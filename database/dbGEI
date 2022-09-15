@@ -1,0 +1,1460 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.5 (Debian 14.5-1.pgdg110+1)
+-- Dumped by pg_dump version 14.5
+
+-- Started on 2022-09-15 20:52:52 UTC
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 216 (class 1259 OID 16723)
+-- Name: alcance; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.alcance (
+    idalcance integer NOT NULL,
+    nombrealcance character varying(50),
+    idusuario integer
+);
+
+
+ALTER TABLE public.alcance OWNER TO root;
+
+--
+-- TOC entry 215 (class 1259 OID 16722)
+-- Name: alcance_idalcance_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.alcance_idalcance_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.alcance_idalcance_seq OWNER TO root;
+
+--
+-- TOC entry 3501 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: alcance_idalcance_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.alcance_idalcance_seq OWNED BY public.alcance.idalcance;
+
+
+--
+-- TOC entry 218 (class 1259 OID 16735)
+-- Name: categoria; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.categoria (
+    idcategoria integer NOT NULL,
+    nombrecategoria character varying(50),
+    idalcance integer,
+    idusuario integer
+);
+
+
+ALTER TABLE public.categoria OWNER TO root;
+
+--
+-- TOC entry 217 (class 1259 OID 16734)
+-- Name: categoria_idcategoria_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.categoria_idcategoria_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.categoria_idcategoria_seq OWNER TO root;
+
+--
+-- TOC entry 3502 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: categoria_idcategoria_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.categoria_idcategoria_seq OWNED BY public.categoria.idcategoria;
+
+
+--
+-- TOC entry 232 (class 1259 OID 16820)
+-- Name: combustible; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.combustible (
+    idcombustible integer NOT NULL,
+    nombrecombustible character varying(50),
+    idunidad integer,
+    idtipo integer,
+    idactividad integer,
+    idusuario integer
+);
+
+
+ALTER TABLE public.combustible OWNER TO root;
+
+--
+-- TOC entry 231 (class 1259 OID 16819)
+-- Name: combustible_idcombustible_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.combustible_idcombustible_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.combustible_idcombustible_seq OWNER TO root;
+
+--
+-- TOC entry 3503 (class 0 OID 0)
+-- Dependencies: 231
+-- Name: combustible_idcombustible_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.combustible_idcombustible_seq OWNED BY public.combustible.idcombustible;
+
+
+--
+-- TOC entry 234 (class 1259 OID 16865)
+-- Name: configuracionactividad; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.configuracionactividad (
+    idconfiguracion integer NOT NULL,
+    idcombustible integer,
+    idsubcategoria integer,
+    idfuenteemision integer
+);
+
+
+ALTER TABLE public.configuracionactividad OWNER TO root;
+
+--
+-- TOC entry 233 (class 1259 OID 16864)
+-- Name: configuracionactividad_idconfiguracion_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.configuracionactividad_idconfiguracion_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.configuracionactividad_idconfiguracion_seq OWNER TO root;
+
+--
+-- TOC entry 3504 (class 0 OID 0)
+-- Dependencies: 233
+-- Name: configuracionactividad_idconfiguracion_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.configuracionactividad_idconfiguracion_seq OWNED BY public.configuracionactividad.idconfiguracion;
+
+
+--
+-- TOC entry 247 (class 1259 OID 16990)
+-- Name: departamento; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.departamento (
+    codigodepartamento integer NOT NULL,
+    nombredepartamento character varying(100)
+);
+
+
+ALTER TABLE public.departamento OWNER TO root;
+
+--
+-- TOC entry 246 (class 1259 OID 16974)
+-- Name: emision; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.emision (
+    idemision integer NOT NULL,
+    mes1 numeric(10,3),
+    mes2 numeric(10,3),
+    mes3 numeric(10,3),
+    mes4 numeric(10,3),
+    mes5 numeric(10,3),
+    mes6 numeric(10,3),
+    mes7 numeric(10,3),
+    mes8 numeric(10,3),
+    mes9 numeric(10,3),
+    mes10 numeric(10,3),
+    mes11 numeric(10,3),
+    mes12 numeric(10,3),
+    valoranual numeric(10,3),
+    nodatos integer,
+    promedio numeric(10,3),
+    desviacionestandar numeric(10,3),
+    coeficientevariacion numeric(10,3),
+    factort numeric(10,3),
+    incertidumbre numeric(3,3),
+    emisiontotal numeric(10,3),
+    idregistroanual integer,
+    idconfiguracion integer
+);
+
+
+ALTER TABLE public.emision OWNER TO root;
+
+--
+-- TOC entry 245 (class 1259 OID 16973)
+-- Name: emision_idemision_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.emision_idemision_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.emision_idemision_seq OWNER TO root;
+
+--
+-- TOC entry 3505 (class 0 OID 0)
+-- Dependencies: 245
+-- Name: emision_idemision_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.emision_idemision_seq OWNED BY public.emision.idemision;
+
+
+--
+-- TOC entry 242 (class 1259 OID 16948)
+-- Name: emisiongei; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.emisiongei (
+    idemisiongei integer NOT NULL,
+    emisiongei numeric(10,3) NOT NULL,
+    emisiongeiequivalente numeric(10,3) NOT NULL,
+    "factorEmision" numeric(10,3) NOT NULL,
+    potencialcalentamientoglobal numeric(10,3) NOT NULL,
+    idfe integer NOT NULL
+);
+
+
+ALTER TABLE public.emisiongei OWNER TO root;
+
+--
+-- TOC entry 241 (class 1259 OID 16947)
+-- Name: emisiongei_idemisiongei_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.emisiongei_idemisiongei_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.emisiongei_idemisiongei_seq OWNER TO root;
+
+--
+-- TOC entry 3506 (class 0 OID 0)
+-- Dependencies: 241
+-- Name: emisiongei_idemisiongei_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.emisiongei_idemisiongei_seq OWNED BY public.emisiongei.idemisiongei;
+
+
+--
+-- TOC entry 238 (class 1259 OID 16909)
+-- Name: factoremision; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.factoremision (
+    idfe integer NOT NULL,
+    factoremision numeric(10,3),
+    potencialcalentamietoglobal numeric(10,3),
+    incertidumbremas numeric(3,3),
+    incertidumbremenos numeric(3,3),
+    idcombustible integer,
+    idgei integer,
+    idusuario integer
+);
+
+
+ALTER TABLE public.factoremision OWNER TO root;
+
+--
+-- TOC entry 237 (class 1259 OID 16908)
+-- Name: factoremision_idfe_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.factoremision_idfe_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.factoremision_idfe_seq OWNER TO root;
+
+--
+-- TOC entry 3507 (class 0 OID 0)
+-- Dependencies: 237
+-- Name: factoremision_idfe_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.factoremision_idfe_seq OWNED BY public.factoremision.idfe;
+
+
+--
+-- TOC entry 222 (class 1259 OID 16769)
+-- Name: fuenteemision; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.fuenteemision (
+    idfuenteemision integer NOT NULL,
+    nombrefuenteemision character varying(50),
+    idusuario integer
+);
+
+
+ALTER TABLE public.fuenteemision OWNER TO root;
+
+--
+-- TOC entry 221 (class 1259 OID 16768)
+-- Name: fuenteemision_ifduenteemision_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.fuenteemision_ifduenteemision_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.fuenteemision_ifduenteemision_seq OWNER TO root;
+
+--
+-- TOC entry 3508 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: fuenteemision_ifduenteemision_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.fuenteemision_ifduenteemision_seq OWNED BY public.fuenteemision.idfuenteemision;
+
+
+--
+-- TOC entry 230 (class 1259 OID 16808)
+-- Name: gei; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.gei (
+    idgei integer NOT NULL,
+    nombregei character varying(50),
+    idusuario integer
+);
+
+
+ALTER TABLE public.gei OWNER TO root;
+
+--
+-- TOC entry 229 (class 1259 OID 16807)
+-- Name: gei_idgei_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.gei_idgei_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.gei_idgei_seq OWNER TO root;
+
+--
+-- TOC entry 3509 (class 0 OID 0)
+-- Dependencies: 229
+-- Name: gei_idgei_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.gei_idgei_seq OWNED BY public.gei.idgei;
+
+
+--
+-- TOC entry 244 (class 1259 OID 16960)
+-- Name: log; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.log (
+    idlog integer NOT NULL,
+    accion integer,
+    contenido text,
+    fechaaccion timestamp without time zone,
+    idusuario integer
+);
+
+
+ALTER TABLE public.log OWNER TO root;
+
+--
+-- TOC entry 243 (class 1259 OID 16959)
+-- Name: log_idlog_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.log_idlog_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.log_idlog_seq OWNER TO root;
+
+--
+-- TOC entry 3510 (class 0 OID 0)
+-- Dependencies: 243
+-- Name: log_idlog_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.log_idlog_seq OWNED BY public.log.idlog;
+
+
+--
+-- TOC entry 248 (class 1259 OID 16995)
+-- Name: municipio; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.municipio (
+    codigomunicipio integer NOT NULL,
+    nombremunicipio character varying(100),
+    codigodepartamento integer
+);
+
+
+ALTER TABLE public.municipio OWNER TO root;
+
+--
+-- TOC entry 236 (class 1259 OID 16887)
+-- Name: registroactividad; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.registroactividad (
+    idregistroactividad integer NOT NULL,
+    valor numeric(10,3),
+    mes character varying(50),
+    "año" integer,
+    idconfiguracion integer,
+    idusuario integer,
+    idsede integer
+);
+
+
+ALTER TABLE public.registroactividad OWNER TO root;
+
+--
+-- TOC entry 235 (class 1259 OID 16886)
+-- Name: registroactividad_idregistroactividad_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.registroactividad_idregistroactividad_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.registroactividad_idregistroactividad_seq OWNER TO root;
+
+--
+-- TOC entry 3511 (class 0 OID 0)
+-- Dependencies: 235
+-- Name: registroactividad_idregistroactividad_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.registroactividad_idregistroactividad_seq OWNED BY public.registroactividad.idregistroactividad;
+
+
+--
+-- TOC entry 240 (class 1259 OID 16931)
+-- Name: registroanual; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.registroanual (
+    idregistroanual integer NOT NULL,
+    fecharegistro timestamp without time zone NOT NULL,
+    idsede integer NOT NULL,
+    idusuario integer NOT NULL,
+    "año" integer NOT NULL,
+    estado integer NOT NULL
+);
+
+
+ALTER TABLE public.registroanual OWNER TO root;
+
+--
+-- TOC entry 239 (class 1259 OID 16930)
+-- Name: registroanual_idregistroanual_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.registroanual_idregistroanual_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.registroanual_idregistroanual_seq OWNER TO root;
+
+--
+-- TOC entry 3512 (class 0 OID 0)
+-- Dependencies: 239
+-- Name: registroanual_idregistroanual_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.registroanual_idregistroanual_seq OWNED BY public.registroanual.idregistroanual;
+
+
+--
+-- TOC entry 210 (class 1259 OID 16678)
+-- Name: rol; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.rol (
+    idrol integer NOT NULL,
+    rol character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.rol OWNER TO root;
+
+--
+-- TOC entry 209 (class 1259 OID 16677)
+-- Name: rol_idrol_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.rol_idrol_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.rol_idrol_seq OWNER TO root;
+
+--
+-- TOC entry 3513 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: rol_idrol_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.rol_idrol_seq OWNED BY public.rol.idrol;
+
+
+--
+-- TOC entry 214 (class 1259 OID 16711)
+-- Name: sede; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.sede (
+    idsede integer NOT NULL,
+    nombresede character varying(100),
+    direccion character varying(50),
+    idusuario integer,
+    codigomunicipio integer
+);
+
+
+ALTER TABLE public.sede OWNER TO root;
+
+--
+-- TOC entry 213 (class 1259 OID 16710)
+-- Name: sede_idsede_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.sede_idsede_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.sede_idsede_seq OWNER TO root;
+
+--
+-- TOC entry 3514 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: sede_idsede_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.sede_idsede_seq OWNED BY public.sede.idsede;
+
+
+--
+-- TOC entry 220 (class 1259 OID 16752)
+-- Name: subcategoria; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.subcategoria (
+    idsubcategoria integer NOT NULL,
+    nombresubcategoria character varying(50),
+    idcategoria integer,
+    idusuario integer
+);
+
+
+ALTER TABLE public.subcategoria OWNER TO root;
+
+--
+-- TOC entry 219 (class 1259 OID 16751)
+-- Name: subcategoria_idsubcategoria_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.subcategoria_idsubcategoria_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.subcategoria_idsubcategoria_seq OWNER TO root;
+
+--
+-- TOC entry 3515 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: subcategoria_idsubcategoria_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.subcategoria_idsubcategoria_seq OWNED BY public.subcategoria.idsubcategoria;
+
+
+--
+-- TOC entry 228 (class 1259 OID 16800)
+-- Name: tipo; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.tipo (
+    idtipo integer NOT NULL,
+    tipo character varying(50)
+);
+
+
+ALTER TABLE public.tipo OWNER TO root;
+
+--
+-- TOC entry 227 (class 1259 OID 16799)
+-- Name: tipo_idtipo_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.tipo_idtipo_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tipo_idtipo_seq OWNER TO root;
+
+--
+-- TOC entry 3516 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: tipo_idtipo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.tipo_idtipo_seq OWNED BY public.tipo.idtipo;
+
+
+--
+-- TOC entry 224 (class 1259 OID 16781)
+-- Name: tipoactividad; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.tipoactividad (
+    idtipoactividad integer NOT NULL,
+    nombretipoactividad character varying(50),
+    idusuario integer
+);
+
+
+ALTER TABLE public.tipoactividad OWNER TO root;
+
+--
+-- TOC entry 223 (class 1259 OID 16780)
+-- Name: tipoactividad_idtipoactividad_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.tipoactividad_idtipoactividad_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tipoactividad_idtipoactividad_seq OWNER TO root;
+
+--
+-- TOC entry 3517 (class 0 OID 0)
+-- Dependencies: 223
+-- Name: tipoactividad_idtipoactividad_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.tipoactividad_idtipoactividad_seq OWNED BY public.tipoactividad.idtipoactividad;
+
+
+--
+-- TOC entry 226 (class 1259 OID 16793)
+-- Name: unidad; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.unidad (
+    idunidad integer NOT NULL,
+    unidad character varying(50)
+);
+
+
+ALTER TABLE public.unidad OWNER TO root;
+
+--
+-- TOC entry 225 (class 1259 OID 16792)
+-- Name: unidad_idunidad_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.unidad_idunidad_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.unidad_idunidad_seq OWNER TO root;
+
+--
+-- TOC entry 3518 (class 0 OID 0)
+-- Dependencies: 225
+-- Name: unidad_idunidad_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.unidad_idunidad_seq OWNED BY public.unidad.idunidad;
+
+
+--
+-- TOC entry 212 (class 1259 OID 16699)
+-- Name: usuario; Type: TABLE; Schema: public; Owner: root
+--
+
+CREATE TABLE public.usuario (
+    idusuario integer NOT NULL,
+    email character varying(50),
+    idrol integer
+);
+
+
+ALTER TABLE public.usuario OWNER TO root;
+
+--
+-- TOC entry 211 (class 1259 OID 16698)
+-- Name: usuario_idusuario_seq; Type: SEQUENCE; Schema: public; Owner: root
+--
+
+CREATE SEQUENCE public.usuario_idusuario_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.usuario_idusuario_seq OWNER TO root;
+
+--
+-- TOC entry 3519 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: usuario_idusuario_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: root
+--
+
+ALTER SEQUENCE public.usuario_idusuario_seq OWNED BY public.usuario.idusuario;
+
+
+--
+-- TOC entry 3268 (class 2604 OID 16726)
+-- Name: alcance idalcance; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.alcance ALTER COLUMN idalcance SET DEFAULT nextval('public.alcance_idalcance_seq'::regclass);
+
+
+--
+-- TOC entry 3269 (class 2604 OID 16738)
+-- Name: categoria idcategoria; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.categoria ALTER COLUMN idcategoria SET DEFAULT nextval('public.categoria_idcategoria_seq'::regclass);
+
+
+--
+-- TOC entry 3276 (class 2604 OID 16823)
+-- Name: combustible idcombustible; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.combustible ALTER COLUMN idcombustible SET DEFAULT nextval('public.combustible_idcombustible_seq'::regclass);
+
+
+--
+-- TOC entry 3277 (class 2604 OID 16868)
+-- Name: configuracionactividad idconfiguracion; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.configuracionactividad ALTER COLUMN idconfiguracion SET DEFAULT nextval('public.configuracionactividad_idconfiguracion_seq'::regclass);
+
+
+--
+-- TOC entry 3283 (class 2604 OID 16977)
+-- Name: emision idemision; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.emision ALTER COLUMN idemision SET DEFAULT nextval('public.emision_idemision_seq'::regclass);
+
+
+--
+-- TOC entry 3281 (class 2604 OID 16951)
+-- Name: emisiongei idemisiongei; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.emisiongei ALTER COLUMN idemisiongei SET DEFAULT nextval('public.emisiongei_idemisiongei_seq'::regclass);
+
+
+--
+-- TOC entry 3279 (class 2604 OID 16912)
+-- Name: factoremision idfe; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.factoremision ALTER COLUMN idfe SET DEFAULT nextval('public.factoremision_idfe_seq'::regclass);
+
+
+--
+-- TOC entry 3271 (class 2604 OID 16772)
+-- Name: fuenteemision idfuenteemision; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.fuenteemision ALTER COLUMN idfuenteemision SET DEFAULT nextval('public.fuenteemision_ifduenteemision_seq'::regclass);
+
+
+--
+-- TOC entry 3275 (class 2604 OID 16811)
+-- Name: gei idgei; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.gei ALTER COLUMN idgei SET DEFAULT nextval('public.gei_idgei_seq'::regclass);
+
+
+--
+-- TOC entry 3282 (class 2604 OID 16963)
+-- Name: log idlog; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.log ALTER COLUMN idlog SET DEFAULT nextval('public.log_idlog_seq'::regclass);
+
+
+--
+-- TOC entry 3278 (class 2604 OID 16890)
+-- Name: registroactividad idregistroactividad; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.registroactividad ALTER COLUMN idregistroactividad SET DEFAULT nextval('public.registroactividad_idregistroactividad_seq'::regclass);
+
+
+--
+-- TOC entry 3280 (class 2604 OID 16934)
+-- Name: registroanual idregistroanual; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.registroanual ALTER COLUMN idregistroanual SET DEFAULT nextval('public.registroanual_idregistroanual_seq'::regclass);
+
+
+--
+-- TOC entry 3265 (class 2604 OID 16681)
+-- Name: rol idrol; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.rol ALTER COLUMN idrol SET DEFAULT nextval('public.rol_idrol_seq'::regclass);
+
+
+--
+-- TOC entry 3267 (class 2604 OID 16714)
+-- Name: sede idsede; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.sede ALTER COLUMN idsede SET DEFAULT nextval('public.sede_idsede_seq'::regclass);
+
+
+--
+-- TOC entry 3270 (class 2604 OID 16755)
+-- Name: subcategoria idsubcategoria; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.subcategoria ALTER COLUMN idsubcategoria SET DEFAULT nextval('public.subcategoria_idsubcategoria_seq'::regclass);
+
+
+--
+-- TOC entry 3274 (class 2604 OID 16803)
+-- Name: tipo idtipo; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.tipo ALTER COLUMN idtipo SET DEFAULT nextval('public.tipo_idtipo_seq'::regclass);
+
+
+--
+-- TOC entry 3272 (class 2604 OID 16784)
+-- Name: tipoactividad idtipoactividad; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.tipoactividad ALTER COLUMN idtipoactividad SET DEFAULT nextval('public.tipoactividad_idtipoactividad_seq'::regclass);
+
+
+--
+-- TOC entry 3273 (class 2604 OID 16796)
+-- Name: unidad idunidad; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.unidad ALTER COLUMN idunidad SET DEFAULT nextval('public.unidad_idunidad_seq'::regclass);
+
+
+--
+-- TOC entry 3266 (class 2604 OID 16702)
+-- Name: usuario idusuario; Type: DEFAULT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.usuario ALTER COLUMN idusuario SET DEFAULT nextval('public.usuario_idusuario_seq'::regclass);
+
+
+--
+-- TOC entry 3291 (class 2606 OID 16728)
+-- Name: alcance alcance_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.alcance
+    ADD CONSTRAINT alcance_pkey PRIMARY KEY (idalcance);
+
+
+--
+-- TOC entry 3293 (class 2606 OID 16740)
+-- Name: categoria categoria_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.categoria
+    ADD CONSTRAINT categoria_pkey PRIMARY KEY (idcategoria);
+
+
+--
+-- TOC entry 3307 (class 2606 OID 16825)
+-- Name: combustible combustible_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.combustible
+    ADD CONSTRAINT combustible_pkey PRIMARY KEY (idcombustible);
+
+
+--
+-- TOC entry 3309 (class 2606 OID 16870)
+-- Name: configuracionactividad configuracionactividad_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.configuracionactividad
+    ADD CONSTRAINT configuracionactividad_pkey PRIMARY KEY (idconfiguracion);
+
+
+--
+-- TOC entry 3323 (class 2606 OID 16994)
+-- Name: departamento departamento_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.departamento
+    ADD CONSTRAINT departamento_pkey PRIMARY KEY (codigodepartamento);
+
+
+--
+-- TOC entry 3321 (class 2606 OID 16979)
+-- Name: emision emision_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.emision
+    ADD CONSTRAINT emision_pkey PRIMARY KEY (idemision);
+
+
+--
+-- TOC entry 3317 (class 2606 OID 16953)
+-- Name: emisiongei emisiongei_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.emisiongei
+    ADD CONSTRAINT emisiongei_pkey PRIMARY KEY (idemisiongei);
+
+
+--
+-- TOC entry 3313 (class 2606 OID 16914)
+-- Name: factoremision factoremision_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.factoremision
+    ADD CONSTRAINT factoremision_pkey PRIMARY KEY (idfe);
+
+
+--
+-- TOC entry 3297 (class 2606 OID 16774)
+-- Name: fuenteemision fuenteemision_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.fuenteemision
+    ADD CONSTRAINT fuenteemision_pkey PRIMARY KEY (idfuenteemision);
+
+
+--
+-- TOC entry 3305 (class 2606 OID 16813)
+-- Name: gei gei_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.gei
+    ADD CONSTRAINT gei_pkey PRIMARY KEY (idgei);
+
+
+--
+-- TOC entry 3319 (class 2606 OID 16967)
+-- Name: log log_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.log
+    ADD CONSTRAINT log_pkey PRIMARY KEY (idlog);
+
+
+--
+-- TOC entry 3325 (class 2606 OID 16999)
+-- Name: municipio municipio_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.municipio
+    ADD CONSTRAINT municipio_pkey PRIMARY KEY (codigomunicipio);
+
+
+--
+-- TOC entry 3311 (class 2606 OID 16892)
+-- Name: registroactividad registroactividad_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.registroactividad
+    ADD CONSTRAINT registroactividad_pkey PRIMARY KEY (idregistroactividad);
+
+
+--
+-- TOC entry 3315 (class 2606 OID 16936)
+-- Name: registroanual registroanual_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.registroanual
+    ADD CONSTRAINT registroanual_pkey PRIMARY KEY (idregistroanual);
+
+
+--
+-- TOC entry 3285 (class 2606 OID 16683)
+-- Name: rol rol_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.rol
+    ADD CONSTRAINT rol_pkey PRIMARY KEY (idrol);
+
+
+--
+-- TOC entry 3289 (class 2606 OID 16716)
+-- Name: sede sede_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.sede
+    ADD CONSTRAINT sede_pkey PRIMARY KEY (idsede);
+
+
+--
+-- TOC entry 3295 (class 2606 OID 16757)
+-- Name: subcategoria subcategoria_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.subcategoria
+    ADD CONSTRAINT subcategoria_pkey PRIMARY KEY (idsubcategoria);
+
+
+--
+-- TOC entry 3303 (class 2606 OID 16805)
+-- Name: tipo tipo_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.tipo
+    ADD CONSTRAINT tipo_pkey PRIMARY KEY (idtipo);
+
+
+--
+-- TOC entry 3299 (class 2606 OID 16786)
+-- Name: tipoactividad tipoactividad_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.tipoactividad
+    ADD CONSTRAINT tipoactividad_pkey PRIMARY KEY (idtipoactividad);
+
+
+--
+-- TOC entry 3301 (class 2606 OID 16798)
+-- Name: unidad unidad_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.unidad
+    ADD CONSTRAINT unidad_pkey PRIMARY KEY (idunidad);
+
+
+--
+-- TOC entry 3287 (class 2606 OID 16704)
+-- Name: usuario usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.usuario
+    ADD CONSTRAINT usuario_pkey PRIMARY KEY (idusuario);
+
+
+--
+-- TOC entry 3329 (class 2606 OID 16729)
+-- Name: alcance alcance_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.alcance
+    ADD CONSTRAINT alcance_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3330 (class 2606 OID 16741)
+-- Name: categoria categoria_idalcance_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.categoria
+    ADD CONSTRAINT categoria_idalcance_fkey FOREIGN KEY (idalcance) REFERENCES public.alcance(idalcance);
+
+
+--
+-- TOC entry 3331 (class 2606 OID 16746)
+-- Name: categoria categoria_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.categoria
+    ADD CONSTRAINT categoria_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3339 (class 2606 OID 16836)
+-- Name: combustible combustible_idactividad_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.combustible
+    ADD CONSTRAINT combustible_idactividad_fkey FOREIGN KEY (idactividad) REFERENCES public.tipoactividad(idtipoactividad);
+
+
+--
+-- TOC entry 3338 (class 2606 OID 16831)
+-- Name: combustible combustible_idtipo_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.combustible
+    ADD CONSTRAINT combustible_idtipo_fkey FOREIGN KEY (idtipo) REFERENCES public.tipo(idtipo);
+
+
+--
+-- TOC entry 3337 (class 2606 OID 16826)
+-- Name: combustible combustible_idunidad_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.combustible
+    ADD CONSTRAINT combustible_idunidad_fkey FOREIGN KEY (idunidad) REFERENCES public.unidad(idunidad);
+
+
+--
+-- TOC entry 3340 (class 2606 OID 16841)
+-- Name: combustible combustible_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.combustible
+    ADD CONSTRAINT combustible_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3341 (class 2606 OID 16871)
+-- Name: configuracionactividad configuracionactividad_idcombustible_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.configuracionactividad
+    ADD CONSTRAINT configuracionactividad_idcombustible_fkey FOREIGN KEY (idcombustible) REFERENCES public.combustible(idcombustible);
+
+
+--
+-- TOC entry 3343 (class 2606 OID 16881)
+-- Name: configuracionactividad configuracionactividad_idfuenteemision_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.configuracionactividad
+    ADD CONSTRAINT configuracionactividad_idfuenteemision_fkey FOREIGN KEY (idfuenteemision) REFERENCES public.fuenteemision(idfuenteemision);
+
+
+--
+-- TOC entry 3342 (class 2606 OID 16876)
+-- Name: configuracionactividad configuracionactividad_idsubcategoria_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.configuracionactividad
+    ADD CONSTRAINT configuracionactividad_idsubcategoria_fkey FOREIGN KEY (idsubcategoria) REFERENCES public.subcategoria(idsubcategoria);
+
+
+--
+-- TOC entry 3354 (class 2606 OID 16985)
+-- Name: emision emision_idconfiguracion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.emision
+    ADD CONSTRAINT emision_idconfiguracion_fkey FOREIGN KEY (idconfiguracion) REFERENCES public.configuracionactividad(idconfiguracion);
+
+
+--
+-- TOC entry 3355 (class 2606 OID 16980)
+-- Name: emision emision_idregistroanual_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.emision
+    ADD CONSTRAINT emision_idregistroanual_fkey FOREIGN KEY (idregistroanual) REFERENCES public.registroanual(idregistroanual);
+
+
+--
+-- TOC entry 3352 (class 2606 OID 17010)
+-- Name: emisiongei emisiongei_idfe_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.emisiongei
+    ADD CONSTRAINT emisiongei_idfe_fkey FOREIGN KEY (idfe) REFERENCES public.factoremision(idfe);
+
+
+--
+-- TOC entry 3347 (class 2606 OID 16915)
+-- Name: factoremision factoremision_idcombustible_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.factoremision
+    ADD CONSTRAINT factoremision_idcombustible_fkey FOREIGN KEY (idcombustible) REFERENCES public.combustible(idcombustible);
+
+
+--
+-- TOC entry 3348 (class 2606 OID 16925)
+-- Name: factoremision factoremision_idgei_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.factoremision
+    ADD CONSTRAINT factoremision_idgei_fkey FOREIGN KEY (idgei) REFERENCES public.gei(idgei);
+
+
+--
+-- TOC entry 3349 (class 2606 OID 16920)
+-- Name: factoremision factoremision_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.factoremision
+    ADD CONSTRAINT factoremision_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3334 (class 2606 OID 16775)
+-- Name: fuenteemision fuenteemision_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.fuenteemision
+    ADD CONSTRAINT fuenteemision_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3336 (class 2606 OID 16814)
+-- Name: gei gei_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.gei
+    ADD CONSTRAINT gei_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3353 (class 2606 OID 16968)
+-- Name: log log_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.log
+    ADD CONSTRAINT log_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3356 (class 2606 OID 17000)
+-- Name: municipio municipio_codigodepartamento_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.municipio
+    ADD CONSTRAINT municipio_codigodepartamento_fkey FOREIGN KEY (codigodepartamento) REFERENCES public.departamento(codigodepartamento);
+
+
+--
+-- TOC entry 3344 (class 2606 OID 16893)
+-- Name: registroactividad registroactividad_idconfiguracion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.registroactividad
+    ADD CONSTRAINT registroactividad_idconfiguracion_fkey FOREIGN KEY (idconfiguracion) REFERENCES public.configuracionactividad(idconfiguracion);
+
+
+--
+-- TOC entry 3345 (class 2606 OID 16903)
+-- Name: registroactividad registroactividad_idsede_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.registroactividad
+    ADD CONSTRAINT registroactividad_idsede_fkey FOREIGN KEY (idsede) REFERENCES public.sede(idsede);
+
+
+--
+-- TOC entry 3346 (class 2606 OID 16898)
+-- Name: registroactividad registroactividad_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.registroactividad
+    ADD CONSTRAINT registroactividad_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3350 (class 2606 OID 16942)
+-- Name: registroanual registroanual_idsede_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.registroanual
+    ADD CONSTRAINT registroanual_idsede_fkey FOREIGN KEY (idsede) REFERENCES public.sede(idsede);
+
+
+--
+-- TOC entry 3351 (class 2606 OID 16937)
+-- Name: registroanual registroanual_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.registroanual
+    ADD CONSTRAINT registroanual_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3328 (class 2606 OID 17005)
+-- Name: sede sede_codigomunicipio_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.sede
+    ADD CONSTRAINT sede_codigomunicipio_fkey FOREIGN KEY (codigomunicipio) REFERENCES public.municipio(codigomunicipio);
+
+
+--
+-- TOC entry 3327 (class 2606 OID 16717)
+-- Name: sede sede_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.sede
+    ADD CONSTRAINT sede_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3332 (class 2606 OID 16758)
+-- Name: subcategoria subcategoria_idcategoria_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.subcategoria
+    ADD CONSTRAINT subcategoria_idcategoria_fkey FOREIGN KEY (idcategoria) REFERENCES public.categoria(idcategoria);
+
+
+--
+-- TOC entry 3333 (class 2606 OID 16763)
+-- Name: subcategoria subcategoria_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.subcategoria
+    ADD CONSTRAINT subcategoria_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3335 (class 2606 OID 16787)
+-- Name: tipoactividad tipoactividad_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.tipoactividad
+    ADD CONSTRAINT tipoactividad_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3326 (class 2606 OID 16705)
+-- Name: usuario usuario_idrol_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+--
+
+ALTER TABLE ONLY public.usuario
+    ADD CONSTRAINT usuario_idrol_fkey FOREIGN KEY (idrol) REFERENCES public.rol(idrol);
+
+
+-- Completed on 2022-09-15 20:52:52 UTC
+
+--
+-- PostgreSQL database dump complete
+--
+
