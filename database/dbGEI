@@ -5,7 +5,7 @@
 -- Dumped from database version 14.5 (Debian 14.5-1.pgdg110+1)
 -- Dumped by pg_dump version 14.5
 
--- Started on 2022-09-15 20:52:52 UTC
+-- Started on 2022-09-16 16:41:20 UTC
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -29,8 +29,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.alcance (
     idalcance integer NOT NULL,
-    nombrealcance character varying(50),
-    idusuario integer
+    nombrealcance character varying(50) NOT NULL,
+    idusuario integer NOT NULL
 );
 
 
@@ -68,9 +68,9 @@ ALTER SEQUENCE public.alcance_idalcance_seq OWNED BY public.alcance.idalcance;
 
 CREATE TABLE public.categoria (
     idcategoria integer NOT NULL,
-    nombrecategoria character varying(50),
-    idalcance integer,
-    idusuario integer
+    nombrecategoria character varying(50) NOT NULL,
+    idalcance integer NOT NULL,
+    idusuario integer NOT NULL
 );
 
 
@@ -108,11 +108,11 @@ ALTER SEQUENCE public.categoria_idcategoria_seq OWNED BY public.categoria.idcate
 
 CREATE TABLE public.combustible (
     idcombustible integer NOT NULL,
-    nombrecombustible character varying(50),
-    idunidad integer,
-    idtipo integer,
-    idactividad integer,
-    idusuario integer
+    nombrecombustible character varying(50) NOT NULL,
+    idunidad integer NOT NULL,
+    idtipo integer NOT NULL,
+    idactividad integer NOT NULL,
+    idusuario integer NOT NULL
 );
 
 
@@ -150,9 +150,9 @@ ALTER SEQUENCE public.combustible_idcombustible_seq OWNED BY public.combustible.
 
 CREATE TABLE public.configuracionactividad (
     idconfiguracion integer NOT NULL,
-    idcombustible integer,
-    idsubcategoria integer,
-    idfuenteemision integer
+    idcombustible integer NOT NULL,
+    idsubcategoria integer NOT NULL,
+    idfuenteemision integer NOT NULL
 );
 
 
@@ -190,7 +190,7 @@ ALTER SEQUENCE public.configuracionactividad_idconfiguracion_seq OWNED BY public
 
 CREATE TABLE public.departamento (
     codigodepartamento integer NOT NULL,
-    nombredepartamento character varying(100)
+    nombredepartamento character varying(100) NOT NULL
 );
 
 
@@ -215,16 +215,16 @@ CREATE TABLE public.emision (
     mes10 numeric(10,3),
     mes11 numeric(10,3),
     mes12 numeric(10,3),
-    valoranual numeric(10,3),
-    nodatos integer,
-    promedio numeric(10,3),
-    desviacionestandar numeric(10,3),
-    coeficientevariacion numeric(10,3),
-    factort numeric(10,3),
-    incertidumbre numeric(3,3),
-    emisiontotal numeric(10,3),
-    idregistroanual integer,
-    idconfiguracion integer
+    valoranual numeric(10,3) NOT NULL,
+    nodatos integer NOT NULL,
+    promedio numeric(10,3) NOT NULL,
+    desviacionestandar numeric(10,3) NOT NULL,
+    coeficientevariacion numeric(10,3) NOT NULL,
+    factort numeric(10,3) NOT NULL,
+    incertidumbre numeric(3,3) NOT NULL,
+    emisiontotal numeric(10,3) NOT NULL,
+    idregistroanual integer NOT NULL,
+    idconfiguracion integer NOT NULL
 );
 
 
@@ -304,13 +304,13 @@ ALTER SEQUENCE public.emisiongei_idemisiongei_seq OWNED BY public.emisiongei.ide
 
 CREATE TABLE public.factoremision (
     idfe integer NOT NULL,
-    factoremision numeric(10,3),
-    potencialcalentamietoglobal numeric(10,3),
+    factoremision numeric(10,3) NOT NULL,
+    potencialcalentamietoglobal numeric(10,3) NOT NULL,
     incertidumbremas numeric(3,3),
     incertidumbremenos numeric(3,3),
-    idcombustible integer,
-    idgei integer,
-    idusuario integer
+    idgei integer NOT NULL,
+    idusuario integer NOT NULL,
+    idconfiguracion integer NOT NULL
 );
 
 
@@ -348,8 +348,8 @@ ALTER SEQUENCE public.factoremision_idfe_seq OWNED BY public.factoremision.idfe;
 
 CREATE TABLE public.fuenteemision (
     idfuenteemision integer NOT NULL,
-    nombrefuenteemision character varying(50),
-    idusuario integer
+    nombrefuenteemision character varying(50) NOT NULL,
+    idusuario integer NOT NULL
 );
 
 
@@ -387,8 +387,8 @@ ALTER SEQUENCE public.fuenteemision_ifduenteemision_seq OWNED BY public.fuenteem
 
 CREATE TABLE public.gei (
     idgei integer NOT NULL,
-    nombregei character varying(50),
-    idusuario integer
+    nombregei character varying(50) NOT NULL,
+    idusuario integer NOT NULL
 );
 
 
@@ -426,10 +426,10 @@ ALTER SEQUENCE public.gei_idgei_seq OWNED BY public.gei.idgei;
 
 CREATE TABLE public.log (
     idlog integer NOT NULL,
-    accion integer,
-    contenido text,
-    fechaaccion timestamp without time zone,
-    idusuario integer
+    accion integer NOT NULL,
+    contenido text NOT NULL,
+    fechaaccion timestamp without time zone NOT NULL,
+    idusuario integer NOT NULL
 );
 
 
@@ -467,8 +467,8 @@ ALTER SEQUENCE public.log_idlog_seq OWNED BY public.log.idlog;
 
 CREATE TABLE public.municipio (
     codigomunicipio integer NOT NULL,
-    nombremunicipio character varying(100),
-    codigodepartamento integer
+    nombremunicipio character varying(100) NOT NULL,
+    codigodepartamento integer NOT NULL
 );
 
 
@@ -481,12 +481,12 @@ ALTER TABLE public.municipio OWNER TO root;
 
 CREATE TABLE public.registroactividad (
     idregistroactividad integer NOT NULL,
-    valor numeric(10,3),
-    mes character varying(50),
-    "año" integer,
-    idconfiguracion integer,
-    idusuario integer,
-    idsede integer
+    valor numeric(10,3) NOT NULL,
+    mes character varying(50) NOT NULL,
+    "año" integer NOT NULL,
+    idconfiguracion integer NOT NULL,
+    idusuario integer NOT NULL,
+    idsede integer NOT NULL
 );
 
 
@@ -604,10 +604,10 @@ ALTER SEQUENCE public.rol_idrol_seq OWNED BY public.rol.idrol;
 
 CREATE TABLE public.sede (
     idsede integer NOT NULL,
-    nombresede character varying(100),
-    direccion character varying(50),
-    idusuario integer,
-    codigomunicipio integer
+    nombresede character varying(100) NOT NULL,
+    direccion character varying(50) NOT NULL,
+    idusuario integer NOT NULL,
+    codigomunicipio integer NOT NULL
 );
 
 
@@ -645,9 +645,9 @@ ALTER SEQUENCE public.sede_idsede_seq OWNED BY public.sede.idsede;
 
 CREATE TABLE public.subcategoria (
     idsubcategoria integer NOT NULL,
-    nombresubcategoria character varying(50),
-    idcategoria integer,
-    idusuario integer
+    nombresubcategoria character varying(50) NOT NULL,
+    idcategoria integer NOT NULL,
+    idusuario integer NOT NULL
 );
 
 
@@ -685,7 +685,7 @@ ALTER SEQUENCE public.subcategoria_idsubcategoria_seq OWNED BY public.subcategor
 
 CREATE TABLE public.tipo (
     idtipo integer NOT NULL,
-    tipo character varying(50)
+    tipo character varying(50) NOT NULL
 );
 
 
@@ -723,8 +723,8 @@ ALTER SEQUENCE public.tipo_idtipo_seq OWNED BY public.tipo.idtipo;
 
 CREATE TABLE public.tipoactividad (
     idtipoactividad integer NOT NULL,
-    nombretipoactividad character varying(50),
-    idusuario integer
+    nombretipoactividad character varying(50) NOT NULL,
+    idusuario integer NOT NULL
 );
 
 
@@ -762,7 +762,7 @@ ALTER SEQUENCE public.tipoactividad_idtipoactividad_seq OWNED BY public.tipoacti
 
 CREATE TABLE public.unidad (
     idunidad integer NOT NULL,
-    unidad character varying(50)
+    unidad character varying(50) NOT NULL
 );
 
 
@@ -800,8 +800,8 @@ ALTER SEQUENCE public.unidad_idunidad_seq OWNED BY public.unidad.idunidad;
 
 CREATE TABLE public.usuario (
     idusuario integer NOT NULL,
-    email character varying(50),
-    idrol integer
+    email character varying(50) NOT NULL,
+    idrol integer NOT NULL
 );
 
 
@@ -1291,12 +1291,12 @@ ALTER TABLE ONLY public.emisiongei
 
 
 --
--- TOC entry 3347 (class 2606 OID 16915)
--- Name: factoremision factoremision_idcombustible_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
+-- TOC entry 3347 (class 2606 OID 17015)
+-- Name: factoremision factoremision_idconfiguracion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: root
 --
 
 ALTER TABLE ONLY public.factoremision
-    ADD CONSTRAINT factoremision_idcombustible_fkey FOREIGN KEY (idcombustible) REFERENCES public.combustible(idcombustible);
+    ADD CONSTRAINT factoremision_idconfiguracion_fkey FOREIGN KEY (idconfiguracion) REFERENCES public.configuracionactividad(idconfiguracion);
 
 
 --
@@ -1452,7 +1452,7 @@ ALTER TABLE ONLY public.usuario
     ADD CONSTRAINT usuario_idrol_fkey FOREIGN KEY (idrol) REFERENCES public.rol(idrol);
 
 
--- Completed on 2022-09-15 20:52:52 UTC
+-- Completed on 2022-09-16 16:41:20 UTC
 
 --
 -- PostgreSQL database dump complete
