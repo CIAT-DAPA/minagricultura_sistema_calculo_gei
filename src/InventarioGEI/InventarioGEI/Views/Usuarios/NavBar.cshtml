@@ -1,0 +1,11 @@
+﻿@if (ViewBag.Rol == "AdmiRoles")
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Rols" asp-action="Index">Rol</a>
+    </li>
+}else if (ViewBag.Rol == "AdmiUsuario")
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+    </li>
+}
