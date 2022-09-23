@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 html {
   font-size: 14px;
@@ -18,7 +18,8 @@ html {
 body {
     margin-bottom: 60px;
     background-color: #F5F6F8;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Work Sans', sans-serif;
+    color: #192A3E;
 }
 
 /*main side bar*/
@@ -27,7 +28,7 @@ body {
     background-color: #FFFFFF;
     position: fixed;
     left: 0;
-    top: 0;
+    top: 45px;
     right: auto;
     min-height: 100%;
     overflow-y: auto;
@@ -36,6 +37,7 @@ body {
     z-index: 1;
     border-right: 1px solid #ddd;
     padding: 25px 25px 0px 25px;
+    box-shadow: 6px 0 14px 0px rgb(0 0 0 / 4%);
 }
 
 .navbar-header {
@@ -48,9 +50,7 @@ body {
 .navbar-brand {
     position: relative;
     top: -17px;
-    font-family: Cooper;
     color: #109CF1;
-    font-family: 'Open Sans', sans-serif;
     font-weight: 600;
 }
 
@@ -79,8 +79,23 @@ main {
     left: 288px;
 }
 
+.img-home {
+    background-image: url("../img/welcomePage.jpg") ;
+    object-fit: cover;
+    height: 100%;
+}
 
-
+.img-logo {
+    background-image: url("../img/logoMinAgro.png");
+    position: relative;
+    height: 61px;
+    width: 323px;
+    object-fit: cover;
+    top: 88px;
+    left: -62px;
+    background-size: cover;
+}
+}
 
 
 

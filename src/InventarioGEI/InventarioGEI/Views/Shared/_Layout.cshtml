@@ -14,18 +14,16 @@
     <link rel="stylesheet" href="~/InventarioGEI.styles.css" asp-append-version="true" />
 </head>
 <body>
+    <div style="position: sticky; top: 0; z-index: 3; background-color: #3366CC; padding:5px;">
+        <img src="/img/govLogo2.png" class="img-fluid rounded-start" alt="gov.co" style="height:35px;" />
+    </div>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow" style="margin-bottom: 35px;">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow" style="margin-bottom: 35px; box-shadow: none;">
             <div class="container-fluid">
-               @* <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">InventarioGEI</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>*@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <img src="/img/logoMinAgroHeader.png" alt="logo minAgri" class="img-fluid rounded-start" style="margin-left: 280px;" />
                         </li>
                         
            
@@ -41,6 +39,20 @@
         <main role="main" class="pb-3" style="margin-right: 35px;">
             @RenderBody()
         </main>
+    </div>
+    <div style="background-color: #3366cc; position: fixed; bottom: 0; width: 100%; z-index: 3; display: flex; justify-content: space-between; padding: 10px 10px 0px 10px;">
+        <div>
+            <img src="/img/colombiaLogo.png" class="img-fluid rounded-start" alt="gov.co" style="height:25px; padding-right: 15px; border-right: solid 1px rgba(255,255,255,0.5);" />
+            <img src="/img/govLogo2.png" class="img-fluid rounded-start" alt="gov.co" style="height:25px;" /> 
+        </div>
+        <div>
+            <ul style="list-style: none; display: flex; color: white;">
+                <li><a href="#"><i class="fa fa-facebook" style="margin-right:15px;"></i></a></li>
+                <li><a href="#"><i class="fa fa-facebook" style="margin-right:15px;"></i></a></li>
+                <li><a href="#"><i class="fa fa-facebook" style="margin-right:15px;"></i></a></li>
+                <li><a href="#"><i class="fa fa-facebook" style="margin-right:15px;"></i></a></li>
+            </ul>
+        </div>
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
