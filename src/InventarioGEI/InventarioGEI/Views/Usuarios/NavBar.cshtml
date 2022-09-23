@@ -1,11 +1,43 @@
-﻿@if (ViewBag.Rol == "AdmiRoles")
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Rols" asp-action="Index">Rol</a>
-    </li>
-}else if (ViewBag.Rol == "AdmiUsuario")
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
-    </li>
-}
+﻿
+<div class="msb" id="msb">
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="navbar-header">
+				<div class="brand-wrapper">
+					<div class="brand-name-wrapper">
+						<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+							Inventario GEI
+						</a>
+					</div>
+				</div>
+			</div>
+
+			@*<div class="user-container">
+				<div>
+					<h3 class="user-name">@User.Identity?.Name.</h3>
+				</div>
+				<div>
+					<p class="user-email">@User.Identity?.Name</p>
+				</div>
+			</div>*@
+
+
+			<div class="side-menu-container">
+				<ul class="nav navbar-nav">
+					<li style="margin-bottom:15px;">
+						<a href="#"><i class="fa fa-dashboard" style="margin-right:15px;"></i> Dashboard</a>
+					</li>
+					@if (ViewBag.Rol == "AdmiRoles")
+					{
+						<li style="margin-bottom:15px;">
+						<a asp-area="" asp-controller="Rols" asp-action="Index"><i class="fa fa-user" style="margin-right:15px;"></i>Rol</a>
+						</li>
+					}else if (ViewBag.Rol == "AdmiUsuario")
+					{
+						<li style="margin-bottom:15px;">
+						<a asp-area="" asp-controller="Usuarios" asp-action="Index"><i class="fa fa-address-book" style="margin-right:15px;"></i>Usuarios</a>
+						</li>
+					}
+				</ul>
+			</div>
+		</nav>  
+</div>

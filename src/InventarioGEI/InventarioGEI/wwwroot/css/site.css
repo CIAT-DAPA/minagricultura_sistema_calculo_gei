@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 html {
   font-size: 14px;
 }
@@ -14,5 +16,74 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #F5F6F8;
+    font-family: 'Poppins', sans-serif;
 }
+
+/*main side bar*/
+.msb {
+    width: 250px;
+    background-color: #FFFFFF;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: auto;
+    min-height: 100%;
+    overflow-y: auto;
+    white-space: nowrap;
+    height: 100%;
+    z-index: 1;
+    border-right: 1px solid #ddd;
+    padding: 25px 25px 0px 25px;
+}
+
+.navbar-header {
+    width: 100%;
+    border-bottom: 1px solid #e7e7e7;
+    margin-bottom: 20px;
+    height: 23px;
+}
+
+.navbar-brand {
+    position: relative;
+    top: -17px;
+    font-family: Cooper;
+    color: #109CF1;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+}
+
+li > a {
+    text-decoration: none;
+    color: #334D6E;
+    font-weight:500;
+}
+.user-container {
+    height: 96px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.user-name {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.user-email{
+    font-size: 0.8rem;
+}
+
+main {
+    position:absolute;
+    left: 288px;
+}
+
+
+
+
+
+
+
+
+
