@@ -1,7 +1,9 @@
+using InventarioGEI;
 using InventarioGEI.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
@@ -18,14 +20,6 @@ builder.Services.AddAuthorization(options =>
 {
     options.FallbackPolicy = options.DefaultPolicy;
 });
-
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.AddPolicy("rol-only", p =>
-//    {
-//        p.RequireClaim("groups", "26a30b0f-4438-4fd2-9bf5-fd6050c5408b");
-//    });
-//});
 
 builder.Services.AddControllersWithViews(options =>
 {

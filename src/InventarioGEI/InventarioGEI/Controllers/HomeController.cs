@@ -1,7 +1,9 @@
 ﻿using InventarioGEI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace InventarioGEI.Controllers
 {
@@ -10,8 +12,6 @@ namespace InventarioGEI.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly Context _context;
-
-
         public HomeController(ILogger<HomeController> logger, Context context)
         {
             _logger = logger;
@@ -20,14 +20,12 @@ namespace InventarioGEI.Controllers
 
         public IActionResult Index()
         {
-            var user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             var rolAsig = _context.Rol.FirstOrDefault(r => r.idRol == user.idRol);
             ViewData["Rol"] = rolAsig.nombreRol;
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
+            //roleManager.AddClaimAsync((IdentityRole)User.Identity, new Claim("Rol", rolAsig.nombreRol));
+            //var claims = User.Claims.ToList();
+            //User.IsInRole(rolAsig.nombreRol);
             return View();
         }
 
@@ -36,6 +34,11 @@ namespace InventarioGEI.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult AccesDenied()
+        {
+            return View();
         }
     }
 }

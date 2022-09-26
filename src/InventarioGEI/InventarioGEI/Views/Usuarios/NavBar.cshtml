@@ -10,33 +10,19 @@
 					</div>
 				</div>
 			</div>
-
-			@*<div class="user-container">
-				<div>
-					<h3 class="user-name">@User.Identity?.Name.</h3>
-				</div>
-				<div>
-					<p class="user-email">@User.Identity?.Name</p>
-				</div>
-			</div>*@
-
-
 			<div class="side-menu-container">
 				<ul class="nav navbar-nav">
 					<li style="margin-bottom:15px;">
 						<a href="#"><i class="fa fa-dashboard" style="margin-right:15px;"></i> Dashboard</a>
 					</li>
-					@if (ViewBag.Rol == "AdmiRoles")
-					{
-						<li style="margin-bottom:15px;">
+
+					<li style="margin-bottom:15px;">
 						<a asp-area="" asp-controller="Rols" asp-action="Index"><i class="fa fa-user" style="margin-right:15px;"></i>Rol</a>
-						</li>
-					}else if (ViewBag.Rol == "AdmiUsuario")
-					{
-						<li style="margin-bottom:15px;">
+					</li>
+					
+					<li style="margin-bottom:15px;">
 						<a asp-area="" asp-controller="Usuarios" asp-action="Index"><i class="fa fa-address-book" style="margin-right:15px;"></i>Usuarios</a>
-						</li>
-					}
+					</li>
 				</ul>
 			</div>
 		</nav>  

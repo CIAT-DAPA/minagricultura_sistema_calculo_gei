@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace InventarioGEI.Controllers
 {
@@ -19,11 +18,27 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        public Rol GetRolFromCurrentUser()
+        {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+            Rol rolAsig = _context.Rol.FirstOrDefault(r => r.idRol == user.idRol);
+            return rolAsig;
+        }
+
         // GET: Rols
-        //[Authorize("rol-only")]
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Rol.ToListAsync());
+            Rol currentRol = GetRolFromCurrentUser();
+
+            if (currentRol.permisoRol)
+            {
+                return View(await _context.Rol.ToListAsync());
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
+            
         }
 
         // GET: Rols/Details/5
@@ -55,7 +70,7 @@ namespace InventarioGEI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("idRol,nombreRol")] Rol rol)
+        public async Task<IActionResult> Create([Bind("idRol,nombreRol,permisoRol,permisoSede,permisoConfiguracion,permisoRegistro,permisoVisualizacion")] Rol rol)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +102,7 @@ namespace InventarioGEI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("idRol,nombreRol")] Rol rol)
+        public async Task<IActionResult> Edit(int id, [Bind("idRol,nombreRol,permisoRol,permisoSede,permisoConfiguracion,permisoRegistro,permisoVisualizacion")] Rol rol)
         {
             if (id != rol.idRol)
             {

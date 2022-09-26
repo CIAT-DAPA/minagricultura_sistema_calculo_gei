@@ -14,6 +14,26 @@ namespace InventarioGEI.Models
         [Display(Name = "Rol")]
         public string nombreRol { get; set; }
 
+        [Column("moduloRol")]
+        [Display(Name = "Permiso de roles")]
+        public bool permisoRol { get; set; }
+
+        [Column("moduloSede")]
+        [Display(Name = "Permiso de sedes")]
+        public bool permisoSede { get; set; }
+
+        [Column("moduloConfiguracion")]
+        [Display(Name = "Permiso de configuracion")]
+        public bool permisoConfiguracion { get; set; }
+
+        [Column("moduloRegistro")]
+        [Display(Name = "Permiso de registros")]
+        public bool permisoRegistro { get; set; }
+
+        [Column("moduloVisualizacion")]
+        [Display(Name = "Permiso de visualizacion")]
+        public bool permisoVisualizacion { get; set; }
+
         public virtual ICollection<Usuario>? Usuarios { get; set; }
     }
 }

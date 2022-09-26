@@ -15,6 +15,21 @@
             <th>
                 @Html.DisplayNameFor(model => model.nombreRol)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.permisoRol)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.permisoSede)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.permisoConfiguracion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.permisoRegistro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.permisoVisualizacion)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -23,6 +38,21 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.nombreRol)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.permisoRol)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.permisoSede)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.permisoConfiguracion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.permisoRegistro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.permisoVisualizacion)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.idRol">Edit</a> |
