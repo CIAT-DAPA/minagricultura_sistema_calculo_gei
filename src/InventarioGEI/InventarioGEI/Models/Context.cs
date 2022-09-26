@@ -10,5 +10,6 @@ namespace InventarioGEI.Models
         }
         public DbSet<InventarioGEI.Models.Rol> Rol { get; set; }
         public DbSet<InventarioGEI.Models.Usuario> Usuario { get; set; }
+        public DbSet<InventarioGEI.Models.Sede> Sede { get; set; }
     }
 }

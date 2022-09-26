@@ -75,7 +75,8 @@ li > a {
 }
 
 main {
-    position:absolute;
+    width: calc(100vw - 330px);
+    position: absolute;
     left: 288px;
 }
 
@@ -95,10 +96,7 @@ main {
     left: -62px;
     background-size: cover;
 }
+
+.table {
+    border-radius: 6px;
 }
-
-
-
-
-
-
