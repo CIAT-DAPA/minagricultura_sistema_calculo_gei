@@ -4,62 +4,74 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="row" style="justify-content: space-between;">
+    <h3 class="col-3">Roles</h3>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.nombreRol)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.permisoRol)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.permisoSede)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.permisoConfiguracion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.permisoRegistro)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.permisoVisualizacion)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.nombreRol)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.permisoRol)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.permisoSede)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.permisoConfiguracion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.permisoRegistro)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.permisoVisualizacion)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.idRol">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.idRol">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.idRol">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+    <button type="button" class="col-2 btn btn-primary btn-lg">
+        <a asp-action="Create" style="color: white; text-decoration: none;">Crear Rol</a>
+    </button>
+</div>
+
+<div class="card mb-3" style="min-height: 100%; box-shadow: 0px 6px 18px 0px rgb(0 0 0 / 6%);">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.nombreRol)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.permisoRol)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.permisoSede)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.permisoConfiguracion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.permisoRegistro)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.permisoVisualizacion)
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombreRol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.permisoRol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.permisoSede)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.permisoConfiguracion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.permisoRegistro)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.permisoVisualizacion)
+                </td>
+                <td>
+                    <button type="button" class="btn btn-outline-primary">
+                            <a asp-action="Edit" asp-route-id="@item.idRol">Edit</a>
+                    </button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger">
+                            <a asp-action="Delete" asp-route-id="@item.idRol">Delete</a>
+                    </button>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>
