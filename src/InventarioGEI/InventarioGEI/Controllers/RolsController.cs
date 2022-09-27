@@ -18,19 +18,24 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
-        public Rol GetRolFromCurrentUser()
+        public bool GetAccesRol()
         {
             Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             Rol rolAsig = _context.Rol.FirstOrDefault(r => r.idRol == user.idRol);
-            return rolAsig;
+            if(rolAsig.permisoRol)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }    
         }
 
         // GET: Rols
         public async Task<IActionResult> Index()
         {
-            Rol currentRol = GetRolFromCurrentUser();
-
-            if (currentRol.permisoRol)
+            if (GetAccesRol())
             {
                 return View(await _context.Rol.ToListAsync());
             }
@@ -41,28 +46,17 @@ namespace InventarioGEI.Controllers
             
         }
 
-        // GET: Rols/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Rol == null)
-            {
-                return NotFound();
-            }
-
-            var rol = await _context.Rol
-                .FirstOrDefaultAsync(m => m.idRol == id);
-            if (rol == null)
-            {
-                return NotFound();
-            }
-
-            return View(rol);
-        }
-
         // GET: Rols/Create
         public IActionResult Create()
         {
-            return View();
+            if (GetAccesRol())
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: Rols/Create
@@ -84,17 +78,24 @@ namespace InventarioGEI.Controllers
         // GET: Rols/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Rol == null)
+            if (GetAccesRol())
             {
-                return NotFound();
-            }
+                if (id == null || _context.Rol == null)
+                {
+                    return NotFound();
+                }
 
-            var rol = await _context.Rol.FindAsync(id);
-            if (rol == null)
-            {
-                return NotFound();
+                var rol = await _context.Rol.FindAsync(id);
+                if (rol == null)
+                {
+                    return NotFound();
+                }
+                return View(rol);
             }
-            return View(rol);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: Rols/Edit/5

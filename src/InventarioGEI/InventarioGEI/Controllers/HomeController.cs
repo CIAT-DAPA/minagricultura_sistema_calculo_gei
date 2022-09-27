@@ -20,12 +20,6 @@ namespace InventarioGEI.Controllers
 
         public IActionResult Index()
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            var rolAsig = _context.Rol.FirstOrDefault(r => r.idRol == user.idRol);
-            ViewData["Rol"] = rolAsig.nombreRol;
-            //roleManager.AddClaimAsync((IdentityRole)User.Identity, new Claim("Rol", rolAsig.nombreRol));
-            //var claims = User.Claims.ToList();
-            //User.IsInRole(rolAsig.nombreRol);
             return View();
         }
 

@@ -81,6 +81,7 @@ li > a {
 
 main {
     width: calc(100vw - 330px);
+    height:calc(100vh - 290px);
     position: absolute;
     left: 288px;
 }
@@ -104,4 +105,8 @@ main {
 
 .table {
     border-radius: 6px;
+}
+
+.check-box{
+    background-color: #213865;
 }

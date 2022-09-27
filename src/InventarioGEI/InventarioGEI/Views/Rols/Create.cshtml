@@ -4,22 +4,22 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+    <div class="card mb-3" style="min-height: 100%; box-shadow: 0px 6px 18px 0px rgb(0 0 0 / 6%);">
+        <div class="card-header" style="background-color: transparent; border: none;">
+        <h3 style="margin-top: 10px;">Crear Rol</h3>
+             <hr />
+        </div>
 
-<h4>Rol</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+    <form asp-action="Create" style="padding: 20px 40px; height: 58vh; display: flex; flex-direction: column; justify-content: space-between;">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="nombreRol" class="control-label"></label>
-                <input asp-for="nombreRol" class="form-control" />
+            <label asp-for="nombreRol" class="control-label col-form-label" style="color: #109CF1;"></label>
+            <input asp-for="nombreRol" placeholder="Ingrese el nombre del Rol" class="form-control" style="border: none; border-bottom: solid 1px black; border-radius: 0px; width: 21%; height:40px;font-weight: 600; padding: 0px;" />
                 <span asp-validation-for="nombreRol" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="permisoRol" /> @Html.DisplayNameFor(model => model.permisoRol)
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="permisoRol" /> @Html.DisplayNameFor(model => model.permisoRol)
                 </label>
             </div>
             <div class="form-group form-check">
@@ -42,14 +42,10 @@
                     <input class="form-check-input" asp-for="permisoVisualizacion" /> @Html.DisplayNameFor(model => model.permisoVisualizacion)
                 </label>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+        <div class="form-group" style="text-align-last: end; margin-top: 50px;">
+            <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+                <input type="submit" value="Crear" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 

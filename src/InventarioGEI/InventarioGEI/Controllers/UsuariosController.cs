@@ -19,20 +19,24 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
-        public Rol GetRolFromCurrentUser()
+        public bool GetAccesRol()
         {
             Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             Rol rolAsig = _context.Rol.FirstOrDefault(r => r.idRol == user.idRol);
-            return rolAsig;
+            if (rolAsig.permisoRol)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         // GET: Usuarios
-        //[Authorize(Roles = "AdminUsers")]
         public async Task<IActionResult> Index()
         {
-            Rol currentRol = GetRolFromCurrentUser();
-
-            if (currentRol.permisoSede)
+            if (GetAccesRol())
             {
                 var context = _context.Usuario.Include(u => u.rolUsuario);
                 return View(await context.ToListAsync());
