@@ -23,7 +23,7 @@ namespace InventarioGEI.Controllers
         //[Authorize("rol-only")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sede.ToListAsync());
+            return View(await _context.Sede.Include("municipio").Include("municipio.departamento").ToListAsync());
         }
 
     }

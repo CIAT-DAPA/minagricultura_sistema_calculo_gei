@@ -22,5 +22,18 @@ namespace InventarioGEI.Models
         [Display(Name = "Habilitado")]
         public bool enabled { get; set; }
 
+        //foreign key
+        [Column("idusuario")]
+        [Display(Name = "Usuario")]
+        public int idUsuario { get; set; }
+        [ForeignKey("idUsuario")]
+        public virtual Usuario usuCreador { get; set; }
+
+        [Column("codigomunicipio")]
+        [Display(Name = "Codigo Municipio")]
+        public int codMunicipio { get; set; }
+        [ForeignKey("codMunicipio")]
+        public virtual Municipio municipio { get; set; }
+
     }
 }
