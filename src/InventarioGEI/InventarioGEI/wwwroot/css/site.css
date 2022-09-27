@@ -54,6 +54,11 @@ body {
     font-weight: 600;
 }
 
+.navbar-icon {
+    width: 16px;
+    margin-right: 15px;
+}
+
 li > a {
     text-decoration: none;
     color: #334D6E;
