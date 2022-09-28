@@ -12,6 +12,7 @@ namespace InventarioGEI.Models
         public int idRol { get; set; }
         [Column("rol")]
         [Display(Name = "Rol")]
+        [Required(ErrorMessage = "Es necesario que el rol tenga un nombre")]
         public string nombreRol { get; set; }
 
         [Column("moduloRol")]

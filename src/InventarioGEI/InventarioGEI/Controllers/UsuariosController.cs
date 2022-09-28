@@ -46,31 +46,25 @@ namespace InventarioGEI.Controllers
                 return RedirectToAction("AccesDenied", "Home");
             }
         }
-
-        // GET: Usuarios/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Usuario == null)
-            {
-                return NotFound();
-            }
-
-            var usuario = await _context.Usuario
-                .Include(u => u.rolUsuario)
-                .FirstOrDefaultAsync(m => m.idUsuario == id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-            return View(usuario);
-        }
-
+        
         // GET: Usuarios/Create
-        public IActionResult Create()
+        public  IActionResult Create()
         {
-            ViewData["idRol"] = new SelectList(_context.Rol, "idRol", "idRol");
-            return View();
+            if (GetAccesRol())
+            {
+                List<Rol> roles = _context.Rol.ToList();
+                var listaRoles = new List<SelectListItem>();
+                foreach (var item in roles)
+                {
+                    listaRoles.Add(new SelectListItem {Text = item.nombreRol, Value = item.idRol.ToString() });
+                }
+                ViewData["idRol"] = listaRoles;
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: Usuarios/Create
@@ -93,18 +87,31 @@ namespace InventarioGEI.Controllers
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Usuario == null)
+            if (GetAccesRol())
             {
-                return NotFound();
-            }
+                if (id == null || _context.Usuario == null)
+                {
+                    return NotFound();
+                }
 
-            var usuario = await _context.Usuario.FindAsync(id);
-            if (usuario == null)
-            {
-                return NotFound();
+                var usuario = await _context.Usuario.FindAsync(id);
+                if (usuario == null)
+                {
+                    return NotFound();
+                }
+                List<Rol> roles = _context.Rol.ToList();
+                var listaRoles = new List<SelectListItem>();
+                foreach (var item in roles)
+                {
+                    listaRoles.Add(new SelectListItem { Text = item.nombreRol, Value = item.idRol.ToString() });
+                }
+                ViewData["idRol"] = listaRoles;
+                return View(usuario);
             }
-            ViewData["idRol"] = new SelectList(_context.Rol, "idRol", "idRol", usuario.idRol);
-            return View(usuario);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: Usuarios/Edit/5
@@ -146,20 +153,27 @@ namespace InventarioGEI.Controllers
         // GET: Usuarios/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Usuario == null)
+            if (GetAccesRol())
             {
-                return NotFound();
-            }
+                if (id == null || _context.Usuario == null)
+                {
+                    return NotFound();
+                }
 
-            var usuario = await _context.Usuario
-                .Include(u => u.rolUsuario)
-                .FirstOrDefaultAsync(m => m.idUsuario == id);
-            if (usuario == null)
+                var usuario = await _context.Usuario
+                    .Include(u => u.rolUsuario)
+                    .FirstOrDefaultAsync(m => m.idUsuario == id);
+                if (usuario == null)
+                {
+                    return NotFound();
+                }
+
+                return View(usuario);
+            }
+            else
             {
-                return NotFound();
+                return RedirectToAction("AccesDenied", "Home");
             }
-
-            return View(usuario);
         }
 
         // POST: Usuarios/Delete/5

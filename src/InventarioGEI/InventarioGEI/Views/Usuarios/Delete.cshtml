@@ -4,30 +4,37 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
-
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Usuario</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.rolUsuario)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.rolUsuario.idRol)
+<div class="card mb-3" style="min-height: 100%; box-shadow: 0px 6px 18px 0px rgb(0 0 0 / 6%);">
+    <div class="card-header" style="background-color: transparent; border: none;">
+        <h3 style="margin-top: 10px;">Eliminar Usuario</h3>
+        <hr />
+    </div>
+    <dl>
+        <div>
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.email)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.email)
+            </dd>
+        </div>
+        <div>
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.rolUsuario)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.rolUsuario.nombreRol)
+            </dd>
+        </div>
+        <dd>
+            <form asp-action="Delete">
+                <div class="form-group" style="text-align-last: end; margin-top: 50px;">
+                    <input type="hidden" asp-for="idUsuario" />
+                    <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+                    <input type="submit" value="Eliminar" class="btn btn-danger" />
+                </div>
+            </form>
         </dd>
     </dl>
     
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="idUsuario" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
 </div>
