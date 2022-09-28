@@ -21,9 +21,21 @@ namespace InventarioGEI.Controllers
 
         // GET: Sedes
         //[Authorize("rol-only")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? filter)
         {
-            return View(await _context.Sede.Include("municipio").Include("municipio.departamento").ToListAsync());
+            ViewBag.filter = new SelectList(_context.Departamento, "codigoDepartamento", "nombreDepartamento");
+
+            var sedes = new Object();
+
+            if (!String.IsNullOrEmpty(filter))
+            {
+                sedes = await _context.Sede.Include("municipio").Include("municipio.departamento").Where(s => s.municipio.departamento.codigoDepartamento == Int32.Parse(filter)).ToListAsync(); 
+            } else
+            {
+                sedes = await _context.Sede.Include("municipio").Include("municipio.departamento").ToListAsync();
+            }
+
+            return View(sedes);
         }
 
     }
