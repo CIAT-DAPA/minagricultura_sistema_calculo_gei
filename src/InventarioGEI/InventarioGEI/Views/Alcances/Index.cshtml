@@ -1,0 +1,40 @@
+﻿@model IEnumerable<InventarioGEI.Models.Alcance>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.nombreAlcance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.usuario)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.nombreAlcance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.usuario.email)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.idAlcance">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.idAlcance">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

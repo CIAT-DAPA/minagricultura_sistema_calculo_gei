@@ -50,7 +50,7 @@ namespace InventarioGEI.Controllers
         public IActionResult Create()
         {
             if (GetAccesRol())
-            {
+            {   
                 return View();
             }
             else

@@ -1,0 +1,31 @@
+﻿@model InventarioGEI.Models.Alcance
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Alcance</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="idAlcance" />
+            <div class="form-group">
+                <label asp-for="nombreAlcance" class="control-label"></label>
+                <input asp-for="nombreAlcance" class="form-control" />
+                <span asp-validation-for="nombreAlcance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

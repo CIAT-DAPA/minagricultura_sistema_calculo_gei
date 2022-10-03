@@ -13,6 +13,9 @@ namespace InventarioGEI.Models
         public DbSet<InventarioGEI.Models.Sede> Sede { get; set; }
         public DbSet<InventarioGEI.Models.Departamento> Departamento { get; set; }
         public DbSet<InventarioGEI.Models.Municipio> Municipio { get; set; }
+        public DbSet<InventarioGEI.Models.Alcance> Alcance { get; set; }
+        public DbSet<InventarioGEI.Models.Categoria> Categoria { get; set; }
+
 
     }
 }
