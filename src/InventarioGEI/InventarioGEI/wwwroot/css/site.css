@@ -151,3 +151,85 @@ dl {
     justify-content: space-around; 
     flex-wrap: nowrap;
 }
+
+.container-title {
+    justify-content: space-between;
+    margin-bottom: 24px;
+    align-items: baseline;
+}
+
+.button-create {
+    font-weight: 500;
+    color: white;
+    text-decoration: none;
+    width: auto;
+}
+
+.container-main {
+    min-height: 100%;
+    box-shadow: 0px 6px 18px 0px rgb(0 0 0 / 6%);
+}
+
+.table-main {
+    margin-top: 10px;
+}
+
+.tr-head {
+    text-align: center;
+    color: #334D6E;
+    font-weight: 100 !important;
+}
+
+.th-head {
+    font-weight: 500;
+    border-color: #EBEFF2;
+}
+
+.tr-body {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.td-body-main {
+    font-weight: 600;
+}
+
+.card-header {
+    background-color: transparent;
+    border: none;
+}
+
+.form-main {
+    padding: 20px 40px;
+    height: 58vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.input-text {
+    border: none;
+    border-bottom: solid 1px black;
+    border-radius: 0px;
+    width: 400px;
+    height: 40px;
+    font-weight: 600;
+    padding: 0px;
+}
+
+.group-buttons {
+    text-align-last: end;
+    margin-top: 50px;
+}
+
+.input-select {
+    border-radius: 0px;
+    width: 300px;
+    border: none;
+    border-bottom: solid 1px black;
+    background-blend-mode: color;
+}
+
+.control-label {
+    color: #109CF1;
+}

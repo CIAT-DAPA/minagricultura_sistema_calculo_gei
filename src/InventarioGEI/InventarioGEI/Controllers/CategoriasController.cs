@@ -21,45 +21,31 @@ namespace InventarioGEI.Controllers
         // GET: Categorias
         public async Task<IActionResult> Index()
         {
-            var context = _context.Categoria.Include(c => c.alcance).Include(c => c.usuarios);
+            var context = _context.Categoria.Where(c => c.enabled == true).Include(c => c.alcance).Include(c => c.usuarios);
             return View(await context.ToListAsync());
-        }
-
-        // GET: Categorias/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Categoria == null)
-            {
-                return NotFound();
-            }
-
-            var categoria = await _context.Categoria
-                .Include(c => c.alcance)
-                .Include(c => c.usuarios)
-                .FirstOrDefaultAsync(m => m.idCategoria == id);
-            if (categoria == null)
-            {
-                return NotFound();
-            }
-
-            return View(categoria);
         }
 
         // GET: Categorias/Create
         public IActionResult Create()
         {
-            ViewData["idAlcance"] = new SelectList(_context.Alcance, "idAlcance", "idAlcance");
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email");
+            List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true).ToList();
+            var listaAlcances = new List<SelectListItem>();
+            foreach (var item in alcances)
+            {
+                listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+            }
+            ViewData["idAlcance"] = listaAlcances;
             return View();
         }
 
         // POST: Categorias/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("idCategoria,nombreCategoria,enabled,idUsuario,idAlcance")] Categoria categoria)
+        public async Task<IActionResult> Create([Bind("idCategoria,nombreCategoria,idAlcance")] Categoria categoria)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+            categoria.enabled = true;
+            categoria.idUsuario = user.idUsuario;
             if (ModelState.IsValid)
             {
                 _context.Add(categoria);
@@ -84,22 +70,29 @@ namespace InventarioGEI.Controllers
             {
                 return NotFound();
             }
-            ViewData["idAlcance"] = new SelectList(_context.Alcance, "idAlcance", "idAlcance", categoria.idAlcance);
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", categoria.idUsuario);
+            List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true).ToList();
+            var listaAlcances = new List<SelectListItem>();
+            foreach (var item in alcances)
+            {
+                listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+            }
+            ViewData["idAlcance"] = listaAlcances;
             return View(categoria);
         }
 
         // POST: Categorias/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("idCategoria,nombreCategoria,enabled,idUsuario,idAlcance")] Categoria categoria)
+        public async Task<IActionResult> Edit(int id, [Bind("idCategoria,nombreCategoria,idAlcance")] Categoria categoria)
         {
             if (id != categoria.idCategoria)
             {
                 return NotFound();
             }
+
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+            categoria.idUsuario = user.idUsuario;
+            categoria.enabled = true;
 
             if (ModelState.IsValid)
             {
@@ -158,7 +151,8 @@ namespace InventarioGEI.Controllers
             var categoria = await _context.Categoria.FindAsync(id);
             if (categoria != null)
             {
-                _context.Categoria.Remove(categoria);
+                categoria.enabled = false;
+                _context.Categoria.Update(categoria);
             }
             
             await _context.SaveChangesAsync();

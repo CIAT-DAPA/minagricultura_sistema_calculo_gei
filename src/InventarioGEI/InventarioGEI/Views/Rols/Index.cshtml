@@ -4,43 +4,43 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="row" style="justify-content: space-between; margin-bottom: 24px; align-items: baseline;">
+<div class="row container-title">
     <h3 class="col-3">Roles</h3>
 
-    <a asp-action="Create" type="button" class="col-1 btn btn-primary" style="font-weight: 500; color: white; text-decoration: none;">Crear Rol</a>
+    <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create">Crear Rol</a>
  
 </div>
 
-<div class="card mb-3" style="min-height: 100%; box-shadow: 0px 6px 18px 0px rgb(0 0 0 / 6%);">
-    <table class="table table-hover" style="margin-top: 10px;">
+<div class="card mb-3 container-main">
+    <table class="table table-hover table-main">
         <thead>
-            <tr style="text-align: center; color: #334D6E; font-weight: 100 !important;">
-                <th style="font-weight: 500; border-color: #EBEFF2;">
+            <tr class="tr-head" >
+                <th class="th-head">
                     @Html.DisplayNameFor(model => model.nombreRol)
                 </th>
-                <th style="font-weight: 500; border-color: #EBEFF2;">
+                <th class="th-head">
                     @Html.DisplayNameFor(model => model.permisoRol)
                 </th>
-                <th style="font-weight: 500; border-color: #EBEFF2;">
+                <th class="th-head">
                     @Html.DisplayNameFor(model => model.permisoSede)
                 </th>
-                <th style="font-weight: 500; border-color: #EBEFF2;">
+                <th class="th-head">
                     @Html.DisplayNameFor(model => model.permisoConfiguracion)
                 </th>
-                <th style="font-weight: 500; border-color: #EBEFF2;">
+                <th class="th-head">
                     @Html.DisplayNameFor(model => model.permisoRegistro)
                 </th>
-                <th style="font-weight: 500; border-color: #EBEFF2;">
+                <th class="th-head">
                     @Html.DisplayNameFor(model => model.permisoVisualizacion)
                 </th>
-                <th style="font-weight: 500; border-color: #EBEFF2;"></th>
-                <th style="font-weight: 500; border-color: #EBEFF2;"></th>
+                <th class="th-head"></th>
+                <th class="th-head"></th>
             </tr>
         </thead>
         <tbody>
     @foreach (var item in Model) {
-            <tr style="text-align: center; vertical-align: middle;">
-                <td style="font-weight: 600;">
+            <tr class="tr-body">
+                <td class="td-body-main">
                     @Html.DisplayFor(modelItem => item.nombreRol)
                 </td>
                 <td>

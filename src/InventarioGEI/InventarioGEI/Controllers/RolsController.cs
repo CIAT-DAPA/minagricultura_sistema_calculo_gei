@@ -37,7 +37,7 @@ namespace InventarioGEI.Controllers
         {
             if (GetAccesRol())
             {
-                return View(await _context.Rol.ToListAsync());
+                return View(await _context.Rol.Where(r => r.enabled == true).ToListAsync());
             }
             else
             {
@@ -66,6 +66,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idRol,nombreRol,permisoRol,permisoSede,permisoConfiguracion,permisoRegistro,permisoVisualizacion")] Rol rol)
         {
+            rol.enabled = true;
             if (ModelState.IsValid)
             {
                 _context.Add(rol);
@@ -110,6 +111,7 @@ namespace InventarioGEI.Controllers
                 return NotFound();
             }
 
+            rol.enabled = true;
             if (ModelState.IsValid)
             {
                 try
@@ -163,7 +165,8 @@ namespace InventarioGEI.Controllers
             var rol = await _context.Rol.FindAsync(id);
             if (rol != null)
             {
-                _context.Rol.Remove(rol);
+                rol.enabled = false;
+                _context.Rol.Update(rol);
             }
             
             await _context.SaveChangesAsync();

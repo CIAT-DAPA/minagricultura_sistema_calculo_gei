@@ -4,8 +4,8 @@
     ViewData["Title"] = "Delete";
 }
 
-<div class="card mb-3" style="min-height: 100%; box-shadow: 0px 6px 18px 0px rgb(0 0 0 / 6%);">
-    <div class="card-header" style="background-color: transparent; border: none;">
+<div class="card mb-3 container-main">
+    <div class="card-header">
         <h3 style="margin-top: 10px;">Eliminar Usuario</h3>
         <hr />
     </div>
@@ -28,7 +28,7 @@
         </div>
         <dd>
             <form asp-action="Delete">
-                <div class="form-group" style="text-align-last: end; margin-top: 50px;">
+                <div class="form-group group-buttons">
                     <input type="hidden" asp-for="idUsuario" />
                     <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
                     <input type="submit" value="Eliminar" class="btn btn-danger" />

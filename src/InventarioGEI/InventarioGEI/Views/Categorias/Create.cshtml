@@ -4,40 +4,29 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<div class="card mb-3 container-main">
+    <div class="card-header">
+        <h3 style="margin-top: 10px;">Crear Categoria</h3>
+        <hr />
+    </div>
 
-<h4>Categoria</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" class="form-main">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="nombreCategoria" class="control-label"></label>
-                <input asp-for="nombreCategoria" class="form-control" />
+            <label asp-for="nombreCategoria" class="control-label col-form-label" ></label>
+            <input asp-for="nombreCategoria" placeholder="Ingrese el nombre del alcance" class="form-control input-text" />
                 <span asp-validation-for="nombreCategoria" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="enabled" /> @Html.DisplayNameFor(model => model.enabled)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="idUsuario" class="control-label"></label>
-                <select asp-for="idUsuario" class ="form-control" asp-items="ViewBag.idUsuario"></select>
             </div>
             <div class="form-group">
                 <label asp-for="idAlcance" class="control-label"></label>
-                <select asp-for="idAlcance" class ="form-control" asp-items="ViewBag.idAlcance"></select>
+                <div class="selectdiv ">
+                    <select asp-for="idAlcance" class ="form-control input-select" asp-items="ViewBag.idAlcance"></select>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group group-buttons">
+                <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+                <input type="submit" value="Crear" class="btn btn-primary" />
             </div>
         </form>
-    </div>
+ 
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-

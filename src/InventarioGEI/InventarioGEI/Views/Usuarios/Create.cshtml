@@ -4,33 +4,31 @@
     ViewData["Title"] = "Create";
 }
 
-<div class="card mb-3" style="min-height: 100%; box-shadow: 0px 6px 18px 0px rgb(0 0 0 / 6%);">
-    <div class="card-header" style="background-color: transparent; border: none;">
+<div class="card mb-3 container-main">
+    <div class="card-header">
         <h3 style="margin-top: 10px;">Crear Usuario</h3>
         <hr />
     </div>
 
 
-    <form asp-action="Create" style="padding: 20px 40px; height: 58vh; display: flex; flex-direction: column; justify-content: space-around;">
+    <form asp-action="Create" class="form-main">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="email" class="control-label col-form-label" style="color: #109CF1;"></label>
-            <input asp-for="email" class="form-control" placeholder="Ingrese el correo organizacional del usuario" style="border: none; border-bottom: solid 1px black; border-radius: 0px; width: 400px; height:40px;font-weight: 600; padding: 0px;" />
+            <label asp-for="email" class="control-label col-form-label" ></label>
+            <input asp-for="email" class="form-control input-text" placeholder="Ingrese el correo organizacional del usuario"/>
             <span asp-validation-for="email" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="idRol" class="control-label" style="color: #109CF1;"></label>
+            <label asp-for="idRol" class="control-label"></label>
             <div class="selectdiv ">
-           
-                <select asp-for="idRol" class="form-select" asp-items="ViewBag.idRol" style="border-radius: 0px; width: 300px; border: none; border-bottom: solid 1px black; background-blend-mode: color;"></select>
+                <select asp-for="idRol" class="form-select input-select" asp-items="ViewBag.idRol"></select>
             </div>
         </div>
-        <div class="form-group">
-            <div class="form-group" style="text-align-last: end; margin-top: 50px;">
-                <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
-                <input type="submit" value="Crear" class="btn btn-primary" />
-            </div>
+        <div class="form-group group-buttons">
+            <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+            <input type="submit" value="Crear" class="btn btn-primary" />
         </div>
+       
     </form>
 
 </div>

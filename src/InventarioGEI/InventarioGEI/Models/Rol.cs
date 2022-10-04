@@ -35,6 +35,10 @@ namespace InventarioGEI.Models
         [Display(Name = "Permiso de visualizacion")]
         public bool permisoVisualizacion { get; set; }
 
+        [Column("enabled")]
+        [Display(Name = "Habilitado")]
+        public bool enabled { get; set; }
+
         public virtual ICollection<Usuario>? Usuarios { get; set; }
     }
 }

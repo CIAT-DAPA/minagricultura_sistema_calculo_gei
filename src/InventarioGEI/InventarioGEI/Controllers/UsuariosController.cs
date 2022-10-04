@@ -38,7 +38,7 @@ namespace InventarioGEI.Controllers
         {
             if (GetAccesRol())
             {
-                var context = _context.Usuario.Include(u => u.rolUsuario);
+                var context = _context.Usuario.Where(u => u.enabled == true).Include(u => u.rolUsuario);
                 return View(await context.ToListAsync());
             }
             else
@@ -52,7 +52,7 @@ namespace InventarioGEI.Controllers
         {
             if (GetAccesRol())
             {
-                List<Rol> roles = _context.Rol.ToList();
+                List<Rol> roles = _context.Rol.Where(r => r.enabled == true).ToList();
                 var listaRoles = new List<SelectListItem>();
                 foreach (var item in roles)
                 {
@@ -74,6 +74,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idUsuario,email,idRol")] Usuario usuario)
         {
+            usuario.enabled = true;
             if (ModelState.IsValid)
             {
                 _context.Add(usuario);
@@ -99,7 +100,7 @@ namespace InventarioGEI.Controllers
                 {
                     return NotFound();
                 }
-                List<Rol> roles = _context.Rol.ToList();
+                List<Rol> roles = _context.Rol.Where(r => r.enabled == true).ToList();
                 var listaRoles = new List<SelectListItem>();
                 foreach (var item in roles)
                 {
@@ -125,7 +126,7 @@ namespace InventarioGEI.Controllers
             {
                 return NotFound();
             }
-
+            usuario.enabled = true;
             if (ModelState.IsValid)
             {
                 try
@@ -188,7 +189,8 @@ namespace InventarioGEI.Controllers
             var usuario = await _context.Usuario.FindAsync(id);
             if (usuario != null)
             {
-                _context.Usuario.Remove(usuario);
+                usuario.enabled = false;
+                _context.Usuario.Update(usuario);
             }
             
             await _context.SaveChangesAsync();

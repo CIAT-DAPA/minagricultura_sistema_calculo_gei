@@ -14,6 +14,9 @@ namespace InventarioGEI.Models
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Es obligatorio el correo electronico del usuario")]
         public string email { get; set; }
+        [Column("enabled")]
+        [Display(Name ="Habilitado")]
+        public bool enabled { get; set; }
         //foreign key
         [Column("idrol")]
         [Display(Name = "Rol")]
