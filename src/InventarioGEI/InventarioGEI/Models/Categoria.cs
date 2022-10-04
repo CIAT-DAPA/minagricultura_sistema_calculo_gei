@@ -30,5 +30,8 @@ namespace InventarioGEI.Models
         [ForeignKey("idAlcance")]
         [Display(Name = "Alcance")]
         public Alcance? alcance { get; set; }
+
+
+        public virtual ICollection<Subcategoria>? Subcategorias { get; set; }
     }
 }

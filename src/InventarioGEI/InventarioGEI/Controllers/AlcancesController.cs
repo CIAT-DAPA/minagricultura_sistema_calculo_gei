@@ -21,7 +21,7 @@ namespace InventarioGEI.Controllers
         // GET: Alcances
         public async Task<IActionResult> Index()
         {
-            var context = _context.Alcance.Include(a => a.usuario);
+            var context = _context.Alcance.Where(a => a.enabled == true).Include(a => a.usuario);
             return View(await context.ToListAsync());
         }
 
@@ -135,7 +135,8 @@ namespace InventarioGEI.Controllers
             var alcance = await _context.Alcance.FindAsync(id);
             if (alcance != null)
             {
-                _context.Alcance.Remove(alcance);
+                alcance.enabled = false;
+                _context.Alcance.Update(alcance);
             }
             
             await _context.SaveChangesAsync();
