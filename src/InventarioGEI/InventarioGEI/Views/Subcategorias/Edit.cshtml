@@ -1,0 +1,34 @@
+﻿@model InventarioGEI.Models.Subcategoria
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="card mb-3 container-main">
+    <div class="card-header">
+        <h3 style="margin-top: 10px;">Editar Subcategoría</h3>
+        <hr />
+    </div>
+    <form asp-action="Edit" class="form-main">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="idSubcategoria" />
+            <div class="form-group">
+            <label asp-for="nombreSubcategoria" class="control-label col-form-label"></label>
+            <input asp-for="nombreSubcategoria" placeholder="Ingrese el nombre de la categoría" class="form-control input-text" />
+                <span asp-validation-for="nombreSubcategoria" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="idCategoria" class="control-label"></label>
+                <div class="form-group">
+                <select asp-for="idCategoria" class="form-control input-select" asp-items="ViewBag.idCategoria"></select>
+                </div>
+                <span asp-validation-for="idCategoria" class="text-danger"></span>
+            </div>
+        <div class="form-group group-buttons">
+            <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+        </div>
+        </form>
+    </div>
+
+

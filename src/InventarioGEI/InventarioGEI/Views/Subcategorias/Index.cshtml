@@ -1,0 +1,55 @@
+﻿@model IEnumerable<InventarioGEI.Models.Subcategoria>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row container-title">
+    <h3 class="col-3">Subcategorías</h3>
+
+    <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create">Crear Subcategoría</a>
+</div>
+<div class="card mb-3 container-main">
+    <table class="table table-hover table-main">
+        <thead>
+            <tr class="tr-head">
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.nombreSubcategoria)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.categoria)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.usuario)
+                </th>
+                <th class="th-head"></th>
+                <th class="th-head"></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr class="tr-body">
+                <td class="td-body-main">
+                    @Html.DisplayFor(modelItem => item.nombreSubcategoria)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.categoria.nombreCategoria)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.usuario.email)
+                </td>
+                    <td>
+                        <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idSubcategoria">
+                            Editar
+                        </a>
+                    </td>
+                    <td>
+                        <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idSubcategoria">
+                            Eliminar
+                        </a>
+                    </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>

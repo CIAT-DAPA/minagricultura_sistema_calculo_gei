@@ -11,7 +11,7 @@ namespace InventarioGEI.Models
         [Display(Name = "Id del combustible")]
         public int idCombustible { get; set; }
 
-        [Column("nombrecombutible")]
+        [Column("nombrecombustible")]
         [Display(Name = "Combustible")]
         public string nombreCombustible { get; set; }
 

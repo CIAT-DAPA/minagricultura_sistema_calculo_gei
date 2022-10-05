@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventarioGEI.Models
 {
-    [Table("Unidad")]
+    [Table("unidad")]
     public class Unidad
     {
         [Key]

@@ -6,7 +6,7 @@
 
 <div class="card mb-3 container-main">
     <div class="card-header">
-        <h3 style="margin-top: 10px;">Editar Categoria</h3>
+        <h3 style="margin-top: 10px;">Editar Categoría</h3>
         <hr />
     </div>
     <form asp-action="Edit" class="form-main">
@@ -14,12 +14,12 @@
             <input type="hidden" asp-for="idCategoria" />
             <div class="form-group">
             <label asp-for="nombreCategoria" class="control-label col-form-label"></label>
-            <input asp-for="nombreCategoria" placeholder="Ingrese el nombre del alcance" class="form-control input-text" />
+            <input asp-for="nombreCategoria" placeholder="Ingrese el nombre de la categoría" class="form-control input-text" />
                 <span asp-validation-for="nombreCategoria" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="idAlcance" class="control-label"></label>
-                <div class="form-group">
+                <div class="selectdiv">
                 <select asp-for="idAlcance" class="form-control input-select" asp-items="ViewBag.idAlcance"></select>
                 </div>
                 <span asp-validation-for="idAlcance" class="text-danger"></span>
