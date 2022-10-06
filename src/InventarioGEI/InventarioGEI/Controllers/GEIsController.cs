@@ -9,85 +9,85 @@ using InventarioGEI.Models;
 
 namespace InventarioGEI.Controllers
 {
-    public class AlcancesController : AccesController
+    public class GEIsController : AccesController
     {
         private readonly Context _context;
 
-        public AlcancesController(Context context) : base(context)
+        public GEIsController(Context context) : base(context)
         {
             _context = context;
         }
 
-        // GET: Alcances
+        // GET: GEIs
         public async Task<IActionResult> Index()
         {
-            var context = _context.Alcance.Where(a => a.enabled == true).Include(a => a.usuario);
+            var context = _context.Gei.Where(g => g.enabled == true).Include(g => g.usuario);
             return View(await context.ToListAsync());
         }
 
-        // GET: Alcances/Create
+        // GET: GEIs/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Alcances/Create
+        // POST: GEIs/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("idAlcance,nombreAlcance")] Alcance alcance)
+        public async Task<IActionResult> Create([Bind("idGei,nombreGei")] GEI gEI)
         {
             Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            alcance.idUsuario = user.idUsuario;
-            alcance.enabled = true;
+            gEI.idUsuario = user.idUsuario;
+            gEI.enabled = true;
             if (ModelState.IsValid)
             {
-                _context.Add(alcance);
+                _context.Add(gEI);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(alcance);
+            return View(gEI);
         }
 
-        // GET: Alcances/Edit/5
+        // GET: GEIs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Alcance == null)
+            if (id == null || _context.Gei == null)
             {
                 return NotFound();
             }
 
-            var alcance = await _context.Alcance.FindAsync(id);
-            if (alcance == null)
+            var gEI = await _context.Gei.FindAsync(id);
+            if (gEI == null)
             {
                 return NotFound();
             }
-            return View(alcance);
+            return View(gEI);
         }
 
-        // POST: Alcances/Edit/5
+        // POST: GEIs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("idAlcance,nombreAlcance")] Alcance alcance)
+        public async Task<IActionResult> Edit(int id, [Bind("idGei,nombreGei")] GEI gEI)
         {
-            if (id != alcance.idAlcance)
+            if (id != gEI.idGei)
             {
                 return NotFound();
             }
 
             Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            alcance.idUsuario = user.idUsuario;
-            alcance.enabled = true;
+            gEI.idUsuario = user.idUsuario;
+            gEI.enabled = true;
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(alcance);
+                    _context.Update(gEI);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AlcanceExists(alcance.idAlcance))
+                    if (!GEIExists(gEI.idGei))
                     {
                         return NotFound();
                     }
@@ -98,52 +98,51 @@ namespace InventarioGEI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", alcance.idUsuario);
-            return View(alcance);
+            return View(gEI);
         }
 
-        // GET: Alcances/Delete/5
+        // GET: GEIs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Alcance == null)
+            if (id == null || _context.Gei == null)
             {
                 return NotFound();
             }
 
-            var alcance = await _context.Alcance
-                .Include(a => a.usuario)
-                .FirstOrDefaultAsync(m => m.idAlcance == id);
-            if (alcance == null)
+            var gEI = await _context.Gei
+                .Include(g => g.usuario)
+                .FirstOrDefaultAsync(m => m.idGei == id);
+            if (gEI == null)
             {
                 return NotFound();
             }
 
-            return View(alcance);
+            return View(gEI);
         }
 
-        // POST: Alcances/Delete/5
+        // POST: GEIs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Alcance == null)
+            if (_context.Gei == null)
             {
-                return Problem("Entity set 'Context.Alcance'  is null.");
+                return Problem("Entity set 'Context.Gei'  is null.");
             }
-            var alcance = await _context.Alcance.FindAsync(id);
-            if (alcance != null)
+            var gEI = await _context.Gei.FindAsync(id);
+            if (gEI != null)
             {
-                alcance.enabled = false;
-                _context.Alcance.Update(alcance);
+                gEI.enabled = false;
+                _context.Gei.Update(gEI);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AlcanceExists(int id)
+        private bool GEIExists(int id)
         {
-          return _context.Alcance.Any(e => e.idAlcance == id);
+          return _context.Gei.Any(e => e.idGei == id);
         }
     }
 }

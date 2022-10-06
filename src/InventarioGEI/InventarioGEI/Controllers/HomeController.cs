@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace InventarioGEI.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

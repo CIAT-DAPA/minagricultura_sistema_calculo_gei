@@ -12,6 +12,7 @@ namespace InventarioGEI.Models
         public int idGei { get; set; }
         [Column("nombregei")]
         [Display(Name = "GEI")]
+        [Required(ErrorMessage = "Es necesario que el GEI tenga un nombre")]
         public string nombreGei { get; set; }
         [Column("enabled")]
         [Display(Name = "Habilitado")]

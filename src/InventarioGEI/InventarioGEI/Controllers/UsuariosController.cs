@@ -10,27 +10,13 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace InventarioGEI.Controllers
 {
-    public class UsuariosController : Controller
+    public class UsuariosController : AccesController
     {
         private readonly Context _context;
 
-        public UsuariosController(Context context)
+        public UsuariosController(Context context) : base(context)
         {
             _context = context;
-        }
-
-        public bool GetAccesRol()
-        {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            Rol rolAsig = _context.Rol.FirstOrDefault(r => r.idRol == user.idRol);
-            if (rolAsig.permisoRol)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
 
         // GET: Usuarios

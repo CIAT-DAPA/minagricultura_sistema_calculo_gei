@@ -12,6 +12,7 @@ namespace InventarioGEI.Models
         public int idCategoria { get; set; }
         [Column("nombrecategoria")]
         [Display(Name = "Categoria")]
+        [Required(ErrorMessage = "Es necesario que la categoría tenga un nombre")]
         public string nombreCategoria { get; set; }
         [Column("enabled")]
         [Display(Name = "habilitado")]

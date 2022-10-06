@@ -14,13 +14,13 @@
         <thead>
             <tr class="tr-head">
                 <th class="th-head">
+                    @Html.DisplayNameFor(model => model.alcance)
+                </th>
+                <th class="th-head">
                     @Html.DisplayNameFor(model => model.nombreCategoria)
                 </th>
                 <th class="th-head">
                     @Html.DisplayNameFor(model => model.usuarios)
-                </th>
-                <th class="th-head">
-                    @Html.DisplayNameFor(model => model.alcance)
                 </th>
                 <th class="th-head"></th>
                 <th class="th-head"></th>
@@ -29,14 +29,14 @@
         <tbody>
     @foreach (var item in Model) {
             <tr class="tr-body">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.alcance.nombreAlcance)
+                    </td>
                 <td class="td-body-main">
                     @Html.DisplayFor(modelItem => item.nombreCategoria)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.usuarios.email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.alcance.nombreAlcance)
                 </td>
                 <td>
                     <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idCategoria">

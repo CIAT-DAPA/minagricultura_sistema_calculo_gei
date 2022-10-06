@@ -9,11 +9,11 @@ using InventarioGEI.Models;
 
 namespace InventarioGEI.Controllers
 {
-    public class SubcategoriasController : Controller
+    public class SubcategoriasController : AccesController
     {
         private readonly Context _context;
 
-        public SubcategoriasController(Context context)
+        public SubcategoriasController(Context context) : base(context)
         {
             _context = context;
         }
@@ -21,18 +21,18 @@ namespace InventarioGEI.Controllers
         // GET: Subcategorias
         public async Task<IActionResult> Index()
         {
-            var context = _context.Subcategoria.Where(s => s.enabled == true).Include(s => s.categoria).Include(s => s.usuario);
+            var context = _context.Subcategoria.Where(s => s.enabled == true).Include(s => s.categoria).Include(s => s.usuario).OrderBy(s => s.categoria.nombreCategoria);
             return View(await context.ToListAsync());
         }
 
         // GET: Subcategorias/Create
         public IActionResult Create()
         {
-            List<Categoria> categorias = _context.Categoria.Where(c => c.enabled == true).ToList();
+            List<Categoria> categorias = _context.Categoria.Where(c => c.enabled == true).Include(c => c.alcance).ToList();
             var listaCategorias = new List<SelectListItem>();
             foreach (var item in categorias)
             {
-                listaCategorias.Add(new SelectListItem { Text = item.nombreCategoria, Value = item.idCategoria.ToString() });
+                listaCategorias.Add(new SelectListItem { Text = item.alcance.nombreAlcance + " - " + item.nombreCategoria, Value = item.idCategoria.ToString() });
             }
 
             ViewData["idCategoria"] = listaCategorias;
@@ -55,8 +55,14 @@ namespace InventarioGEI.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["idCategoria"] = new SelectList(_context.Categoria, "idCategoria", "idCategoria", subcategoria.idCategoria);
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", subcategoria.idUsuario);
+            List<Categoria> categorias = _context.Categoria.Where(c => c.enabled == true).Include(c => c.alcance).ToList();
+            var listaCategorias = new List<SelectListItem>();
+            foreach (var item in categorias)
+            {
+                listaCategorias.Add(new SelectListItem { Text = item.alcance.nombreAlcance + " - " + item.nombreCategoria, Value = item.idCategoria.ToString() });
+            }
+
+            ViewData["idCategoria"] = listaCategorias;
             return View(subcategoria);
         }
 
@@ -73,12 +79,13 @@ namespace InventarioGEI.Controllers
             {
                 return NotFound();
             }
-            List<Categoria> categorias = _context.Categoria.Where(c => c.enabled == true).ToList();
+            List<Categoria> categorias = _context.Categoria.Where(c => c.enabled == true).Include(c => c.alcance).ToList();
             var listaCategorias = new List<SelectListItem>();
             foreach (var item in categorias)
             {
-                listaCategorias.Add(new SelectListItem { Text = item.nombreCategoria, Value = item.idCategoria.ToString() });
+                listaCategorias.Add(new SelectListItem { Text = item.alcance.nombreAlcance + " - " + item.nombreCategoria, Value = item.idCategoria.ToString() });
             }
+
             ViewData["idCategoria"] = listaCategorias;
             return View(subcategoria);
         }
@@ -118,8 +125,14 @@ namespace InventarioGEI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["idCategoria"] = new SelectList(_context.Categoria, "idCategoria", "idCategoria", subcategoria.idCategoria);
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", subcategoria.idUsuario);
+            List<Categoria> categorias = _context.Categoria.Where(c => c.enabled == true).Include(c => c.alcance).ToList();
+            var listaCategorias = new List<SelectListItem>();
+            foreach (var item in categorias)
+            {
+                listaCategorias.Add(new SelectListItem { Text = item.alcance.nombreAlcance + " - " + item.nombreCategoria, Value = item.idCategoria.ToString() });
+            }
+
+            ViewData["idCategoria"] = listaCategorias;
             return View(subcategoria);
         }
 

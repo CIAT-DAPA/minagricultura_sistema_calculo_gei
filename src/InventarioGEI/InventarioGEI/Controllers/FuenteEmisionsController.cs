@@ -9,85 +9,87 @@ using InventarioGEI.Models;
 
 namespace InventarioGEI.Controllers
 {
-    public class AlcancesController : AccesController
+    public class FuenteEmisionsController : AccesController
     {
         private readonly Context _context;
 
-        public AlcancesController(Context context) : base(context)
+        public FuenteEmisionsController(Context context) : base(context)
         {
             _context = context;
         }
 
-        // GET: Alcances
+        // GET: FuenteEmisions
         public async Task<IActionResult> Index()
         {
-            var context = _context.Alcance.Where(a => a.enabled == true).Include(a => a.usuario);
+            var context = _context.FuenteEmision.Where(f => f.enabled == true).Include(f => f.usuario);
             return View(await context.ToListAsync());
         }
 
-        // GET: Alcances/Create
+        // GET: FuenteEmisions/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Alcances/Create
+        // POST: FuenteEmisions/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("idAlcance,nombreAlcance")] Alcance alcance)
+        public async Task<IActionResult> Create([Bind("idFuenteEmision,nombreFuenteEmision")] FuenteEmision fuenteEmision)
         {
             Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            alcance.idUsuario = user.idUsuario;
-            alcance.enabled = true;
+            fuenteEmision.idUsuario = user.idUsuario;
+            fuenteEmision.enabled = true;
             if (ModelState.IsValid)
             {
-                _context.Add(alcance);
+                _context.Add(fuenteEmision);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(alcance);
+            return View(fuenteEmision);
         }
 
-        // GET: Alcances/Edit/5
+        // GET: FuenteEmisions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Alcance == null)
+            if (id == null || _context.FuenteEmision == null)
             {
                 return NotFound();
             }
 
-            var alcance = await _context.Alcance.FindAsync(id);
-            if (alcance == null)
+            var fuenteEmision = await _context.FuenteEmision.FindAsync(id);
+            if (fuenteEmision == null)
             {
                 return NotFound();
             }
-            return View(alcance);
+            return View(fuenteEmision);
         }
 
-        // POST: Alcances/Edit/5
+        // POST: FuenteEmisions/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("idAlcance,nombreAlcance")] Alcance alcance)
+        public async Task<IActionResult> Edit(int id, [Bind("idFuenteEmision,nombreFuenteEmision")] FuenteEmision fuenteEmision)
         {
-            if (id != alcance.idAlcance)
+            if (id != fuenteEmision.idFuenteEmision)
             {
                 return NotFound();
             }
 
             Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            alcance.idUsuario = user.idUsuario;
-            alcance.enabled = true;
+            fuenteEmision.idUsuario = user.idUsuario;
+            fuenteEmision.enabled = true;
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(alcance);
+                    _context.Update(fuenteEmision);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AlcanceExists(alcance.idAlcance))
+                    if (!FuenteEmisionExists(fuenteEmision.idFuenteEmision))
                     {
                         return NotFound();
                     }
@@ -98,52 +100,51 @@ namespace InventarioGEI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", alcance.idUsuario);
-            return View(alcance);
+            return View(fuenteEmision);
         }
 
-        // GET: Alcances/Delete/5
+        // GET: FuenteEmisions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Alcance == null)
+            if (id == null || _context.FuenteEmision == null)
             {
                 return NotFound();
             }
 
-            var alcance = await _context.Alcance
-                .Include(a => a.usuario)
-                .FirstOrDefaultAsync(m => m.idAlcance == id);
-            if (alcance == null)
+            var fuenteEmision = await _context.FuenteEmision
+                .Include(f => f.usuario)
+                .FirstOrDefaultAsync(m => m.idFuenteEmision == id);
+            if (fuenteEmision == null)
             {
                 return NotFound();
             }
 
-            return View(alcance);
+            return View(fuenteEmision);
         }
 
-        // POST: Alcances/Delete/5
+        // POST: FuenteEmisions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Alcance == null)
+            if (_context.FuenteEmision == null)
             {
-                return Problem("Entity set 'Context.Alcance'  is null.");
+                return Problem("Entity set 'Context.FuenteEmision'  is null.");
             }
-            var alcance = await _context.Alcance.FindAsync(id);
-            if (alcance != null)
+            var fuenteEmision = await _context.FuenteEmision.FindAsync(id);
+            if (fuenteEmision != null)
             {
-                alcance.enabled = false;
-                _context.Alcance.Update(alcance);
+                fuenteEmision.enabled = false;
+                _context.FuenteEmision.Update(fuenteEmision);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AlcanceExists(int id)
+        private bool FuenteEmisionExists(int id)
         {
-          return _context.Alcance.Any(e => e.idAlcance == id);
+          return _context.FuenteEmision.Any(e => e.idFuenteEmision == id);
         }
     }
 }

@@ -9,27 +9,14 @@ using InventarioGEI.Models;
 
 namespace InventarioGEI.Controllers
 {
-    public class RolsController : Controller
+    public class RolsController : AccesController
     {
+
         private readonly Context _context;
 
-        public RolsController(Context context)
+        public RolsController(Context context) : base(context)
         {
             _context = context;
-        }
-
-        public bool GetAccesRol()
-        {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            Rol rolAsig = _context.Rol.FirstOrDefault(r => r.idRol == user.idRol);
-            if(rolAsig.permisoRol)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }    
         }
 
         // GET: Rols

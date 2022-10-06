@@ -12,6 +12,7 @@ namespace InventarioGEI.Models
         public int idFuenteEmision { get; set; }
         [Column("nombrefuenteemision")]
         [Display(Name = "Fuente de emisión")]
+        [Required(ErrorMessage = "Es necesario que la fuente de emisión tenga un nombre")]
         public string nombreFuenteEmision { get; set; }
         [Column("enabled")]
         [Display(Name = "Habilitado")]

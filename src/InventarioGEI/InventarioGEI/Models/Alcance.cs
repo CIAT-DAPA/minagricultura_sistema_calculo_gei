@@ -12,6 +12,7 @@ namespace InventarioGEI.Models
         public int idAlcance { get; set; }
         [Column("nombrealcance")]
         [Display(Name ="Alcance")]
+        [Required(ErrorMessage = "Es necesario que el alcance tenga un nombre")]
         public string nombreAlcance { get; set; }
         [Column("enabled")]
         [Display(Name = "Habilitiado")]

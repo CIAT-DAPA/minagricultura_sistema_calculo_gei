@@ -12,6 +12,7 @@ namespace InventarioGEI.Models
         public int idSubcategoria { get; set; }
         [Column("nombresubcategoria")]
         [Display(Name = "Subcategoría")]
+        [Required(ErrorMessage = "Es necesario que la subcategoría tenga un nombre")]
         public string nombreSubcategoria { get; set; }
         [Column("enabled")]
         [Display(Name = "Habilitado")]

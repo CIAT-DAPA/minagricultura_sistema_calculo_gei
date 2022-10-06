@@ -9,11 +9,11 @@ using InventarioGEI.Models;
 
 namespace InventarioGEI.Controllers
 {
-    public class CombustiblesController : Controller
+    public class CombustiblesController : AccesController
     {
         private readonly Context _context;
 
-        public CombustiblesController(Context context)
+        public CombustiblesController(Context context) : base(context)
         {
             _context = context;
         }

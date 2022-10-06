@@ -9,11 +9,11 @@ using InventarioGEI.Models;
 
 namespace InventarioGEI.Controllers
 {
-    public class CategoriasController : Controller
+    public class CategoriasController : AccesController
     {
         private readonly Context _context;
 
-        public CategoriasController(Context context)
+        public CategoriasController(Context context) : base(context)
         {
             _context = context;
         }
@@ -21,7 +21,7 @@ namespace InventarioGEI.Controllers
         // GET: Categorias
         public async Task<IActionResult> Index()
         {
-            var context = _context.Categoria.Where(c => c.enabled == true).Include(c => c.alcance).Include(c => c.usuarios);
+            var context = _context.Categoria.Where(c => c.enabled == true).Include(c => c.alcance).Include(c => c.usuarios).OrderBy(c => c.alcance.nombreAlcance);
             return View(await context.ToListAsync());
         }
 
@@ -52,8 +52,13 @@ namespace InventarioGEI.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["idAlcance"] = new SelectList(_context.Alcance, "idAlcance", "idAlcance", categoria.idAlcance);
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", categoria.idUsuario);
+            List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true).ToList();
+            var listaAlcances = new List<SelectListItem>();
+            foreach (var item in alcances)
+            {
+                listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+            }
+            ViewData["idAlcance"] = listaAlcances;
             return View(categoria);
         }
 
@@ -114,8 +119,13 @@ namespace InventarioGEI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["idAlcance"] = new SelectList(_context.Alcance, "idAlcance", "idAlcance", categoria.idAlcance);
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", categoria.idUsuario);
+            List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true).ToList();
+            var listaAlcances = new List<SelectListItem>();
+            foreach (var item in alcances)
+            {
+                listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+            }
+            ViewData["idAlcance"] = listaAlcances;
             return View(categoria);
         }
 

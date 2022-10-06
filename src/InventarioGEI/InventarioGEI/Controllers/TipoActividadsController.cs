@@ -9,11 +9,11 @@ using InventarioGEI.Models;
 
 namespace InventarioGEI.Controllers
 {
-    public class TipoActividadsController : Controller
+    public class TipoActividadsController : AccesController
     {
         private readonly Context _context;
 
-        public TipoActividadsController(Context context)
+        public TipoActividadsController(Context context) : base(context)
         {
             _context = context;
         }

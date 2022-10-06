@@ -12,6 +12,13 @@
     <form asp-action="Edit" class="form-main">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="idCombustible" />
+        <div class="form-group">
+            <label asp-for="idActividad" class="control-label"></label>
+            <div class="selectdiv">
+                <select asp-for="idActividad" class="form-control input-select" asp-items="ViewBag.idActividad"></select>
+            </div>
+            <span asp-validation-for="idActividad" class="text-danger"></span>
+        </div>
             <div class="form-group">
             <label asp-for="nombreCombustible" class="control-label col-form-label"></label>
             <input asp-for="nombreCombustible" placeholder="Ingrese el nombre del combustible" class="form-control input-text" />
@@ -31,13 +38,7 @@
                 </div>  
                 <span asp-validation-for="idTipo" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="idActividad" class="control-label"></label>
-                <div class="selectdiv">
-                    <select asp-for="idActividad" class="form-control input-select" asp-items="ViewBag.idActividad"></select>
-                </div>
-                <span asp-validation-for="idActividad" class="text-danger"></span>
-            </div>
+            
             <div class="form-group group-buttons">
             <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
             <input type="submit" value="Guardar" class="btn btn-primary" />

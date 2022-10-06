@@ -14,11 +14,12 @@
         <thead>
             <tr class="tr-head">
                 <th class="th-head">
-                    @Html.DisplayNameFor(model => model.nombreSubcategoria)
-                </th>
-                <th class="th-head">
                     @Html.DisplayNameFor(model => model.categoria)
                 </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.nombreSubcategoria)
+                </th>
+                
                 <th class="th-head">
                     @Html.DisplayNameFor(model => model.usuario)
                 </th>
@@ -29,12 +30,13 @@
         <tbody>
     @foreach (var item in Model) {
             <tr class="tr-body">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.categoria.nombreCategoria)
+                    </td>
                 <td class="td-body-main">
                     @Html.DisplayFor(modelItem => item.nombreSubcategoria)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.categoria.nombreCategoria)
-                </td>
+                
                 <td>
                     @Html.DisplayFor(modelItem => item.usuario.email)
                 </td>

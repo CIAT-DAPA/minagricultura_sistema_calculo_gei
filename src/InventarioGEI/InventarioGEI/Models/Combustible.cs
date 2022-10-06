@@ -13,6 +13,7 @@ namespace InventarioGEI.Models
 
         [Column("nombrecombustible")]
         [Display(Name = "Combustible")]
+        [Required(ErrorMessage = "Es necesario que el combustible tenga un nombre")]
         public string nombreCombustible { get; set; }
 
         [Column("enabled")]

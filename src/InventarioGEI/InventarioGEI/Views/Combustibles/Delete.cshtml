@@ -11,6 +11,14 @@
     </div>
     <dl>
         <div>
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.actividad)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.actividad.nombreTipoActividad)
+            </dd>
+        </div>
+        <div>
             <dt class = "col-sm-10">
                 @Html.DisplayNameFor(model => model.nombreCombustible)
             </dt>
@@ -37,14 +45,7 @@
             </dd>
         </div>
 
-        <div>
-            <dt class = "col-sm-10">
-                @Html.DisplayNameFor(model => model.actividad)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.actividad.nombreTipoActividad)
-            </dd>
-        </div>
+        
 
         <div>
             <dt class = "col-sm-10">

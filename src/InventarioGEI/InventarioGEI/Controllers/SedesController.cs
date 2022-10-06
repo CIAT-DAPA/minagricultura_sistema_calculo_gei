@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace InventarioGEI.Controllers
 {
-    public class SedesController : Controller
+    public class SedesController : AccesController
     {
         private readonly Context _context;
 
-        public SedesController(Context context)
+        public SedesController(Context context) : base(context)
         {
             _context = context;
         }

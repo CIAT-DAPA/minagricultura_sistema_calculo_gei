@@ -11,7 +11,14 @@
                     Bienvenido!
                 </h5>
                 <p class="card-text" style="color: #4C5862; margin-top: 34px; padding: 0px 30px 0px 30px;">Bienvenidos al sistema de inventario GEI, en esta aplicación podrás realizar tus acciones dependiendo de tu rol y consultar las emisiones GEI causadas por las distintas actividades del ministerio de Agricultura de Colombia</p>
-      </div>
+                @if (User.Identity?.IsAuthenticated == true)
+                { 
+                }else{
+                    <p class="card-text" style="color: #4C5862; margin-top: 34px; padding: 0px 30px 0px 30px;">Para poder usar las funciones del sistema debes iniciar sesión con tu cuenta organizacional</p>
+                    <a type="button" class="btn btn-primary button-create" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">Entrar</a>
+                }
+                
+            </div>
     </div>
     <div class="col-md-4">
             <div class="img-home">

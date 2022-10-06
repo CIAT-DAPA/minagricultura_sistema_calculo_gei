@@ -11,6 +11,14 @@
     </div>
     <dl>
         <div>
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.alcance)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.alcance.nombreAlcance)
+            </dd>
+        </div>
+        <div>
             <dt class = "col-sm-10">
                 @Html.DisplayNameFor(model => model.nombreCategoria)
             </dt>
@@ -24,14 +32,6 @@
             </dt>
             <dd class = "col-sm-10">
                 @Html.DisplayFor(model => model.usuarios.email)
-            </dd>
-        </div>
-        <div>
-            <dt class = "col-sm-10">
-                @Html.DisplayNameFor(model => model.alcance)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.alcance.nombreAlcance)
             </dd>
         </div>
         <dd>

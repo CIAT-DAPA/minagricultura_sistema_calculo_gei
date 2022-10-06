@@ -12,7 +12,11 @@
 <div class="card mb-3 container-main">
     <table class="table table-hover table-main">
     <thead>
+
             <tr class="tr-head">
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.actividad)
+                </th>
                 <th class="th-head">
                 @Html.DisplayNameFor(model => model.nombreCombustible)
             </th>
@@ -22,9 +26,7 @@
                     <th class="th-head">
                 @Html.DisplayNameFor(model => model.tipo)
             </th>
-                    <th class="th-head">
-                @Html.DisplayNameFor(model => model.actividad)
-            </th>
+                    
                     <th class="th-head">
                 @Html.DisplayNameFor(model => model.usuario)
             </th>
@@ -35,6 +37,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr class="tr-body">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.actividad.nombreTipoActividad)
+                    </td>
                     <td class="td-body-main">
                 @Html.DisplayFor(modelItem => item.nombreCombustible)
             </td>
@@ -44,9 +49,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.tipo.tipo)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.actividad.nombreTipoActividad)
-            </td>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.usuario.email)
             </td>
