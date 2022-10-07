@@ -1,0 +1,77 @@
+﻿@model IEnumerable<InventarioGEI.Models.FactorEmision>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.factorEmision)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PCG)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.incertidumbreMas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.incertidumbreMenos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.enabled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.gei)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.idUsuario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.configuracion)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.factorEmision)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PCG)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.incertidumbreMas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.incertidumbreMenos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.enabled)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.gei.nombreGei)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.idUsuario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.configuracion.idConfiguracion)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.idFE">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.idFE">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.idFE">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -235,3 +235,7 @@ dl {
 .control-label {
     color: #109CF1;
 }
+
+.dropdown-menu {
+    padding: 5px 10px;
+}

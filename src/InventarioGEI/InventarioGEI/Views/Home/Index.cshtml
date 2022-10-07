@@ -3,27 +3,28 @@
 }
 
 <div class="card mb-3" style="min-height: 100%; box-shadow: 0px 6px 18px 0px rgb(0 0 0 / 6%);">
-   <div class="row g-0" style="height: 46rem;">
-    <div class="col-md-8" style="    text-align: center; align-self: center;">
-      <div class="card-body">
-                
+    <div class="row g-0" style="height: 46rem;">
+        <div class="col-md-8" style="    text-align: center; align-self: center;">
+            <div class="card-body">
+
                 <h5 class="card-title" style="font-size: 3rem; font-weight: 500; color: #192A3E;">
                     Bienvenido!
                 </h5>
                 <p class="card-text" style="color: #4C5862; margin-top: 34px; padding: 0px 30px 0px 30px;">Bienvenidos al sistema de inventario GEI, en esta aplicación podrás realizar tus acciones dependiendo de tu rol y consultar las emisiones GEI causadas por las distintas actividades del ministerio de Agricultura de Colombia</p>
                 @if (User.Identity?.IsAuthenticated == true)
-                { 
-                }else{
+                {
+                }
+                else
+                {
                     <p class="card-text" style="color: #4C5862; margin-top: 34px; padding: 0px 30px 0px 30px;">Para poder usar las funciones del sistema debes iniciar sesión con tu cuenta organizacional</p>
                     <a type="button" class="btn btn-primary button-create" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">Entrar</a>
                 }
-                
             </div>
-    </div>
-    <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
             <div class="img-home">
                 <div class="img-logo" style=""></div>
             </div>
+        </div>
     </div>
-  </div>
 </div>
