@@ -10,6 +10,10 @@ namespace InventarioGEI.Models
         [Column("idconfiguracion")]
         [Display(Name = "Id de la configuración")]
         public int idConfiguracion { get; set; }
+        [Column("enabled")]
+        [Display(Name = "Habilitado")]
+        public bool enabled { get; set; }
+
 
         [Column("idcombustible")]
         [Display(Name = "Combustible")]
