@@ -4,63 +4,54 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>FactorEmision</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="idFE" />
-            <div class="form-group">
-                <label asp-for="factorEmision" class="control-label"></label>
-                <input asp-for="factorEmision" class="form-control" />
+<div class="card mb-3 container-main">
+    <div class="card-header">
+        <h3 style="margin-top: 10px;">Editar Factor de Emisión</h3>
+        <hr />
+    </div>
+    <form asp-action="Edit" class="form-main">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="idFE" />
+        <div class="row form-group">
+            <div class="col-12 col-lg-9">
+                <label asp-for="idConfiguracion" class="control-label"></label>
+                <div class="selectdiv ">
+                    <select asp-for="idConfiguracion" class="form-select input-select" asp-items="ViewBag.idConfiguracion"></select>
+                </div>
+            </div>
+            <div class="col-12 col-lg-3">
+                <label asp-for="idGei" class="control-label"></label>
+                <div class="selectdiv ">
+                    <select asp-for="idGei" class="form-select input-select" asp-items="ViewBag.idGei"></select>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-12 col-lg-6 col-xl-3">
+                <label asp-for="factorEmision" class="control-label col-form-label"></label>
+                <input asp-for="factorEmision" type="number" step="any" min="0" class="form-control input-text" placeholder="Ingrese el factor de Emisión" />
                 <span asp-validation-for="factorEmision" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PCG" class="control-label"></label>
-                <input asp-for="PCG" class="form-control" />
+            <div class="col-12 col-lg-6 col-xl-3">
+                <label asp-for="PCG" class="control-label col-form-label"></label>
+                <input asp-for="PCG" type="number" step="any" min="0" class="form-control input-text" placeholder="Ingrese el PCG" />
                 <span asp-validation-for="PCG" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="incertidumbreMas" class="control-label"></label>
-                <input asp-for="incertidumbreMas" class="form-control" />
+            <div class="col-12 col-lg-6 col-xl-3">
+                <label asp-for="incertidumbreMas" class="control-label col-form-label"></label>
+                <input asp-for="incertidumbreMas" type="number" step="any" min="0" class="form-control input-text" placeholder="Ingrese la incertidumbre +" />
                 <span asp-validation-for="incertidumbreMas" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="incertidumbreMenos" class="control-label"></label>
-                <input asp-for="incertidumbreMenos" class="form-control" />
+            <div class="col-12 col-lg-6 col-xl-3">
+                <label asp-for="incertidumbreMenos" class="control-label col-form-label"></label>
+                <input asp-for="incertidumbreMenos" type="number" step="any" min="0" class="form-control input-text" placeholder="Ingrese la incertidumbre -" />
                 <span asp-validation-for="incertidumbreMenos" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="enabled" /> @Html.DisplayNameFor(model => model.enabled)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="idGei" class="control-label"></label>
-                <select asp-for="idGei" class="form-control" asp-items="ViewBag.idGei"></select>
-                <span asp-validation-for="idGei" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="idUsuario" class="control-label"></label>
-                <input asp-for="idUsuario" class="form-control" />
-                <span asp-validation-for="idUsuario" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="idConfiguracion" class="control-label"></label>
-                <select asp-for="idConfiguracion" class="form-control" asp-items="ViewBag.idConfiguracion"></select>
-                <span asp-validation-for="idConfiguracion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+        <div class="form-group group-buttons">
+            <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
-

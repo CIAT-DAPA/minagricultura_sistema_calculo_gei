@@ -10,24 +10,24 @@
     </div>
     <form asp-action="Create" class="form-main">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
+        <div class="form-group col-12 col-lg-6">
             <label asp-for="idActividad" class="control-label"></label>
             <div class="selectdiv">
                 <select asp-for="idActividad" class="form-control input-select" asp-items="ViewBag.idActividad"></select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group col-12 col-lg-6">
             <label asp-for="nombreCombustible" class="control-label col-form-label"></label>
             <input asp-for="nombreCombustible" placeholder="Ingrese el nombre del combustible" class="form-control input-text" />
             <span asp-validation-for="nombreCombustible" class="text-danger"></span>
         </div>
-        <div class="form-group">
+        <div class="form-group col-12 col-lg-6">
             <label asp-for="idTipo" class="control-label"></label>
             <div class="selectdiv">
                 <select asp-for="idTipo" class="form-control input-select" asp-items="ViewBag.idTipo"></select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group col-12 col-lg-6">
             <label asp-for="idUnidad" class="control-label"></label>
             <div class="selectdiv">
                 <select asp-for="idUnidad" class="form-control input-select" asp-items="ViewBag.idUnidad"></select>

@@ -13,21 +13,21 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="idConfiguracion" />
 
-        <div class="form-group">
+        <div class="form-group col-12 col-lg-6">
             <label asp-for="idSubcategoria" class="control-label"></label>
             <div class="selectdiv">
                 <select asp-for="idSubcategoria" class="form-control input-select" asp-items="ViewBag.idSubcategoria"></select>
             </div>
             <span asp-validation-for="idSubcategoria" class="text-danger"></span>
         </div>
-        <div class="form-group">
+        <div class="form-group col-12 col-lg-6">
             <label asp-for="idFuenteEmision" class="control-label"></label>
             <div class="selectdiv">
                 <select asp-for="idFuenteEmision" class="form-control input-select" asp-items="ViewBag.idFuenteEmision"></select>
             </div>
             <span asp-validation-for="idFuenteEmision" class="text-danger"></span>
         </div>
-        <div class="form-group">
+        <div class="form-group col-12 col-lg-6">
             <label asp-for="idCombustible" class="control-label"></label>
             <div class="selectdiv">
                 <select asp-for="idCombustible" class="form-control input-select" asp-items="ViewBag.idCombustible"></select>

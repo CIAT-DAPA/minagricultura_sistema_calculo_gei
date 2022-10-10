@@ -12,7 +12,7 @@
     <form asp-action="Edit" class="form-main">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="idTipoActividad" />
-            <div class="form-group">
+            <div class="form-group col-12 col-lg-6">
             <label asp-for="nombreTipoActividad" class="control-label col-form-label"></label>
             <input asp-for="nombreTipoActividad" placeholder="Ingrese el nombre del tipo de actividad" class="form-control input-text" />
                 <span asp-validation-for="nombreTipoActividad" class="text-danger"></span>

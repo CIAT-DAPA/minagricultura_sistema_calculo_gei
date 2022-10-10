@@ -12,14 +12,14 @@
     <form asp-action="Edit" class="form-main">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="idSubcategoria" />
-        <div class="form-group">
+        <div class="form-group col-12 col-lg-6">
             <label asp-for="idCategoria" class="control-label"></label>
             <div class="form-group">
                 <select asp-for="idCategoria" class="form-control input-select" asp-items="ViewBag.idCategoria"></select>
             </div>
             <span asp-validation-for="idCategoria" class="text-danger"></span>
         </div>
-            <div class="form-group">
+            <div class="form-group col-12 col-lg-6">
             <label asp-for="nombreSubcategoria" class="control-label col-form-label"></label>
             <input asp-for="nombreSubcategoria" placeholder="Ingrese el nombre de la categoría" class="form-control input-text" />
                 <span asp-validation-for="nombreSubcategoria" class="text-danger"></span>

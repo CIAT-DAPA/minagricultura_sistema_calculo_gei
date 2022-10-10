@@ -9,7 +9,7 @@ using InventarioGEI.Models;
 
 namespace InventarioGEI.Controllers
 {
-    public class FactorEmisionsController : AccesController 
+    public class FactorEmisionsController : AccesController
     {
         private readonly Context _context;
 
@@ -21,61 +21,86 @@ namespace InventarioGEI.Controllers
         // GET: FactorEmisions
         public async Task<IActionResult> Index()
         {
-            var context = _context.FactorEmision.Where(f => f.enabled == true).Include(f => f.configuracion).Include(f => f.gei);
+            var context = _context.FactorEmision.Where(f => f.enabled == true).Include(f => f.configuracion).Include(f=> f.configuracion.combustible).Include(f => f.configuracion.fuenteEmision).Include(f => f.configuracion.subcategoria).Include(f => f.gei).Include(f => f.usuario);
             return View(await context.ToListAsync());
+        }
+
+        // GET: FactorEmisions1/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.FactorEmision == null)
+            {
+                return NotFound();
+            }
+
+            var factorEmision = await _context.FactorEmision
+                .Include(f => f.configuracion)
+                .Include(f => f.configuracion.subcategoria)
+                .Include(f => f.configuracion.fuenteEmision)
+                .Include(f => f.configuracion.combustible)
+                .Include(f => f.gei)
+                .Include(f => f.usuario)
+                .FirstOrDefaultAsync(m => m.idFE == id);
+            ViewData["configuracion"] = factorEmision.configuracion.subcategoria.nombreSubcategoria + " - " + factorEmision.configuracion.fuenteEmision.nombreFuenteEmision + " - " + factorEmision.configuracion.combustible.nombreCombustible;
+            if (factorEmision == null)
+            {
+                return NotFound();
+            }
+
+            return View(factorEmision);
         }
 
         // GET: FactorEmisions/Create
         public IActionResult Create()
         {
-            List<ConfiguracionActividad> configuracion = _context.ConfiguracionActividad.Where(c => c.enabled == true).Include(c => c.subcategoria).Include(c => c.fuenteEmision).Include(c => c.combustible).ToList();
-            var listaCombustibles = new List<SelectListItem>();
-            foreach (var item in configuracion)
+            List<ConfiguracionActividad> configuraciones = _context.ConfiguracionActividad.Where(c => c.enabled == true).Include(c => c.subcategoria).Include(c => c.fuenteEmision).Include(c => c.combustible).ToList();
+            var listaConfiguraciones = new List<SelectListItem>();
+            foreach (var item in configuraciones)
             {
-                listaCombustibles.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+                listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
             }
-            ViewData["idConfiguracion"] = listaCombustibles;
+            ViewData["idConfiguracion"] = listaConfiguraciones;
 
             List<GEI> geis = _context.Gei.Where(g => g.enabled == true).ToList();
-            var listaGEIs = new List<SelectListItem>();
+            var listaGeis = new List<SelectListItem>();
             foreach (var item in geis)
             {
-                listaGEIs.Add(new SelectListItem { Text = item.nombreGei, Value = item.idGei.ToString() });
+                listaGeis.Add(new SelectListItem { Text = item.nombreGei, Value = item.idGei.ToString() });
             }
-            ViewData["idGei"] = listaGEIs;
+            ViewData["idGei"] = listaGeis;
             return View();
         }
 
         // POST: FactorEmisions/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("idFE,factorEmision,PCG,incertidumbreMas,incertidumbreMenos,idGei,idConfiguracion")] FactorEmision factorEmision)
+        public async Task<IActionResult> Create([Bind("idFE,factorEmision,PCG,incertidumbreMas,incertidumbreMenos,idGei,idConfiguracion")] FactorEmision factor)
         {
-            factorEmision.enabled = true;
+            factor.enabled = true;
             Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            factorEmision.idUsuario = user.idUsuario;
+            factor.idUsuario = user.idUsuario;
             if (ModelState.IsValid)
             {
-                _context.Add(factorEmision);
+                _context.Add(factor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            List<ConfiguracionActividad> configuracion = _context.ConfiguracionActividad.Where(c => c.enabled == true).Include(c => c.subcategoria).Include(c => c.fuenteEmision).Include(c => c.combustible).ToList();
-            var listaCombustibles = new List<SelectListItem>();
-            foreach (var item in configuracion)
+            List<ConfiguracionActividad> configuraciones = _context.ConfiguracionActividad.Where(c => c.enabled == true).Include(c => c.subcategoria).Include(c => c.fuenteEmision).Include(c => c.combustible).ToList();
+            var listaConfiguraciones = new List<SelectListItem>();
+            foreach (var item in configuraciones)
             {
-                listaCombustibles.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+                listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
             }
-            ViewData["idConfiguracion"] = listaCombustibles;
+            ViewData["idConfiguracion"] = listaConfiguraciones;
 
             List<GEI> geis = _context.Gei.Where(g => g.enabled == true).ToList();
-            var listaGEIs = new List<SelectListItem>();
+            var listaGeis = new List<SelectListItem>();
             foreach (var item in geis)
             {
-                listaGEIs.Add(new SelectListItem { Text = item.nombreGei, Value = item.idGei.ToString() });
+                listaGeis.Add(new SelectListItem { Text = item.nombreGei, Value = item.idGei.ToString() });
             }
-            ViewData["idGei"] = listaGEIs;
-            return View(factorEmision);
+            ViewData["idGei"] = listaGeis;
+            return View(factor);
         }
 
         // GET: FactorEmisions/Edit/5
@@ -91,48 +116,48 @@ namespace InventarioGEI.Controllers
             {
                 return NotFound();
             }
-            List<ConfiguracionActividad> configuracion = _context.ConfiguracionActividad.Where(c => c.enabled == true).Include(c => c.subcategoria).Include(c => c.fuenteEmision).Include(c => c.combustible).ToList();
-            var listaCombustibles = new List<SelectListItem>();
-            foreach (var item in configuracion)
+            List<ConfiguracionActividad> configuraciones = _context.ConfiguracionActividad.Where(c => c.enabled == true).Include(c => c.subcategoria).Include(c => c.fuenteEmision).Include(c => c.combustible).ToList();
+            var listaConfiguraciones = new List<SelectListItem>();
+            foreach (var item in configuraciones)
             {
-                listaCombustibles.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+                listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
             }
-            ViewData["idConfiguracion"] = listaCombustibles;
+            ViewData["idConfiguracion"] = listaConfiguraciones;
 
             List<GEI> geis = _context.Gei.Where(g => g.enabled == true).ToList();
-            var listaGEIs = new List<SelectListItem>();
+            var listaGeis = new List<SelectListItem>();
             foreach (var item in geis)
             {
-                listaGEIs.Add(new SelectListItem { Text = item.nombreGei, Value = item.idGei.ToString() });
+                listaGeis.Add(new SelectListItem { Text = item.nombreGei, Value = item.idGei.ToString() });
             }
-            ViewData["idGei"] = listaGEIs;
+            ViewData["idGei"] = listaGeis;
             return View(factorEmision);
         }
 
         // POST: FactorEmisions/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("idFE,factorEmision,PCG,incertidumbreMas,incertidumbreMenos,idGei,idConfiguracion")] FactorEmision factorEmision)
+        public async Task<IActionResult> Edit(int id, [Bind("idFE,factorEmision,PCG,incertidumbreMas,incertidumbreMenos,idGei,idConfiguracion")] FactorEmision factor)
         {
-            if (id != factorEmision.idFE)
+            if (id != factor.idFE)
             {
                 return NotFound();
             }
 
-            factorEmision.enabled = true;
+            factor.enabled = true;
             Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            factorEmision.idUsuario = user.idUsuario;
+            factor.idUsuario = user.idUsuario;
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(factorEmision);
+                    _context.Update(factor);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FactorEmisionExists(factorEmision.idFE))
+                    if (!FactorEmisionExists(factor.idFE))
                     {
                         return NotFound();
                     }
@@ -143,22 +168,22 @@ namespace InventarioGEI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            List<ConfiguracionActividad> configuracion = _context.ConfiguracionActividad.Where(c => c.enabled == true).Include(c => c.subcategoria).Include(c => c.fuenteEmision).Include(c => c.combustible).ToList();
-            var listaCombustibles = new List<SelectListItem>();
-            foreach (var item in configuracion)
+            List<ConfiguracionActividad> configuraciones = _context.ConfiguracionActividad.Where(c => c.enabled == true).Include(c => c.subcategoria).Include(c => c.fuenteEmision).Include(c => c.combustible).ToList();
+            var listaConfiguraciones = new List<SelectListItem>();
+            foreach (var item in configuraciones)
             {
-                listaCombustibles.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+                listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
             }
-            ViewData["idConfiguracion"] = listaCombustibles;
+            ViewData["idConfiguracion"] = listaConfiguraciones;
 
             List<GEI> geis = _context.Gei.Where(g => g.enabled == true).ToList();
-            var listaGEIs = new List<SelectListItem>();
+            var listaGeis = new List<SelectListItem>();
             foreach (var item in geis)
             {
-                listaGEIs.Add(new SelectListItem { Text = item.nombreGei, Value = item.idGei.ToString() });
+                listaGeis.Add(new SelectListItem { Text = item.nombreGei, Value = item.idGei.ToString() });
             }
-            ViewData["idGei"] = listaGEIs;
-            return View(factorEmision);
+            ViewData["idGei"] = listaGeis;
+            return View(factor);
         }
 
         // GET: FactorEmisions/Delete/5
@@ -171,8 +196,13 @@ namespace InventarioGEI.Controllers
 
             var factorEmision = await _context.FactorEmision
                 .Include(f => f.configuracion)
+                .Include(f => f.configuracion.subcategoria)
+                .Include(f => f.configuracion.fuenteEmision)
+                .Include(f => f.configuracion.combustible)
                 .Include(f => f.gei)
+                .Include(f => f.usuario)
                 .FirstOrDefaultAsync(m => m.idFE == id);
+            ViewData["configuracion"] = factorEmision.configuracion.subcategoria.nombreSubcategoria + " - " + factorEmision.configuracion.fuenteEmision.nombreFuenteEmision + " - " + factorEmision.configuracion.combustible.nombreCombustible;
             if (factorEmision == null)
             {
                 return NotFound();

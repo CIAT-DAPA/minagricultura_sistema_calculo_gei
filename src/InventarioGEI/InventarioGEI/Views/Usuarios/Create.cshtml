@@ -13,12 +13,12 @@
 
     <form asp-action="Create" class="form-main">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
+        <div class="form-group col-12 col-lg-6">
             <label asp-for="email" class="control-label col-form-label" ></label>
             <input asp-for="email" class="form-control input-text" placeholder="Ingrese el correo organizacional del usuario"/>
             <span asp-validation-for="email" class="text-danger"></span>
         </div>
-        <div class="form-group">
+        <div class="form-group col-12 col-lg-6">
             <label asp-for="idRol" class="control-label"></label>
             <div class="selectdiv ">
                 <select asp-for="idRol" class="form-select input-select" asp-items="ViewBag.idRol"></select>

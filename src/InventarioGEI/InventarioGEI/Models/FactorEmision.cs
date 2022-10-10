@@ -12,15 +12,19 @@ namespace InventarioGEI.Models
         public int idFE { get; set; }
         [Column("factoremision")]
         [Display(Name = "Factor de Emisión")]
+        [Required(ErrorMessage = "Es necesario que el factor de emisión")]
         public double factorEmision { get; set; }
         [Column("potencialcalentamientoglobal")]
         [Display(Name = "PCG")]
+        [Required(ErrorMessage = "Es necesario que el PCG")]
         public double PCG { get; set; }
         [Column("incertidumbremas")]
         [Display(Name = "Incertidumbre +")]
+        [Required(ErrorMessage = "Es necesario la incertidumbre +")]
         public double incertidumbreMas { get; set; }
         [Column("incertidumbremenos")]
         [Display(Name = "Incertidumbre -")]
+        [Required(ErrorMessage = "Es necesario la incertidumbre -")]
         public double incertidumbreMenos { get; set; }
         [Column("enabled")]
         [Display(Name = "Habilitado")]
@@ -33,10 +37,10 @@ namespace InventarioGEI.Models
         [Display(Name = "GEI")]
         public GEI? gei { get; set; }
         [Column("idusuario")]
-        [Display(Name = "Usuario")]
+        [Display(Name = "Última modificación hecha por")]
         public int idUsuario { get; set; }
-        [ForeignKey("idUsuaro")]
-        [Display(Name = "Usuario")]
+        [ForeignKey("idUsuario")]
+        [Display(Name = "Última modificación hecha por")]
         public Usuario? usuario { get; set; }
         [Column("idconfiguracion")]
         [Display(Name = "Configuracion")]
