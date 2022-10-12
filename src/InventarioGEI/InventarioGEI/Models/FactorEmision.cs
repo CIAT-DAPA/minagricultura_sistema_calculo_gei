@@ -19,11 +19,11 @@ namespace InventarioGEI.Models
         [Required(ErrorMessage = "Es necesario que el PCG")]
         public double PCG { get; set; }
         [Column("incertidumbremas")]
-        [Display(Name = "Incertidumbre +")]
+        [Display(Name = "Incertidumbre + (%)")]
         [Required(ErrorMessage = "Es necesario la incertidumbre +")]
         public double incertidumbreMas { get; set; }
         [Column("incertidumbremenos")]
-        [Display(Name = "Incertidumbre -")]
+        [Display(Name = "Incertidumbre - (%)")]
         [Required(ErrorMessage = "Es necesario la incertidumbre -")]
         public double incertidumbreMenos { get; set; }
         [Column("enabled")]

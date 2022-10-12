@@ -16,20 +16,29 @@
             <div class="col-12 col-lg-9">
                 <label asp-for="idConfiguracion" class="control-label"></label>
                 <div class="selectdiv ">
-                    <select asp-for="idConfiguracion" class="form-select input-select" asp-items="ViewBag.idConfiguracion"></select>
+                    <select asp-for="idConfiguracion" class="form-select input-select" asp-items="ViewBag.idConfiguracion" onchange="selectedCon(this)"></select>
                 </div>
             </div>
             <div class="col-12 col-lg-3">
                 <label asp-for="idGei" class="control-label"></label>
                 <div class="selectdiv ">
-                    <select asp-for="idGei" class="form-select input-select" asp-items="ViewBag.idGei"></select>
+                    <select asp-for="idGei" class="form-select input-select" asp-items="ViewBag.idGei" onchange="selectedGEI(this)"></select>
                 </div>
             </div>
         </div>
         <div class="row form-group">
             <div class="col-12 col-lg-6 col-xl-3">
                 <label asp-for="factorEmision" class="control-label col-form-label"></label>
-                <input asp-for="factorEmision" type="number" step="any" min="0" class="form-control input-text" placeholder="Ingrese el factor de Emisión" />
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <input asp-for="factorEmision" type="number" step="any" min="0" class="form-control input-text" placeholder="Ingrese el factor de Emisión" />
+                    </div>
+                    <div class = "col-4 d-flex" >
+                        <p id="unidadGei"></p>
+                        <p id="unidadCom"></p>
+                    </div>
+                </div>
+                
                 <span asp-validation-for="factorEmision" class="text-danger"></span>
             </div>
             <div class="col-12 col-lg-6 col-xl-3">
@@ -55,5 +64,32 @@
         </div>
     </form>
 </div>
+
+<script>
+    function selectedGEI(geiItem){
+        var selvalue = geiItem.value;
+        var seltext = geiItem.options[geiItem.selectedIndex].innerHTML;
+        $('#unidadGei').contents().remove();
+        $('#unidadGei').append("kg "+seltext);
+    }
+
+
+</script>
+
+<script>
+    function selectedCon(conItem) {
+        var selectedCon = conItem.value;
+        var unidadGei = $('#unidadCom');
+        unidadGei.contents().remove();
+        if (selectedCon != null && selectedCon != '') {
+            $.getJSON('@Url.Action("GetUnidad")', { id: selectedCon }, function (unidad) {
+                if (unidad != null && !jQuery.isEmptyObject(unidad)) {
+                    console.log(unidad[0].combustible.unidad.unidad);
+                    unidadGei.append("/"+unidad[0].combustible.unidad.unidad);
+                };
+            });
+        }
+    };
+</script>
 
 

@@ -21,7 +21,7 @@ namespace InventarioGEI.Controllers
         // GET: FactorEmisions
         public async Task<IActionResult> Index()
         {
-            var context = _context.FactorEmision.Where(f => f.enabled == true).Include(f => f.configuracion).Include(f=> f.configuracion.combustible).Include(f => f.configuracion.fuenteEmision).Include(f => f.configuracion.subcategoria).Include(f => f.gei).Include(f => f.usuario);
+            var context = _context.FactorEmision.Where(f => f.enabled == true).Include(f => f.configuracion).Include(f=> f.configuracion.combustible).Include(f => f.configuracion.fuenteEmision).Include(f => f.configuracion.subcategoria).Include(f => f.gei).Include(f => f.usuario).Include(f => f.configuracion.combustible.unidad);
             return View(await context.ToListAsync());
         }
 
@@ -234,6 +234,20 @@ namespace InventarioGEI.Controllers
         private bool FactorEmisionExists(int id)
         {
           return _context.FactorEmision.Any(e => e.idFE == id);
+        }
+
+        [HttpGet]
+        public ActionResult GetUnidad(int id)
+        {
+            if (id > 0)
+            {
+                Console.WriteLine("entro metodo if");
+
+                var unidad = _context.ConfiguracionActividad.Where(c => c.idConfiguracion == id).Include(c => c.combustible).Include(c => c.combustible.unidad);
+                Console.WriteLine(unidad);
+                return Json(unidad);
+            }
+            return null;
         }
     }
 }

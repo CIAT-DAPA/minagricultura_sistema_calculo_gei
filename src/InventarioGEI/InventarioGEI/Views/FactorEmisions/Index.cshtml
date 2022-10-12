@@ -53,7 +53,7 @@
                         @Html.DisplayFor(modelItem => item.gei.nombreGei)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.factorEmision)
+                        @Html.DisplayFor(modelItem => item.factorEmision) kg @Html.DisplayFor(modelItem => item.gei.nombreGei)/@Html.DisplayFor(modelItem => item.configuracion.combustible.unidad.unidad)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.PCG)
@@ -92,3 +92,30 @@
         </tbody>
     </table>
 </div>
+
+<script>
+     function selectedGEI(geiItem) {
+         var selvalue = geiItem.value;
+         var seltext = geiItem.options[geiItem.selectedIndex].innerHTML;
+         $('#unidadGei').contents().remove();
+         $('#unidadGei').append("kg " + seltext);
+     }
+
+
+</script>
+
+<script>
+    function selectedCon(conItem) {
+        var selectedCon = conItem.value;
+        var unidadGei = $('#unidadCom');
+        unidadGei.contents().remove();
+        if (selectedCon != null && selectedCon != '') {
+            $.getJSON('@Url.Action("GetUnidad")', { id: selectedCon }, function (unidad) {
+                if (unidad != null && !jQuery.isEmptyObject(unidad)) {
+                    console.log(unidad[0].combustible.unidad.unidad);
+                    unidadGei.append("/" + unidad[0].combustible.unidad.unidad);
+                };
+            });
+        }
+    };
+</script>

@@ -21,6 +21,7 @@ namespace InventarioGEI.Controllers
         // GET: Alcances
         public async Task<IActionResult> Index()
         {
+            ViewData["numAlcances"] = _context.Alcance.Where(a => a.enabled == true).Count();
             var context = _context.Alcance.Where(a => a.enabled == true).Include(a => a.usuario);
             return View(await context.ToListAsync());
         }
