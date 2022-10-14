@@ -12,9 +12,9 @@
         </div>
         <div class="side-menu-container">
             <ul class="nav navbar-nav">
-                <li class="nav-item" style="margin-bottom:15px;">
+             @*   <li class="nav-item" style="margin-bottom:15px;">
                     <a href="#"><i class="fa fa-dashboard navbar-icon"></i>Dashboard</a>
-                </li>
+                </li>*@
                 <li class="nav-item" style="margin-bottom:15px;">
                     <a asp-area="" asp-controller="Rols" asp-action="Index"><i class="fa fa-user navbar-icon"></i>Rol</a>
                 </li>
@@ -43,20 +43,9 @@
                         <li class="nav-item"><a asp-area="" asp-controller="FactorEmisions" asp-action="Index">Factores de emisión</a></li>
                     </div>
                 </div>
-                @*<li class="nav-item dropdown" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <a href="#" class="dropdown-toggle"><i class="fa-solid fa-layer-group navbar-icon"></i>Divisiones GEI</a>
+                <li class="nav-item" style="margin-bottom:15px;">
+    <a asp-area="" asp-controller="RegistroActividads" asp-action="Index"><i class="fa-solid fa-pen-to-square navbar-icon"></i>Registros</a>
                 </li>
-                <ul class="dropdown-menu text-small" aria-labelledby="dropdown" style="border:none">
-                    <li class="nav-item" style="margin-left: 32px;"><a asp-area="" asp-controller="Alcances" asp-action="Index">Alcances</a></li>
-                    <li class="nav-item" style="margin-left: 32px;"><a asp-area="" asp-controller="Categorias" asp-action="Index">Categorías</a></li>
-                    <li class="nav-item" style="margin-left: 32px;"><a asp-area="" asp-controller="Subcategorias" asp-action="Index">Subcategorías</a></li>
-                    <li class="nav-item" style="margin-left: 32px;"><a asp-area="" asp-controller="TipoActividads" asp-action="Index">Tipos de actividad</a></li>
-                    <li class="nav-item" style="margin-left: 32px;"><a asp-area="" asp-controller="Combustibles" asp-action="Index">Combustibles</a></li>
-                    <li class="nav-item" style="margin-left: 32px;"><a asp-area="" asp-controller="GEIs" asp-action="Index">GEI</a></li>
-                    <li class="nav-item" style="margin-left: 32px;"><a asp-area="" asp-controller="FuenteEmisions" asp-action="Index">Fuentes de emisión</a></li>
-                    <li class="nav-item" style="margin-left: 32px;"><a asp-area="" asp-controller="ConfiguracionActividads" asp-action="Index">Configuración de GEI</a></li>
-                    <li class="nav-item" style="margin-left: 32px;"><a asp-area="" asp-controller="FactorEmisions" asp-action="Index">Factores de emisión</a></li>
-                </ul>*@
             </ul>
         </div>
     </nav>

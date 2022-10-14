@@ -1,0 +1,167 @@
+﻿@model IEnumerable<InventarioGEI.Models.RegistroActividad>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row container-title">
+    <h3 class="col-3">Registros</h3>
+</div>
+<div class="row">
+    <div class="col-12 col-md-6">
+        <label class="control-label">Sede</label>
+        <div class="selectdiv">
+            <select class="form-select input-select" asp-items="ViewBag.sede" onchange=""></select>
+        </div>
+    </div>
+    <div class="form-group col-12 col-lg-5">
+        <label class="control-label">Año</label>
+        <input type="number" placeholder="YYYY" min="1999" max="2020">
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-12 col-md-6">
+        <label class="control-label">Alcance</label>
+        <div class="selectdiv">
+            <select class="form-select input-select" asp-items="ViewBag.alcance" onchange="filterCategoria(this)"></select>
+        </div>
+    </div>
+    <div class="col-12 col-md-6">
+        <label class="control-label">Categoría</label>
+        <div class="selectdiv">
+            <select class="form-select input-select" asp-items="ViewBag.categoria" onchange="filterCombustibles(this)" id="selectCat"></select>
+        </div>
+    </div>
+</div>
+<div class="card mb-3 container-main" style="height: 70%">
+    <table class="table table-hover table-main">
+        <thead>
+            <tr class="tr-head">
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.configuracion)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.configuracion.combustible.unidad.unidad)
+                </th>
+                <th class="th-head">
+                    Ene
+                </th>
+                <th class="th-head">
+                    Feb
+                </th>
+                <th class="th-head">
+                    Mar
+                </th>
+                <th class="th-head">
+                    Abr
+                </th>
+                <th class="th-head">
+                    May
+                </th>
+                <th class="th-head">
+                    Jun
+                </th>
+                <th class="th-head">
+                    Jul
+                </th>
+                <th class="th-head">
+                    Ago
+                </th>
+                <th class="th-head">
+                    Sep
+                </th>
+                <th class="th-head">
+                    Oct
+                </th>
+                <th class="th-head">
+                    Nov
+                </th>
+                <th class="th-head">
+                    Dic
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="tr-body">
+                    <td class="td-body-main">
+                        @Html.DisplayFor(modelItem => item.configuracion.combustible.nombreCombustible)
+                    </td>
+                    <td class="td-body-main">
+                        @Html.DisplayFor(modelItem => item.configuracion.combustible.unidad.unidad)
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        3
+                    </td>
+
+                    <td>
+                        4
+                    </td>
+                    <td>
+                        5
+                    </td>
+                    <td>
+                        6
+                    </td>
+                    <td>
+                        7
+                    </td>
+                    <td>
+                        8
+                    </td>
+                    <td>
+                        9
+                    </td>
+                    <td>
+                        10
+                    </td>
+                    <td>
+                        11
+                    </td>
+                    <td>
+                        12
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <div class="col-12 d-flex justify-content-end">
+        <a asp-action="Create" type="button" class="btn btn-primary button-create">Guardar Cambios</a>
+    </div>
+</div>
+<script>
+    function filterCategoria(alcanceItem) {
+        var selectedAlcance = alcanceItem.value;
+        var selectCat = $('#selectCat');
+        selectCat.contents().remove();
+        if (selectedAlcance != null && selectedAlcance != '') {
+            $.getJSON('@Url.Action("GetCategorias")', { id: selectedAlcance }, function (unidad) {
+                console.log("se llamo a la función");
+                if (unidad != null && !jQuery.isEmptyObject(unidad)) {
+                    console.log(unidad);
+                    unidad.map(f => {
+                        console.log(f);
+                        selectCat
+                            .append($("<option></option>")
+                                .attr("value", f.value)
+                                .text(f.text));
+                    });
+                    //selectFE.append("/" + unidad[0].combustible.unidad.unidad);
+                };
+            });
+        }
+    };
+
+    function filterCombustibles(categoriaItem){
+
+    };
+</script>

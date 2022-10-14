@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using InventarioGEI.Models;
 
 namespace InventarioGEI.Models
 {
@@ -24,5 +25,6 @@ namespace InventarioGEI.Models
         public DbSet<InventarioGEI.Models.FactorEmision> FactorEmision { get; set; }
         public DbSet<InventarioGEI.Models.Tipo> Tipo { get; set; }
         public DbSet<InventarioGEI.Models.Unidad> Unidad { get; set; }
+        public DbSet<InventarioGEI.Models.RegistroActividad> RegistroActividad { get; set; }
     }
 }

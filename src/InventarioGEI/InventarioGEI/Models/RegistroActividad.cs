@@ -15,7 +15,7 @@ namespace InventarioGEI.Models
         public double valor { get; set; }
         [Column("mes")]
         [Display(Name = "Mes")]
-        public string mes { get; set; }
+        public int mes { get; set; }
         [Column("año")]
         [Display(Name = "Año")]
         public int ano { get; set; }

@@ -244,3 +244,7 @@ dl {
     --bs-table-accent-bg: var(--bs-table-hover-bg);
     color: var(--bs-table-hover-color);
 }
+
+.td-description {
+    padding: 0 0.5rem;
+}

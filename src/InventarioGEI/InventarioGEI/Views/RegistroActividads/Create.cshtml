@@ -1,0 +1,57 @@
+﻿@model InventarioGEI.Models.RegistroActividad
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>RegistroActividad</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="valor" class="control-label"></label>
+                <input asp-for="valor" class="form-control" />
+                <span asp-validation-for="valor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="mes" class="control-label"></label>
+                <input asp-for="mes" class="form-control" />
+                <span asp-validation-for="mes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ano" class="control-label"></label>
+                <input asp-for="ano" class="form-control" />
+                <span asp-validation-for="ano" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="enabled" /> @Html.DisplayNameFor(model => model.enabled)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="idConfiguracion" class="control-label"></label>
+                <select asp-for="idConfiguracion" class ="form-control" asp-items="ViewBag.idConfiguracion"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="idUsuario" class="control-label"></label>
+                <select asp-for="idUsuario" class ="form-control" asp-items="ViewBag.idUsuario"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="idSede" class="control-label"></label>
+                <select asp-for="idSede" class ="form-control" asp-items="ViewBag.idSede"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

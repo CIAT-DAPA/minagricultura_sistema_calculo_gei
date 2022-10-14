@@ -33,41 +33,38 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <div class="tr-hover">
-                    <tr class="tr-body">
-                        <td>
+                <tr class="tr-body">
+                    <td class="border-bottom-0">
                         @Html.DisplayFor(modelItem => item.actividad.nombreTipoActividad)
-                        </td>
-                        <td class="td-body-main">
-                            @Html.DisplayFor(modelItem => item.nombreCombustible)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.tipo.tipo)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.unidad.unidad)
-                        </td>
-    
-                        <td>
-                            <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idCombustible">
-                                Editar
-                            </a>
-                        </td>
-                        <td>
-                            <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idCombustible">
-                                Eliminar
-                            </a>
-                        </td>
-                   
-                        
-                    
-                    </tr>
-                    <tr>
-                        <td colspan="100%">
-                            <small class="text-muted">Creador por: @Html.DisplayFor(modelItem => item.usuario.email)</small>
-                        </td>
-                    </tr>
-                </div>
+                    </td>
+                    <td class="td-body-main border-bottom-0">
+                        @Html.DisplayFor(modelItem => item.nombreCombustible)
+                    </td>
+                    <td class="border-bottom-0">
+                        @Html.DisplayFor(modelItem => item.tipo.tipo)
+                    </td>
+                    <td class="border-bottom-0">
+                        @Html.DisplayFor(modelItem => item.unidad.unidad)
+                    </td>
+
+                    <td rowspan="2">
+                        <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idCombustible">
+                            Editar
+                        </a>
+                    </td>
+                    <td rowspan="2">
+                        <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idCombustible">
+                            Eliminar
+                        </a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="100" class="td-description">
+                        <small class="text-muted">Creador por: @Html.DisplayFor(modelItem => item.usuario.email)</small>
+                    </td>
+                </tr>
+
             }
         </tbody>
     </table>
