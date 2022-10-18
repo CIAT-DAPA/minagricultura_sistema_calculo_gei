@@ -16,7 +16,7 @@
     </div>
     <div class="form-group col-12 col-lg-5">
         <label class="control-label">Año</label>
-        <input type="number" placeholder="YYYY" min="1999" max="2020">
+        <input type="number" placeholder="YYYY" min="1994" max="3000" class="form-control input-text" style="width: 95px">
     </div>
 </div>
 <div class="row mb-3">
@@ -81,61 +81,13 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="tr-body">
-                    <td class="td-body-main">
-                        @Html.DisplayFor(modelItem => item.configuracion.combustible.nombreCombustible)
-                    </td>
-                    <td class="td-body-main">
-                        @Html.DisplayFor(modelItem => item.configuracion.combustible.unidad.unidad)
-                    </td>
-                    <td>
-                        1
-                    </td>
-                    <td>
-                        2
-                    </td>
-                    <td>
-                        3
-                    </td>
-
-                    <td>
-                        4
-                    </td>
-                    <td>
-                        5
-                    </td>
-                    <td>
-                        6
-                    </td>
-                    <td>
-                        7
-                    </td>
-                    <td>
-                        8
-                    </td>
-                    <td>
-                        9
-                    </td>
-                    <td>
-                        10
-                    </td>
-                    <td>
-                        11
-                    </td>
-                    <td>
-                        12
-                    </td>
-                </tr>
-            }
+        <tbody id="tableCombustible">
         </tbody>
     </table>
 </div>
 <div class="row">
     <div class="col-12 d-flex justify-content-end">
-        <a asp-action="Create" type="button" class="btn btn-primary button-create">Guardar Cambios</a>
+        <button type="button" class="btn btn-primary button-create" onclick="sendChanges()">Guardar Cambios</button>
     </div>
 </div>
 <script>
@@ -145,23 +97,80 @@
         selectCat.contents().remove();
         if (selectedAlcance != null && selectedAlcance != '') {
             $.getJSON('@Url.Action("GetCategorias")', { id: selectedAlcance }, function (unidad) {
-                console.log("se llamo a la función");
                 if (unidad != null && !jQuery.isEmptyObject(unidad)) {
-                    console.log(unidad);
                     unidad.map(f => {
-                        console.log(f);
                         selectCat
                             .append($("<option></option>")
                                 .attr("value", f.value)
                                 .text(f.text));
                     });
-                    //selectFE.append("/" + unidad[0].combustible.unidad.unidad);
                 };
             });
         }
     };
 
-    function filterCombustibles(categoriaItem){
-
+    function filterCombustibles(categoriaItem) {
+        var selectedCategoria = categoriaItem.value;
+        var tableCombustibles = $('#tableCombustible');
+        tableCombustibles.contents().remove();
+        if (selectedCategoria != null && selectedCategoria != '') {
+            $.getJSON('@Url.Action("GetCombustibles")', { id: selectedCategoria }, function (unidad) {
+                if (unidad != null && !jQuery.isEmptyObject(unidad)) {
+                    unidad.map(f => {
+                        console.log(f);
+                        tableCombustibles
+                            .append('<tr />')
+                            .children('tr:last')
+                            .append(
+                                '<td />' + f.nombreCombustible +
+                                '<td />' + f.unidad.unidad +
+                                '<td>' +
+                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-1"/>' +
+                                '</td>' +
+                                '<td>' +
+                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-2"/>' +
+                                '</td>' +
+                                '<td>' +
+                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-3"/>' +
+                                '</td>' +
+                                '<td>' +
+                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-4"/>' +
+                                '</td>' +
+                                '<td>' +
+                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-5"/>' +
+                                '</td>' +
+                                '<td >' +
+                                '<input type="text" class="form-control input-text text-center"  id="' + f.idCombustible + '-6"/>' +
+                                '</td>' +
+                                '<td>' +
+                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-7"/>' +
+                                '</td>' +
+                                '<td >' +
+                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-8"/>' +
+                                '</td>' +
+                                '<td>' +
+                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-9"/>' +
+                                '</td>' +
+                                '<td >' +
+                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-10"/>' +
+                                '</td>' +
+                                '<td >' +
+                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-11"/>' +
+                                '</td>' +
+                                '<td >' +
+                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-12"/>' +
+                                '</td>'
+                            );
+                        $('#tableCombustible > tr').addClass('tr-body')
+                    });
+                };
+            });
+        }
     };
+
+    function sendChanges(){
+        console.log("fere");
+    }
+  
+    
 </script>

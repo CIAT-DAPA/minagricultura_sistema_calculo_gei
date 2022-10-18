@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
 using Newtonsoft.Json.Linq;
+using static Azure.Core.HttpHeader;
 
 namespace InventarioGEI.Controllers
 {
@@ -201,17 +202,45 @@ namespace InventarioGEI.Controllers
         {
             if (id > 0)
             {
-                Console.WriteLine("entro metodo if");
-
                 List<Categoria> categorias = _context.Categoria.Where(c => c.enabled == true).Where(c => c.idAlcance == id).ToList();
                 var listaCategorias = new List<SelectListItem>();
                 foreach (var item in categorias)
                 {
                     listaCategorias.Add(new SelectListItem { Text = item.nombreCategoria, Value = item.idCategoria.ToString() });
                 }
-
-                Console.WriteLine(listaCategorias);
                 return Json(listaCategorias);
+            }
+            return null;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCombustibles(int id)
+        {
+            if (id > 0)
+            {
+                Console.WriteLine("entro metodo if rrrrrrrrrrrrrr");
+
+                List<Subcategoria> subcategorias = await _context.Subcategoria.Where(s => s.enabled == true).Where(s => s.idCategoria == id).ToListAsync();
+                List<ConfiguracionActividad> configuraciones = new List<ConfiguracionActividad>();
+                foreach (var item in subcategorias)
+                {
+                    var configuracion =  _context.ConfiguracionActividad.Where(c => c.enabled).Where(c => c.idSubcategoria == item.idSubcategoria).ToList();
+                    configuracion.ForEach(delegate(ConfiguracionActividad conf) {
+                        configuraciones.Add(conf);
+                    });
+                }
+
+                List<Combustible> combustibles = new List<Combustible>();
+                foreach (var item in configuraciones)
+                {
+                    var combustible = _context.Combustible.Where(c => c.enabled).Where(c => c.idCombustible == item.idCombustible).Include(c => c.unidad).ToList();
+                    combustible.ForEach(delegate (Combustible comb) {
+                        combustibles.Add(comb);
+                    });
+                }
+
+                Console.WriteLine(combustibles);
+                return Json(combustibles);
             }
             return null;
         }
