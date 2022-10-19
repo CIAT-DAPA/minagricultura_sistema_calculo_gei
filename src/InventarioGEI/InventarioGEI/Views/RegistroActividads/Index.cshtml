@@ -8,25 +8,25 @@
     <h3 class="col-3">Registros</h3>
 </div>
 <div class="row">
-    <div class="col-12 col-md-6">
+    <div class="col-6">
         <label class="control-label">Sede</label>
         <div class="selectdiv">
             <select class="form-select input-select" asp-items="ViewBag.sede" onchange=""></select>
         </div>
     </div>
-    <div class="form-group col-12 col-lg-5">
+    <div class="form-group col-5">
         <label class="control-label">Año</label>
         <input type="number" placeholder="YYYY" min="1994" max="3000" class="form-control input-text" style="width: 95px">
     </div>
 </div>
 <div class="row mb-3">
-    <div class="col-12 col-md-6">
+    <div class="col-6">
         <label class="control-label">Alcance</label>
         <div class="selectdiv">
             <select class="form-select input-select" asp-items="ViewBag.alcance" onchange="filterCategoria(this)"></select>
         </div>
     </div>
-    <div class="col-12 col-md-6">
+    <div class="col-6">
         <label class="control-label">Categoría</label>
         <div class="selectdiv">
             <select class="form-select input-select" asp-items="ViewBag.categoria" onchange="filterCombustibles(this)" id="selectCat"></select>
@@ -169,8 +169,16 @@
     };
 
     function sendChanges(){
-        console.log("fere");
+        var jsonVal;
+        $("td").each(function () {
+            var valueInput = $(this).find("input");
+            if(valueInput.val() !== undefined){
+                var id = valueInput.attr('id');
+                var ids = id.split('-');
+                var idCombustible = ids[0];
+                var mes = ids[1];
+                console.log("ÏdCombustible: " + idCombustible + " Mes: " + mes + " Value: " + valueInput.val())
+            }           
+        });
     }
-  
-    
 </script>
