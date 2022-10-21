@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
 using Newtonsoft.Json.Linq;
 using static Azure.Core.HttpHeader;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Win32;
 
 namespace InventarioGEI.Controllers
 {
@@ -41,160 +43,9 @@ namespace InventarioGEI.Controllers
             }
             ViewData["sede"] = listaSedes;
 
-        
+
 
             return View(await context.ToListAsync());
-        }
-
-        // GET: RegistroActividads/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.RegistroActividad == null)
-            {
-                return NotFound();
-            }
-
-            var registroActividad = await _context.RegistroActividad
-                .Include(r => r.configuracion)
-                .Include(r => r.sede)
-                .Include(r => r.usuario)
-                .FirstOrDefaultAsync(m => m.idRegistroActividad == id);
-            if (registroActividad == null)
-            {
-                return NotFound();
-            }
-
-            return View(registroActividad);
-        }
-
-        // GET: RegistroActividads/Create
-        public IActionResult Create()
-        {
-            ViewData["idConfiguracion"] = new SelectList(_context.ConfiguracionActividad, "idConfiguracion", "idConfiguracion");
-            ViewData["idSede"] = new SelectList(_context.Sede, "idSede", "idSede");
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email");
-            return View();
-        }
-
-        // POST: RegistroActividads/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("idRegistroActividad,valor,mes,ano,enabled,idConfiguracion,idUsuario,idSede")] RegistroActividad registroActividad)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(registroActividad);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["idConfiguracion"] = new SelectList(_context.ConfiguracionActividad, "idConfiguracion", "idConfiguracion", registroActividad.idConfiguracion);
-            ViewData["idSede"] = new SelectList(_context.Sede, "idSede", "idSede", registroActividad.idSede);
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", registroActividad.idUsuario);
-            return View(registroActividad);
-        }
-
-        // GET: RegistroActividads/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.RegistroActividad == null)
-            {
-                return NotFound();
-            }
-
-            var registroActividad = await _context.RegistroActividad.FindAsync(id);
-            if (registroActividad == null)
-            {
-                return NotFound();
-            }
-            ViewData["idConfiguracion"] = new SelectList(_context.ConfiguracionActividad, "idConfiguracion", "idConfiguracion", registroActividad.idConfiguracion);
-            ViewData["idSede"] = new SelectList(_context.Sede, "idSede", "idSede", registroActividad.idSede);
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", registroActividad.idUsuario);
-            return View(registroActividad);
-        }
-
-        // POST: RegistroActividads/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("idRegistroActividad,valor,mes,ano,enabled,idConfiguracion,idUsuario,idSede")] RegistroActividad registroActividad)
-        {
-            if (id != registroActividad.idRegistroActividad)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(registroActividad);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RegistroActividadExists(registroActividad.idRegistroActividad))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["idConfiguracion"] = new SelectList(_context.ConfiguracionActividad, "idConfiguracion", "idConfiguracion", registroActividad.idConfiguracion);
-            ViewData["idSede"] = new SelectList(_context.Sede, "idSede", "idSede", registroActividad.idSede);
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", registroActividad.idUsuario);
-            return View(registroActividad);
-        }
-
-        // GET: RegistroActividads/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.RegistroActividad == null)
-            {
-                return NotFound();
-            }
-
-            var registroActividad = await _context.RegistroActividad
-                .Include(r => r.configuracion)
-                .Include(r => r.sede)
-                .Include(r => r.usuario)
-                .FirstOrDefaultAsync(m => m.idRegistroActividad == id);
-            if (registroActividad == null)
-            {
-                return NotFound();
-            }
-
-            return View(registroActividad);
-        }
-
-        // POST: RegistroActividads/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.RegistroActividad == null)
-            {
-                return Problem("Entity set 'Context.RegistroActividad'  is null.");
-            }
-            var registroActividad = await _context.RegistroActividad.FindAsync(id);
-            if (registroActividad != null)
-            {
-                _context.RegistroActividad.Remove(registroActividad);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool RegistroActividadExists(int id)
-        {
-          return _context.RegistroActividad.Any(e => e.idRegistroActividad == id);
         }
 
         [HttpGet]
@@ -218,31 +69,88 @@ namespace InventarioGEI.Controllers
         {
             if (id > 0)
             {
-                Console.WriteLine("entro metodo if rrrrrrrrrrrrrr");
-
                 List<Subcategoria> subcategorias = await _context.Subcategoria.Where(s => s.enabled == true).Where(s => s.idCategoria == id).ToListAsync();
                 List<ConfiguracionActividad> configuraciones = new List<ConfiguracionActividad>();
                 foreach (var item in subcategorias)
                 {
-                    var configuracion =  _context.ConfiguracionActividad.Where(c => c.enabled).Where(c => c.idSubcategoria == item.idSubcategoria).ToList();
-                    configuracion.ForEach(delegate(ConfiguracionActividad conf) {
+                    var configuracion = _context.ConfiguracionActividad
+                        .Where(c => c.enabled)
+                        .Where(c => c.idSubcategoria == item.idSubcategoria)
+                        .Include(c => c.combustible).Include(c => c.combustible.unidad)
+                        .ToList();
+                    configuracion.ForEach(delegate (ConfiguracionActividad conf)
+                    {
                         configuraciones.Add(conf);
                     });
                 }
 
-                List<Combustible> combustibles = new List<Combustible>();
-                foreach (var item in configuraciones)
-                {
-                    var combustible = _context.Combustible.Where(c => c.enabled).Where(c => c.idCombustible == item.idCombustible).Include(c => c.unidad).ToList();
-                    combustible.ForEach(delegate (Combustible comb) {
-                        combustibles.Add(comb);
-                    });
-                }
-
-                Console.WriteLine(combustibles);
-                return Json(combustibles);
+                return Json(configuraciones);
             }
             return null;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetValorDeRegistros(int idConfiguracion, int mes, int año, int sede)
+        {
+            var query = _context.RegistroActividad
+                    .Where(r => r.idConfiguracion == idConfiguracion)
+                    .Where(r => r.idSede == sede)
+                    .Where(r => r.mes == mes)
+                    .Where(r => r.año == año)
+                    .Any();
+            ;
+            if (query)
+            {
+                var queryExist = await _context.RegistroActividad
+                    .Where(r => r.idConfiguracion == idConfiguracion)
+                    .Where(r => r.idSede == sede)
+                    .Where(r => r.mes == mes)
+                    .Where(r => r.año == año)
+                    .FirstAsync();
+
+                return Json(queryExist);
+            }
+            return NotFound();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> PostRegistros(List<RegistroActividad> registros)
+        {
+            Usuario user = await _context.Usuario.FirstOrDefaultAsync(u => u.email == User.Identity.Name);
+            foreach (var registro in registros)
+            {
+                registro.idUsuario = user.idUsuario;
+                var query = await _context.RegistroActividad
+                    .Where(r => r.idConfiguracion == registro.idConfiguracion)
+                    .Where(r => r.idSede == registro.idSede)
+                    .Where(r => r.mes == registro.mes)
+                    .Where(r => r.año == registro.año)
+                    .AnyAsync();
+                ;
+                if (!query)
+                {
+                    _context.Add(registro);
+                    await _context.SaveChangesAsync();
+                    
+                }
+                else
+                {
+                    var queryExist = await _context.RegistroActividad
+                    .Where(r => r.idConfiguracion == registro.idConfiguracion)
+                    .Where(r => r.idSede == registro.idSede)
+                    .Where(r => r.mes == registro.mes)
+                    .Where(r => r.año == registro.año)
+                    .FirstAsync();
+
+                    registro.idRegistroActividad = queryExist.idRegistroActividad;
+                    _context.ChangeTracker.Clear();
+                    _context.Update(registro);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            return Ok(true);
+
         }
     }
 }

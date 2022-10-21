@@ -4,6 +4,23 @@
     ViewData["Title"] = "Index";
 }
 
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Guardando tus cambios</h5>
+            </div>
+            <div class="modal-body d-flex justify-content-center py-5">
+                <div class="spinner-border text-primary" role="status" id="loadingModal">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row container-title">
     <h3 class="col-3">Registros</h3>
 </div>
@@ -11,34 +28,41 @@
     <div class="col-6">
         <label class="control-label">Sede</label>
         <div class="selectdiv">
-            <select class="form-select input-select" asp-items="ViewBag.sede" onchange=""></select>
+            <select class="form-select input-select" asp-items="ViewBag.sede" onchange="" id="sede"></select>
         </div>
     </div>
     <div class="form-group col-5">
         <label class="control-label">Año</label>
-        <input type="number" placeholder="YYYY" min="1994" max="3000" class="form-control input-text" style="width: 95px">
+        <input type="number" placeholder="YYYY" min="1994" max="3000" class="form-control input-text" style="width: 95px" id="year">
     </div>
 </div>
 <div class="row mb-3">
     <div class="col-6">
         <label class="control-label">Alcance</label>
         <div class="selectdiv">
-            <select class="form-select input-select" asp-items="ViewBag.alcance" onchange="filterCategoria(this)"></select>
+            <select class="form-select input-select" asp-items="ViewBag.alcance" onchange="filterCategoria(this)">
+                <option value="" selected disabled hidden>Escoge un alcance</option>
+            </select>
         </div>
     </div>
     <div class="col-6">
         <label class="control-label">Categoría</label>
         <div class="selectdiv">
-            <select class="form-select input-select" asp-items="ViewBag.categoria" onchange="filterCombustibles(this)" id="selectCat"></select>
+            <select class="form-select input-select" asp-items="ViewBag.categoria" onchange="filterCombustibles(this)" id="selectCat">
+                <option value="" selected disabled hidden>Escoge una categoría</option>
+            </select>
         </div>
     </div>
 </div>
 <div class="card mb-3 container-main" style="height: 70%">
+    <div class="spinner-border text-primary d-none" role="status" style="position: fixed; top: 50%; left: 55%;" id="loading">
+        <span class="visually-hidden">Loading...</span>
+    </div>
     <table class="table table-hover table-main">
         <thead>
             <tr class="tr-head">
                 <th class="th-head">
-                    @Html.DisplayNameFor(model => model.configuracion)
+                    Combustible
                 </th>
                 <th class="th-head">
                     @Html.DisplayNameFor(model => model.configuracion.combustible.unidad.unidad)
@@ -82,20 +106,28 @@
             </tr>
         </thead>
         <tbody id="tableCombustible">
+            <tr>
+                <th colspan="100%" class="text-center">
+                    Por favor escoja un alcance y luego una categoría
+                </th>
+            </tr>
         </tbody>
     </table>
 </div>
 <div class="row">
     <div class="col-12 d-flex justify-content-end">
-        <button type="button" class="btn btn-primary button-create" onclick="sendChanges()">Guardar Cambios</button>
+        <button type="button" class="btn btn-primary button-create" onclick="sendChanges()" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Guardar Cambios</button>
     </div>
 </div>
+
 <script>
     function filterCategoria(alcanceItem) {
         var selectedAlcance = alcanceItem.value;
         var selectCat = $('#selectCat');
         selectCat.contents().remove();
         if (selectedAlcance != null && selectedAlcance != '') {
+            selectCat.
+                append($('<option value="" selected disabled hidden > Escoge una categoría </option>'));
             $.getJSON('@Url.Action("GetCategorias")', { id: selectedAlcance }, function (unidad) {
                 if (unidad != null && !jQuery.isEmptyObject(unidad)) {
                     unidad.map(f => {
@@ -116,69 +148,117 @@
         if (selectedCategoria != null && selectedCategoria != '') {
             $.getJSON('@Url.Action("GetCombustibles")', { id: selectedCategoria }, function (unidad) {
                 if (unidad != null && !jQuery.isEmptyObject(unidad)) {
-                    unidad.map(f => {
-                        console.log(f);
-                        tableCombustibles
-                            .append('<tr />')
-                            .children('tr:last')
-                            .append(
-                                '<td />' + f.nombreCombustible +
-                                '<td />' + f.unidad.unidad +
-                                '<td>' +
-                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-1"/>' +
-                                '</td>' +
-                                '<td>' +
-                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-2"/>' +
-                                '</td>' +
-                                '<td>' +
-                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-3"/>' +
-                                '</td>' +
-                                '<td>' +
-                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-4"/>' +
-                                '</td>' +
-                                '<td>' +
-                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-5"/>' +
-                                '</td>' +
-                                '<td >' +
-                                '<input type="text" class="form-control input-text text-center"  id="' + f.idCombustible + '-6"/>' +
-                                '</td>' +
-                                '<td>' +
-                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-7"/>' +
-                                '</td>' +
-                                '<td >' +
-                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-8"/>' +
-                                '</td>' +
-                                '<td>' +
-                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-9"/>' +
-                                '</td>' +
-                                '<td >' +
-                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-10"/>' +
-                                '</td>' +
-                                '<td >' +
-                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-11"/>' +
-                                '</td>' +
-                                '<td >' +
-                                '<input type="text" class="form-control input-text text-center" id="' + f.idCombustible + '-12"/>' +
-                                '</td>'
+                    unidad.map(async f => {
+                        var tdMes = "";
+                        var promises = [];
+                        for (let i = 0; i < 12; i++) {
+                            promises.push(
+                                new Promise(async function (myResolve, myReject) {
+                                    const mes = i + 1;
+                                    $('#loading').addClass('d-block').removeClass('d-none');
+                                    try {
+                                        await $.getJSON('@Url.Action("GetValorDeRegistros")', { idConfiguracion: f.idConfiguracion, mes: mes, año: $("#year").val(), sede: $("#sede").val() }, function (registro) {
+                                            $('#loading').addClass('d-block').removeClass('d-none');
+                                            if (registro != null && !jQuery.isEmptyObject(registro)) {
+                                                const tdMesTemp = '<td>' +
+                                                    '<input type="number" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '" value="' + registro.valor + '"/>' +
+                                                    '</td>';
+                                                myResolve(tdMesTemp);
+                                            }
+                                            else {
+                                                const tdMesTemp = '<td>' +
+                                                    '<input type="number" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '"/>' +
+                                                    '</td>';
+                                                myReject(tdMesTemp);
+                                            }
+                                        });
+                                    } catch (error) {
+                                        const tdMesTemp = '<td>' +
+                                            '<input type="number" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '"/>' +
+                                            '</td>';
+                                        myResolve(tdMesTemp);
+                                    }
+
+                                })
+
                             );
-                        $('#tableCombustible > tr').addClass('tr-body')
+                        };
+
+                        Promise.all(promises).then((result) => {
+                            result.forEach(element => {
+                                tdMes += element;
+                            });
+
+                            tableCombustibles
+                                .append('<tr />')
+                                .children('tr:last')
+                                .append(
+                                    '<td />' + f.combustible.nombreCombustible +
+                                    '<td />' + f.combustible.unidad.unidad +
+                                    tdMes
+                                );
+                            $('#tableCombustible > tr').addClass('tr-body');
+                            $('#loading').removeClass('d-block').addClass('d-none');
+                        })
+                            .catch((result) => {
+                                const resultString = result.substr(result.indexOf("id"));
+                                const mes = resultString.substr(resultString.indexOf('"') + 1, resultString.indexOf('"') + 1).split("-")[1];
+                                tdMes += result;
+
+                                if (mes != 1) {
+                                    tableCombustibles
+                                        .children('tr:last')
+                                        .append(
+                                            '<td />' + f.combustible.nombreCombustible +
+                                            '<td />' + f.combustible.unidad.unidad +
+                                            tdMes
+                                        );
+                                } else {
+                                    tableCombustibles
+                                        .append('<tr />')
+                                        .children('tr:last')
+                                        .append(
+                                            '<td />' + f.combustible.nombreCombustible +
+                                            '<td />' + f.combustible.unidad.unidad +
+                                            tdMes
+                                        );
+                                }
+                                $('#tableCombustible > tr').addClass('tr-body');
+                                $('#loading').removeClass('d-block').addClass('d-none');
+                            });
+
                     });
                 };
             });
         }
-    };
+    }
 
-    function sendChanges(){
-        var jsonVal;
+    function sendChanges() {
+        var jsonVal = [];
+        var idSede = $("#sede").val();
+        var año = $("#year").val();
+
         $("td").each(function () {
             var valueInput = $(this).find("input");
-            if(valueInput.val() !== undefined){
+            if (valueInput.val() !== undefined) {
                 var id = valueInput.attr('id');
                 var ids = id.split('-');
-                var idCombustible = ids[0];
+                var idConfiguracion = ids[0];
                 var mes = ids[1];
-                console.log("ÏdCombustible: " + idCombustible + " Mes: " + mes + " Value: " + valueInput.val())
-            }           
+                var newJson = new Object();
+                newJson.idConfiguracion = idConfiguracion;
+                newJson.idUsuario = 0;
+                newJson.idSede = idSede;
+                newJson.valor = valueInput.val();
+                newJson.mes = mes;
+                newJson.año = año;
+                newJson.enabled = true;
+                jsonVal.push(newJson);
+            }
         });
+        $.post('@Url.Action("PostRegistros")', { registros: jsonVal }, function (result) {
+            $('#staticBackdrop').modal('hide');
+        });
+
     }
 </script>

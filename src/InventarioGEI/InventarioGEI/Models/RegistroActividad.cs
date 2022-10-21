@@ -18,7 +18,7 @@ namespace InventarioGEI.Models
         public int mes { get; set; }
         [Column("año")]
         [Display(Name = "Año")]
-        public int ano { get; set; }
+        public int año { get; set; }
         [Column("enabled")]
         [Display(Name = "Habilitado")]
         public bool enabled { get; set; }
