@@ -5,47 +5,47 @@
 }
 
 <div class="card mb-3 container-main">
-        <div class="card-header">
+    <div class="card-header">
         <h3 style="margin-top: 10px;">Crear Rol</h3>
-             <hr />
-        </div>
+        <hr />
+    </div>
 
     <form asp-action="Create" class="form-main">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group col-12 col-lg-6 mb-5">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group col-12 col-lg-6 mb-5">
             <label asp-for="nombreRol" class="control-label col-form-label"></label>
-            <input asp-for="nombreRol" placeholder="Ingrese el nombre del Rol" class="form-control input-text"/>
-                <span asp-validation-for="nombreRol" class="text-danger"></span>
-            </div>
+            <input asp-for="nombreRol" placeholder="Ingrese el nombre del Rol" class="form-control input-text" />
+            <span asp-validation-for="nombreRol" class="text-danger"></span>
+        </div>
         <div class="form-group form-check">
             <label class="form-check-label">
                 <input class="form-check-input" asp-for="permisoRol" /> @Html.DisplayNameFor(model => model.permisoRol)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="permisoSede" /> @Html.DisplayNameFor(model => model.permisoSede)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="permisoConfiguracion" /> @Html.DisplayNameFor(model => model.permisoConfiguracion)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="permisoRegistro" /> @Html.DisplayNameFor(model => model.permisoRegistro)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="permisoVisualizacion" /> @Html.DisplayNameFor(model => model.permisoVisualizacion)
-                </label>
-            </div>
+            </label>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="permisoSede" /> @Html.DisplayNameFor(model => model.permisoSede)
+            </label>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="permisoConfiguracion" /> @Html.DisplayNameFor(model => model.permisoConfiguracion)
+            </label>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="permisoRegistro" /> @Html.DisplayNameFor(model => model.permisoRegistro)
+            </label>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="permisoVisualizacion" /> @Html.DisplayNameFor(model => model.permisoVisualizacion)
+            </label>
+        </div>
         <div class="form-group group-buttons">
             <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
-                <input type="submit" value="Crear" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+            <input type="submit" value="Crear" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
 

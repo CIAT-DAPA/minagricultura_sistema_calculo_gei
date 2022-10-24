@@ -92,6 +92,7 @@ namespace InventarioGEI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetValorDeRegistros(int idConfiguracion, int mes, int año, int sede)
         {
+            
             var query = _context.RegistroActividad
                     .Where(r => r.idConfiguracion == idConfiguracion)
                     .Where(r => r.idSede == sede)
