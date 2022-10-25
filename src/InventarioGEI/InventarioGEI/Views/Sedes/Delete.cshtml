@@ -1,0 +1,50 @@
+﻿@model InventarioGEI.Models.Sede
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Sede</h4>
+    <hr />
+    <dl class="row">
+        <div class="col-md-4">
+            <dt>
+                @Html.DisplayNameFor(model => model.nombreSede)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.nombreSede)
+            </dd>
+        </div>
+        <div class ="col-md-4">
+            <dt>
+                @Html.DisplayNameFor(model => model.direccion)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.direccion)
+            </dd>
+        </div>
+    </dl>
+
+    <dl class="row">
+        <div class="col-md-4">
+            <dt>
+                @Html.DisplayNameFor(model => model.municipio)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.municipio.nombreMunicipio)
+            </dd>
+        </div>
+        <div class="col-md-4">
+            <dt>
+                @Html.DisplayNameFor(model => model.municipio.departamento)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.municipio.departamento.nombreDepartamento)
+            </dd>
+        </div>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="idSede" />
+        <input type="submit" value="Eliminar" class="btn btn-danger btn-sm" /> |
+        <a asp-action="Index" class="btn btn-outline-primary btn-sm">Regresar</a>
+    </form>
+</div>

@@ -1,0 +1,74 @@
+﻿@model InventarioGEI.Models.Sede
+
+<h4>Sede</h4>
+<hr />
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="idUsuario" />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="nombreSede" class="control-label"></label>
+                <input asp-for="nombreSede" class="form-control input-text" placeholder="Ingrese el nombre de la sede" />
+                <span asp-validation-for="nombreSede" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="direccion" class="control-label"></label>
+                <input asp-for="direccion" class="form-control input-text" placeholder="Ingrese la dirección de la sede" />
+                <span asp-validation-for="direccion" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">Departamento</label>
+                <select class="form-control" asp-for="municipio.codDepartamento" asp-items="ViewBag.departamentos" onchange="filterMunicipio(this)">
+                    <option value="" disabled hidden>Elija un Departamento</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">Municipio</label>
+                <select asp-for="codMunicipio" class="form-control" asp-items="ViewBag.municipios" id="selectMun">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary btn-sm" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <a class="btn btn-outline-primary btn-sm" asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</form>
+
+
+<script>
+
+    function filterMunicipio(departamentoItem) {
+        let selectedDepartamento = departamentoItem.value;
+        let selectMun = $('#selectMun');
+        selectMun.contents().remove();
+        if (selectedDepartamento != null && selectedDepartamento != '') {
+            selectMun.append($('<option value="" selected disabled hidden >Elija un Municipio</option>'));
+            $.getJSON('@Url.Action("GetMunicipios")', { id: selectedDepartamento }, function (muni) {
+                if (muni != null && !jQuery.isEmptyObject(muni)) {
+                    muni.map(f => {
+                        selectMun.append($("<option></option>").attr("value", f.value).text(f.text));
+                    });
+                };
+            });
+        }
+    };
+</script>

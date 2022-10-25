@@ -27,13 +27,13 @@ namespace InventarioGEI.Models
         [Display(Name = "Usuario")]
         public int idUsuario { get; set; }
         [ForeignKey("idUsuario")]
-        public virtual Usuario usuCreador { get; set; }
+        public virtual Usuario? usuCreador { get; set; }
 
         [Column("codigomunicipio")]
         [Display(Name = "Codigo Municipio")]
         public int codMunicipio { get; set; }
         [ForeignKey("codMunicipio")]
-        public virtual Municipio municipio { get; set; }
+        public virtual Municipio? municipio { get; set; }
 
     }
 }
