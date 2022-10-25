@@ -41,5 +41,10 @@ namespace InventarioGEI.Models
         [ForeignKey("idSede")]
         [Display(Name = "Sede")]
         public Sede? sede { get; set; }
+
+        public override string ToString()
+        {
+            return idRegistroActividad.ToString() + "|" + valor.ToString() + "|" + mes.ToString() + "|" + año.ToString() + "|" + enabled.ToString() + "|" + idConfiguracion.ToString() + "|" + idUsuario.ToString() + "|" + idSede.ToString();
+        }
     }
 }

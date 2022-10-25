@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
+using System.Numerics;
 
 namespace InventarioGEI.Controllers
 {
@@ -44,6 +45,14 @@ namespace InventarioGEI.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(fuenteEmision);
+                Log log = new Log
+                {
+                    accion = 1,
+                    contenido = fuenteEmision.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -86,6 +95,15 @@ namespace InventarioGEI.Controllers
                 {
                     _context.Update(fuenteEmision);
                     await _context.SaveChangesAsync();
+                    Log log = new Log
+                    {
+                        accion = 2,
+                        contenido = fuenteEmision.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -127,6 +145,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             if (_context.FuenteEmision == null)
             {
                 return Problem("Entity set 'Context.FuenteEmision'  is null.");
@@ -136,6 +155,14 @@ namespace InventarioGEI.Controllers
             {
                 fuenteEmision.enabled = false;
                 _context.FuenteEmision.Update(fuenteEmision);
+                Log log = new Log
+                {
+                    accion = 3,
+                    contenido = fuenteEmision.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
             }
             
             await _context.SaveChangesAsync();

@@ -1,0 +1,63 @@
+﻿@model IEnumerable<InventarioGEI.Models.RegistroAnual>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row container-title">
+    <h3 class="col-3">Cierres</h3>
+
+    <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create">Generar nuevo cierre</a>
+
+</div>
+
+<div class="card mb-3 container-main">
+    <table class="table table-hover table-main">
+        <thead>
+            <tr class="tr-head">
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.sede)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.año)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.fechaRegistro)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.user)
+                </th>
+                <th class="th-head"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="tr-body">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.sede.nombreSede)
+                        @if(item.estado){
+                            <span class="badge rounded-pill bg-success">Habilitado</span>
+                        }else{
+                            <span class="badge rounded-pill bg-danger">Deshabilitado</span>
+                        }
+                        
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.año)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fechaRegistro)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.user.email)
+                    </td>
+                    <td>
+                        <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idRegistroAnual" style="text-decoration: none; font-weight: 600; color: white;">
+                            Deshabilitar
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

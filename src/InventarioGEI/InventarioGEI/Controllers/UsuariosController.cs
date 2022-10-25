@@ -60,10 +60,19 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idUsuario,email,idRol")] Usuario usuario)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             usuario.enabled = true;
             if (ModelState.IsValid)
             {
                 _context.Add(usuario);
+                Log log = new Log
+                {
+                    accion = 1,
+                    contenido = usuario.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -108,6 +117,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idUsuario,email,idRol")] Usuario usuario)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             if (id != usuario.idUsuario)
             {
                 return NotFound();
@@ -118,6 +128,15 @@ namespace InventarioGEI.Controllers
                 try
                 {
                     _context.Update(usuario);
+                    await _context.SaveChangesAsync();
+                    Log log = new Log
+                    {
+                        accion = 2,
+                        contenido = usuario.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -168,6 +187,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             if (_context.Usuario == null)
             {
                 return Problem("Entity set 'Context.Usuario'  is null.");
@@ -177,6 +197,14 @@ namespace InventarioGEI.Controllers
             {
                 usuario.enabled = false;
                 _context.Usuario.Update(usuario);
+                Log log = new Log
+                {
+                    accion = 3,
+                    contenido = usuario.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
             }
             
             await _context.SaveChangesAsync();

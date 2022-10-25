@@ -82,6 +82,14 @@ namespace InventarioGEI.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(factor);
+                Log log = new Log
+                {
+                    accion = 1,
+                    contenido = factor.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -154,6 +162,15 @@ namespace InventarioGEI.Controllers
                 {
                     _context.Update(factor);
                     await _context.SaveChangesAsync();
+                    Log log = new Log
+                    {
+                        accion = 2,
+                        contenido = factor.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -216,6 +233,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             if (_context.FactorEmision == null)
             {
                 return Problem("Entity set 'Context.FactorEmision'  is null.");
@@ -225,6 +243,14 @@ namespace InventarioGEI.Controllers
             {
                 factorEmision.enabled = false;
                 _context.FactorEmision.Update(factorEmision);
+                Log log = new Log
+                {
+                    accion = 3,
+                    contenido = factorEmision.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
             }
             
             await _context.SaveChangesAsync();
@@ -241,8 +267,6 @@ namespace InventarioGEI.Controllers
         {
             if (id > 0)
             {
-                Console.WriteLine("entro metodo if");
-
                 var unidad = _context.ConfiguracionActividad.Where(c => c.idConfiguracion == id).Include(c => c.combustible).Include(c => c.combustible.unidad);
                 Console.WriteLine(unidad);
                 return Json(unidad);

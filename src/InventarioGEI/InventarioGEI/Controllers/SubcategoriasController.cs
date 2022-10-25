@@ -52,6 +52,14 @@ namespace InventarioGEI.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(subcategoria);
+                Log log = new Log
+                {
+                    accion = 1,
+                    contenido = subcategoria.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -111,6 +119,15 @@ namespace InventarioGEI.Controllers
                 {
                     _context.Update(subcategoria);
                     await _context.SaveChangesAsync();
+                    Log log = new Log
+                    {
+                        accion = 2,
+                        contenido = subcategoria.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -161,6 +178,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             if (_context.Subcategoria == null)
             {
                 return Problem("Entity set 'Context.Subcategoria'  is null.");
@@ -170,6 +188,14 @@ namespace InventarioGEI.Controllers
             {
                 subcategoria.enabled = false;
                 _context.Subcategoria.Update(subcategoria);
+                Log log = new Log
+                {
+                    accion = 3,
+                    contenido = subcategoria.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
             }
             
             await _context.SaveChangesAsync();

@@ -133,7 +133,16 @@ namespace InventarioGEI.Controllers
                 {
                     _context.Add(registro);
                     await _context.SaveChangesAsync();
-                    
+
+                    Log log = new Log
+                    {
+                        accion = 1,
+                        contenido = registro.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                    await _context.SaveChangesAsync();
                 }
                 else
                 {
@@ -147,6 +156,15 @@ namespace InventarioGEI.Controllers
                     registro.idRegistroActividad = queryExist.idRegistroActividad;
                     _context.ChangeTracker.Clear();
                     _context.Update(registro);
+                    await _context.SaveChangesAsync();
+                    Log log = new Log
+                    {
+                        accion = 2,
+                        contenido = registro.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
                     await _context.SaveChangesAsync();
                 }
             }

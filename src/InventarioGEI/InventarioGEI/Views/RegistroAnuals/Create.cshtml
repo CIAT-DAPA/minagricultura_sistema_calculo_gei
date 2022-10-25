@@ -1,0 +1,33 @@
+﻿@model InventarioGEI.Models.RegistroAnual
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="card mb-3 container-main">
+    <div class="card-header">
+        <h3 style="margin-top: 10px;">Generar Cierre</h3>
+        <hr />
+    </div>
+
+    <form asp-action="Create" class="form-main">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group col-8">
+            <label asp-for="idSede" class="control-label"></label>
+            <div class="selectdiv">
+                <select asp-for="idSede" class="form-control" asp-items="ViewBag.idSede"></select>
+            </div>
+        </div>
+        <div class="form-group col-2">
+            <label asp-for="año" class="control-label"></label>
+            <input asp-for="año" class="form-control" />
+            <span asp-validation-for="año" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group group-buttons">
+            <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+            <input type="submit" value="Generar" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+

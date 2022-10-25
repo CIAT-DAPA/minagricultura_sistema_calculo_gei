@@ -53,10 +53,19 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idRol,nombreRol,permisoRol,permisoSede,permisoConfiguracion,permisoRegistro,permisoVisualizacion")] Rol rol)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             rol.enabled = true;
             if (ModelState.IsValid)
             {
                 _context.Add(rol);
+                Log log = new Log
+                {
+                    accion = 1,
+                    contenido = rol.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -93,6 +102,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idRol,nombreRol,permisoRol,permisoSede,permisoConfiguracion,permisoRegistro,permisoVisualizacion")] Rol rol)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             if (id != rol.idRol)
             {
                 return NotFound();
@@ -104,6 +114,15 @@ namespace InventarioGEI.Controllers
                 try
                 {
                     _context.Update(rol);
+                    await _context.SaveChangesAsync();
+                    Log log = new Log
+                    {
+                        accion = 2,
+                        contenido = rol.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -145,6 +164,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             if (_context.Rol == null)
             {
                 return Problem("Entity set 'Context.Rol'  is null.");
@@ -154,6 +174,14 @@ namespace InventarioGEI.Controllers
             {
                 rol.enabled = false;
                 _context.Rol.Update(rol);
+                Log log = new Log
+                {
+                    accion = 3,
+                    contenido = rol.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
             }
             
             await _context.SaveChangesAsync();

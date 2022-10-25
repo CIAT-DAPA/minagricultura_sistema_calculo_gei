@@ -49,6 +49,16 @@ namespace InventarioGEI.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(categoria);
+
+                Log log = new Log
+                {
+                    accion = 1,
+                    contenido = categoria.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -105,6 +115,15 @@ namespace InventarioGEI.Controllers
                 {
                     _context.Update(categoria);
                     await _context.SaveChangesAsync();
+                    Log log = new Log
+                    {
+                        accion = 2,
+                        contenido = categoria.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -154,6 +173,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             if (_context.Categoria == null)
             {
                 return Problem("Entity set 'Context.Categoria'  is null.");
@@ -163,6 +183,14 @@ namespace InventarioGEI.Controllers
             {
                 categoria.enabled = false;
                 _context.Categoria.Update(categoria);
+                Log log = new Log
+                {
+                    accion = 3,
+                    contenido = categoria.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
             }
             
             await _context.SaveChangesAsync();

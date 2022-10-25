@@ -44,6 +44,14 @@ namespace InventarioGEI.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(tipoActividad);
+                Log log = new Log
+                {
+                    accion = 1,
+                    contenido = tipoActividad.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -87,6 +95,15 @@ namespace InventarioGEI.Controllers
                 {
                     _context.Update(tipoActividad);
                     await _context.SaveChangesAsync();
+                    Log log = new Log
+                    {
+                        accion = 2,
+                        contenido = tipoActividad.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -129,6 +146,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             if (_context.TipoActividad == null)
             {
                 return Problem("Entity set 'Context.TipoActividad'  is null.");
@@ -138,6 +156,14 @@ namespace InventarioGEI.Controllers
             {
                 tipoActividad.enabled = false;
                 _context.TipoActividad.Update(tipoActividad);
+                Log log = new Log
+                {
+                    accion = 3,
+                    contenido = tipoActividad.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
             }
             
             await _context.SaveChangesAsync();

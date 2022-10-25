@@ -1,340 +1,338 @@
 ﻿@model IEnumerable<InventarioGEI.Models.RegistroActividad>
 
-@{
-    ViewData["Title"] = "Index";
-}
-
-
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Guardando tus cambios</h5>
-            </div>
-            <div class="modal-body d-flex justify-content-center py-5">
-                <div class="spinner-border text-primary" role="status" id="loadingModal">
-                    <span class="visually-hidden">Loading...</span>
+    @{
+        ViewData["Title"] = "Index";
+    }
+    
+    
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Guardando tus cambios</h5>
+                </div>
+                <div class="modal-body d-flex justify-content-center py-5">
+                    <div class="spinner-border text-primary" role="status" id="loadingModal">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="row container-title">
-    <h3 class="col-3">Registros</h3>
-</div>
-<div class="row">
-    <div class="col-6">
-        <label class="control-label">Sede</label>
-        <div class="selectdiv">
-            <select class="form-select input-select" asp-items="ViewBag.sede" onchange="" id="sede"></select>
+    
+    <div class="row container-title">
+        <h3 class="col-3">Registros</h3>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label class="control-label">Sede</label>
+            <div class="selectdiv">
+                <select class="form-select input-select" asp-items="ViewBag.sede" onchange="" id="sede"></select>
+            </div>
+        </div>
+        <div class="form-group col-5">
+            <label class="control-label">Año</label>
+            <input type="number" placeholder="YYYY" min="2005" max="2100" class="form-control input-text"
+                   style="width: 95px" id="year" onchange="checkYear()">
+            <span class="text-danger d-none" id="yearVerification"></span>
         </div>
     </div>
-    <div class="form-group col-5">
-        <label class="control-label">Año</label>
-        <input type="number" placeholder="YYYY" min="2005" max="2100" class="form-control input-text"
-               style="width: 95px" id="year" onchange="checkYear()">
-        <span class="text-danger d-none" id="yearVerification"></span>
-    </div>
-</div>
-<div class="row mb-3">
-    <div class="col-6">
-        <label class="control-label">Alcance</label>
-        <div class="selectdiv">
-            <select class="form-select input-select" asp-items="ViewBag.alcance"
-                    onchange="filterCategoria(this), checkAlcance()" id="selectAlc">
-                <option value="" selected disabled hidden>Escoge un alcance</option>
-            </select>
+    <div class="row mb-3">
+        <div class="col-6">
+            <label class="control-label">Alcance</label>
+            <div class="selectdiv">
+                <select class="form-select input-select" asp-items="ViewBag.alcance"
+                        onchange="filterCategoria(this), checkAlcance()" id="selectAlc">
+                    <option value="" selected disabled hidden>Escoge un alcance</option>
+                </select>
+            </div>
+            <span class="text-danger d-none" id="alcanceVerification"></span>
         </div>
-        <span class="text-danger d-none" id="alcanceVerification"></span>
-    </div>
-    <div class="col-6">
-        <label class="control-label">Categoría</label>
-        <div class="selectdiv">
-            <select class="form-select input-select" asp-items="ViewBag.categoria"
-                    onchange="filterCombustibles(), checkCategoria()" id="selectCat">
-                <option value="" selected disabled hidden>Escoge una categoría</option>
-            </select>
+        <div class="col-6">
+            <label class="control-label">Categoría</label>
+            <div class="selectdiv">
+                <select class="form-select input-select" asp-items="ViewBag.categoria"
+                        onchange="filterCombustibles(), checkCategoria()" id="selectCat">
+                    <option value="" selected disabled hidden>Escoge una categoría</option>
+                </select>
+            </div>
+            <span class="text-danger d-none" id="categoriaVerification"></span>
         </div>
-        <span class="text-danger d-none" id="categoriaVerification"></span>
     </div>
-</div>
-<div class="card mb-3 container-main" style="height: 70%">
-    <div class="spinner-border text-primary d-none" role="status" style="position: fixed; top: 50%; left: 55%;"
-         id="loading">
-        <span class="visually-hidden">Loading...</span>
+    <div class="card mb-3 container-main" style="height: 70%">
+        <div class="spinner-border text-primary d-none" role="status" style="position: fixed; top: 50%; left: 55%;"
+             id="loading">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="text-primary d-none" style="text-align: center; position: relative; top: 50%;"
+             id="notFoundText">
+            <span>No se encontraron resultados</span>
+        </div>
+        <table class="table table-hover table-main">
+            <thead>
+                <tr class="tr-head">
+                    <th class="th-head">
+                        Combustible
+                    </th>
+                    <th class="th-head">
+                        @Html.DisplayNameFor(model => model.configuracion.combustible.unidad.unidad)
+                    </th>
+                    <th class="th-head">
+                        Ene
+                    </th>
+                    <th class="th-head">
+                        Feb
+                    </th>
+                    <th class="th-head">
+                        Mar
+                    </th>
+                    <th class="th-head">
+                        Abr
+                    </th>
+                    <th class="th-head">
+                        May
+                    </th>
+                    <th class="th-head">
+                        Jun
+                    </th>
+                    <th class="th-head">
+                        Jul
+                    </th>
+                    <th class="th-head">
+                        Ago
+                    </th>
+                    <th class="th-head">
+                        Sep
+                    </th>
+                    <th class="th-head">
+                        Oct
+                    </th>
+                    <th class="th-head">
+                        Nov
+                    </th>
+                    <th class="th-head">
+                        Dic
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tableCombustible">
+                <tr>
+                    <th colspan="100%" class="text-center">
+                        Por favor escoja un alcance y luego una categoría
+                    </th>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="text-primary d-none" style="text-align: center; position: relative; top: 50%;"
-         id="notFoundText">
-        <span>No se encontraron resultados</span>
+    <div class="row">
+        <div class="col-12 d-flex justify-content-end">
+            <button type="button" class="btn btn-primary button-create" onclick="sendChanges()">
+                Guardar Cambios
+            </button>
+        </div>
     </div>
-    <table class="table table-hover table-main">
-        <thead>
-            <tr class="tr-head">
-                <th class="th-head">
-                    Combustible
-                </th>
-                <th class="th-head">
-                    @Html.DisplayNameFor(model => model.configuracion.combustible.unidad.unidad)
-                </th>
-                <th class="th-head">
-                    Ene
-                </th>
-                <th class="th-head">
-                    Feb
-                </th>
-                <th class="th-head">
-                    Mar
-                </th>
-                <th class="th-head">
-                    Abr
-                </th>
-                <th class="th-head">
-                    May
-                </th>
-                <th class="th-head">
-                    Jun
-                </th>
-                <th class="th-head">
-                    Jul
-                </th>
-                <th class="th-head">
-                    Ago
-                </th>
-                <th class="th-head">
-                    Sep
-                </th>
-                <th class="th-head">
-                    Oct
-                </th>
-                <th class="th-head">
-                    Nov
-                </th>
-                <th class="th-head">
-                    Dic
-                </th>
-            </tr>
-        </thead>
-        <tbody id="tableCombustible">
-            <tr>
-                <th colspan="100%" class="text-center">
-                    Por favor escoja un alcance y luego una categoría
-                </th>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div class="row">
-    <div class="col-12 d-flex justify-content-end">
-        <button type="button" class="btn btn-primary button-create" onclick="sendChanges()" @*data-bs-toggle="modal"
-                data-bs-target="#staticBackdrop" *@>
-            Guardar Cambios
-        </button>
-    </div>
-</div>
-
-<script>
-    function filterCategoria(alcanceItem) {
-        var selectedAlcance = alcanceItem.value;
-        var selectCat = $('#selectCat');
-        selectCat.contents().remove();
-        if (selectedAlcance != null && selectedAlcance != '') {
-            selectCat.
-                append($('<option value="" selected disabled hidden > Escoge una categoría </option>'));
-            $.getJSON('@Url.Action("GetCategorias")', { id: selectedAlcance }, function (unidad) {
-                if (unidad != null && !jQuery.isEmptyObject(unidad)) {
-                    unidad.map(f => {
-                        selectCat
-                            .append($("<option></option>")
-                                .attr("value", f.value)
-                                .text(f.text));
-                    });
-                };
-            });
-        }
-    };
-
-    function filterCombustibles() {
-        var selectedCategoria = $('#selectCat').val();
-        var tableCombustibles = $('#tableCombustible');
-        tableCombustibles.contents().remove();
-        if (selectedCategoria != null && selectedCategoria != '') {
-            $.getJSON('@Url.Action("GetCombustibles")', { id: selectedCategoria }, function (unidad) {
-                if (unidad != null && !jQuery.isEmptyObject(unidad)) {
-                    unidad.map(async f => {
-                        var tdMes = "";
-                        var promises = [];
-                        for (let i = 0; i < 12; i++) {
-                            promises.push(
-                                new Promise(async function (myResolve, myReject) {
-                                    const mes = i + 1;
-                                    $('#loading').addClass('d-block').removeClass('d-none');
-                                    try {
-                                        await $.getJSON('@Url.Action("GetValorDeRegistros")', { idConfiguracion: f.idConfiguracion, mes: mes, año: $("#year").val(), sede: $("#sede").val() }, function (registro) {
-                                            $('#loading').addClass('d-block').removeClass('d-none');
-                                            if (registro != null && !jQuery.isEmptyObject(registro)) {
-                                                const tdMesTemp = '<td>' +
-                                                    '<input type="number" min="0" onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '" value="' + registro.valor + '"/>' +
-                                                    '</td>';
-                                                myResolve(tdMesTemp);
-                                            }
-                                            else {
-                                                const tdMesTemp = '<td>' +
-                                                    '<input type="number" min="0" onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '"/>' +
-                                                    '</td>';
-                                                myReject(tdMesTemp);
-                                            }
-                                        });
-                                    } catch (error) {
-                                        const tdMesTemp = '<td>' +
-                                            '<input type="number" min="0" onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '"/>' +
-                                            '</td>';
-                                        myResolve(tdMesTemp);
-                                    }
-
-                                })
-
-                            );
-                        };
-
-                        Promise.all(promises).then((result) => {
-                            result.forEach(element => {
-                                tdMes += element;
-                            });
-
-                            tableCombustibles
-                                .append('<tr />')
-                                .children('tr:last')
-                                .append(
-                                    '<td />' + f.combustible.nombreCombustible +
-                                    '<td />' + f.combustible.unidad.unidad +
-                                    tdMes
+    
+    <script>
+        function filterCategoria(alcanceItem) {
+            var selectedAlcance = alcanceItem.value;
+            var selectCat = $('#selectCat');
+            selectCat.contents().remove();
+            if (selectedAlcance != null && selectedAlcance != '') {
+                selectCat.
+                    append($('<option value="" selected disabled hidden > Escoge una categoría </option>'));
+                $.getJSON('@Url.Action("GetCategorias")', { id: selectedAlcance }, function (unidad) {
+                    if (unidad != null && !jQuery.isEmptyObject(unidad)) {
+                        unidad.map(f => {
+                            selectCat
+                                .append($("<option></option>")
+                                    .attr("value", f.value)
+                                    .text(f.text));
+                        });
+                    };
+                });
+            }
+        };
+    
+        function filterCombustibles() {
+            var selectedCategoria = $('#selectCat').val();
+            var tableCombustibles = $('#tableCombustible');
+            tableCombustibles.contents().remove();
+            if (selectedCategoria != null && selectedCategoria != '') {
+                $.getJSON('@Url.Action("GetCombustibles")', { id: selectedCategoria }, function (unidad) {
+                    if (unidad != null && !jQuery.isEmptyObject(unidad)) {
+                        unidad.map(async f => {
+                            var tdMes = "";
+                            var promises = [];
+                            for (let i = 0; i < 12; i++) {
+                                promises.push(
+                                    new Promise(async function (myResolve, myReject) {
+                                        const mes = i + 1;
+                                        $('#loading').addClass('d-block').removeClass('d-none');
+                                        try {
+                                            await $.getJSON('@Url.Action("GetValorDeRegistros")', { idConfiguracion: f.idConfiguracion, mes: mes, año: $("#year").val(), sede: $("#sede").val() }, function (registro) {
+                                                $('#loading').addClass('d-block').removeClass('d-none');
+                                                if (registro != null && !jQuery.isEmptyObject(registro)) {
+                                                    const tdMesTemp = '<td>' +
+                                                        '<input type="number" min="0" onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '" value="' + registro.valor + '"/>' +
+                                                        '</td>';
+                                                    myResolve(tdMesTemp);
+                                                }
+                                                else {
+                                                    const tdMesTemp = '<td>' +
+                                                        '<input type="number" min="0" onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '"/>' +
+                                                        '</td>';
+                                                    myReject(tdMesTemp);
+                                                }
+                                            });
+                                        } catch (error) {
+                                            const tdMesTemp = '<td>' +
+                                                '<input type="number" min="0" onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '"/>' +
+                                                '</td>';
+                                            myResolve(tdMesTemp);
+                                        }
+    
+                                    })
+    
                                 );
-                            $('#tableCombustible > tr').addClass('tr-body');
-                            $('#loading').removeClass('d-block').addClass('d-none');
-                            checkCombustibles();
-                        })
-                            .catch((result) => {
-                                const resultString = result.substr(result.indexOf("id"));
-                                const mes = resultString.substr(resultString.indexOf('"') + 1, resultString.indexOf('"') + 1).split("-")[1];
-                                tdMes += result;
-
-                                if (mes != 1) {
-                                    tableCombustibles
-                                        .children('tr:last')
-                                        .append(
-                                            '<td />' + f.combustible.nombreCombustible +
-                                            '<td />' + f.combustible.unidad.unidad +
-                                            tdMes
-                                        );
-                                } else {
-                                    tableCombustibles
-                                        .append('<tr />')
-                                        .children('tr:last')
-                                        .append(
-                                            '<td />' + f.combustible.nombreCombustible +
-                                            '<td />' + f.combustible.unidad.unidad +
-                                            tdMes
-                                        );
-                                }
+                            };
+    
+                            Promise.all(promises).then((result) => {
+                                result.forEach(element => {
+                                    tdMes += element;
+                                });
+    
+                                tableCombustibles
+                                    .append('<tr />')
+                                    .children('tr:last')
+                                    .append(
+                                        '<td />' + f.combustible.nombreCombustible +
+                                        '<td />' + f.combustible.unidad.unidad +
+                                        tdMes
+                                    );
                                 $('#tableCombustible > tr').addClass('tr-body');
                                 $('#loading').removeClass('d-block').addClass('d-none');
-
-                            });
-
-                    });
-
-                } else {
-                    checkCombustibles();
+                                checkCombustibles();
+                            })
+                                .catch((result) => {
+                                    const resultString = result.substr(result.indexOf("id"));
+                                    const mes = resultString.substr(resultString.indexOf('"') + 1, resultString.indexOf('"') + 1).split("-")[1];
+                                    tdMes += result;
+    
+                                    if (mes != 1) {
+                                        tableCombustibles
+                                            .children('tr:last')
+                                            .append(
+                                                '<td />' + f.combustible.nombreCombustible +
+                                                '<td />' + f.combustible.unidad.unidad +
+                                                tdMes
+                                            );
+                                    } else {
+                                        tableCombustibles
+                                            .append('<tr />')
+                                            .children('tr:last')
+                                            .append(
+                                                '<td />' + f.combustible.nombreCombustible +
+                                                '<td />' + f.combustible.unidad.unidad +
+                                                tdMes
+                                            );
+                                    }
+                                    $('#tableCombustible > tr').addClass('tr-body');
+                                    $('#loading').removeClass('d-block').addClass('d-none');
+    
+                                });
+    
+                        });
+    
+                    } else {
+                        checkCombustibles();
+                    }
+                });
+    
+            }
+    
+        }
+    
+        function sendChanges() {
+            var jsonVal = [];
+            var idSede = $("#sede").val();
+            var año = $("#year").val();
+    
+            $("td").each(function () {
+                var valueInput = $(this).find("input");
+                if (valueInput.val() !== undefined) {
+                    var id = valueInput.attr('id');
+                    var ids = id.split('-');
+                    var idConfiguracion = ids[0];
+                    var mes = ids[1];
+                    var newJson = new Object();
+                    newJson.idConfiguracion = idConfiguracion;
+                    newJson.idUsuario = 0;
+                    newJson.idSede = idSede;
+                    newJson.valor = valueInput.val();
+                    newJson.mes = mes;
+                    newJson.año = año;
+                    newJson.enabled = true;
+                    jsonVal.push(newJson);
                 }
             });
-
-        }
-
-    }
-
-    function sendChanges() {
-        var jsonVal = [];
-        var idSede = $("#sede").val();
-        var año = $("#year").val();
-
-        $("td").each(function () {
-            var valueInput = $(this).find("input");
-            if (valueInput.val() !== undefined) {
-                var id = valueInput.attr('id');
-                var ids = id.split('-');
-                var idConfiguracion = ids[0];
-                var mes = ids[1];
-                var newJson = new Object();
-                newJson.idConfiguracion = idConfiguracion;
-                newJson.idUsuario = 0;
-                newJson.idSede = idSede;
-                newJson.valor = valueInput.val();
-                newJson.mes = mes;
-                newJson.año = año;
-                newJson.enabled = true;
-                jsonVal.push(newJson);
+            if (checkYear() && checkAlcance() && checkCategoria() && jsonVal.length > 1) {
+                $('#staticBackdrop').modal('show');
+                $.post('@Url.Action("PostRegistros")', { registros: jsonVal }, function (result) {
+                    filterCombustibles();
+                    $('#staticBackdrop').modal('hide');
+                });
             }
-        });
-
-        if (checkYear() && checkAlcance() && checkCategoria() && checkCombustibles()) {
-            $('#staticBackdrop').modal('show');
-            $('#yearVerification').addClass('d-none').removeClass('d-block');
-            $.post('@Url.Action("PostRegistros")', { registros: jsonVal }, function (result) {
-                $('#staticBackdrop').modal('hide');
-            });
+    
+    
+    
         }
-
-
-
-    }
-
-    function checkYear() {
-        if ($('#year').val() < 2005 || $('#year').val() > 2100) {
-            $('#yearVerification').addClass('d-block').removeClass('d-none');
-            $('#yearVerification').text("Debe ser un año entre 2005 y 2100");
+    
+        function checkYear() {
+            if ($('#year').val() < 2005 || $('#year').val() > 2100) {
+                $('#yearVerification').addClass('d-block').removeClass('d-none');
+                $('#yearVerification').text("Debe ser un año entre 2005 y 2100");
+                return false;
+            } else if ($('#year').val() == null) {
+                $('#yearVerification').addClass('d-block').removeClass('d-none');
+                $('#yearVerification').text("Debes escoger un año");
+                return false;
+            } else {
+                $('#yearVerification').addClass('d-none').removeClass('d-block');
+                filterCombustibles()
+                return true;
+            }
+        }
+    
+        function checkAlcance() {
+            if ($('#selectAlc').val() != null) {
+                $('#alcanceVerification').addClass('d-none').removeClass('d-block');
+                return true;
+            }
+            $('#alcanceVerification').addClass('d-block').removeClass('d-none');
+            $('#alcanceVerification').text("Debes escoger un alcance");
             return false;
-        } else if ($('#year').val() == null) {
-            $('#yearVerification').addClass('d-block').removeClass('d-none');
-            $('#yearVerification').text("Debes escoger un año");
+        }
+    
+        function checkCategoria() {
+    
+            if ($('#selectCat').val() != null) {
+    
+                $('#categoriaVerification').addClass('d-none').removeClass('d-block');
+                return true;
+            }
+            $('#categoriaVerification').addClass('d-block').removeClass('d-none');
+            $('#categoriaVerification').text("Debes escoger una categoria");
             return false;
-        } else {
-            $('#yearVerification').addClass('d-none').removeClass('d-block');
-            filterCombustibles()
-            return true;
         }
-    }
-
-    function checkAlcance() {
-        if ($('#selectAlc').val() != null) {
-            $('#alcanceVerification').addClass('d-none').removeClass('d-block');
-            return true;
+    
+        function checkCombustibles() {
+            if ($('#tableCombustible').children().length >= 1) {
+                $('#notFoundText').addClass('d-none').removeClass('d-block');
+                return true;
+            }
+            $('#notFoundText').addClass('d-block').removeClass('d-none');
+            return false;
         }
-        $('#alcanceVerification').addClass('d-block').removeClass('d-none');
-        $('#alcanceVerification').text("Debes escoger un alcance");
-        return false;
-    }
-
-    function checkCategoria() {
-
-        if ($('#selectCat').val() != null) {
-
-            $('#categoriaVerification').addClass('d-none').removeClass('d-block');
-            return true;
-        }
-        $('#categoriaVerification').addClass('d-block').removeClass('d-none');
-        $('#categoriaVerification').text("Debes escoger una categoria");
-        return false;
-    }
-
-    function checkCombustibles() {
-        if ($('#tableCombustible').children().length >= 1) {
-            $('#notFoundText').addClass('d-none').removeClass('d-block');
-            return true;
-        }
-        $('#notFoundText').addClass('d-block').removeClass('d-none');
-        return false;
-    }
-</script>
+    </script>

@@ -26,5 +26,7 @@ namespace InventarioGEI.Models
         public DbSet<InventarioGEI.Models.Tipo> Tipo { get; set; }
         public DbSet<InventarioGEI.Models.Unidad> Unidad { get; set; }
         public DbSet<InventarioGEI.Models.RegistroActividad> RegistroActividad { get; set; }
+        public DbSet<InventarioGEI.Models.Log> Log { get; set; }
+        public DbSet<InventarioGEI.Models.RegistroAnual> RegistroAnual { get; set; }
     }
 }

@@ -34,5 +34,10 @@ namespace InventarioGEI.Models
 
 
         public virtual ICollection<Subcategoria>? Subcategorias { get; set; }
+
+        public override string ToString()
+        {
+            return idCategoria.ToString() + "|" + nombreCategoria.ToString() + "|" + enabled.ToString() + "|" + idUsuario.ToString() + "|" + idAlcance.ToString();
+        }
     }
 }

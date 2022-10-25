@@ -59,10 +59,19 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idConfiguracion,idCombustible,idSubcategoria,idFuenteEmision")] ConfiguracionActividad configuracionActividad)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             configuracionActividad.enabled = true;
             if (ModelState.IsValid)
             {
                 _context.Add(configuracionActividad);
+                Log log = new Log
+                {
+                    accion = 1,
+                    contenido = configuracionActividad.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -136,6 +145,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idConfiguracion,idCombustible,idSubcategoria,idFuenteEmision")] ConfiguracionActividad configuracionActividad)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             if (id != configuracionActividad.idConfiguracion)
             {
                 return NotFound();
@@ -147,6 +157,16 @@ namespace InventarioGEI.Controllers
                 try
                 {
                     _context.Update(configuracionActividad);
+                    await _context.SaveChangesAsync();
+
+                    Log log = new Log
+                    {
+                        accion = 2,
+                        contenido = configuracionActividad.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -214,6 +234,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             if (_context.ConfiguracionActividad == null)
             {
                 return Problem("Entity set 'Context.ConfiguracionActividad'  is null.");
@@ -223,6 +244,14 @@ namespace InventarioGEI.Controllers
             {
                 configuracionActividad.enabled = false;
                 _context.ConfiguracionActividad.Update(configuracionActividad);
+                Log log = new Log
+                {
+                    accion = 3,
+                    contenido = configuracionActividad.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
             }
             
             await _context.SaveChangesAsync();

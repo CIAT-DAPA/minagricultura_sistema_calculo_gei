@@ -40,5 +40,10 @@ namespace InventarioGEI.Models
         public bool enabled { get; set; }
 
         public virtual ICollection<Usuario>? Usuarios { get; set; }
+
+        public override string ToString()
+        {
+            return idRol.ToString() + "|" + nombreRol.ToString() + "|" + permisoRol.ToString() + "|" + permisoSede.ToString() + "|" + permisoConfiguracion.ToString() + "|" + permisoRegistro.ToString() + "|" + permisoVisualizacion.ToString() + "|" + enabled.ToString();
+        }
     }
 }

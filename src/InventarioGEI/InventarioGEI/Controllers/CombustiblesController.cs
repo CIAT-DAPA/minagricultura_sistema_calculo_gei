@@ -65,7 +65,17 @@ namespace InventarioGEI.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(combustible);
+                Log log = new Log
+                {
+                    accion = 1,
+                    contenido = combustible.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
+
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             List<TipoActividad> tiposActividad = _context.TipoActividad.Where(t => t.enabled == true).ToList();
@@ -151,6 +161,15 @@ namespace InventarioGEI.Controllers
                 {
                     _context.Update(combustible);
                     await _context.SaveChangesAsync();
+                    Log log = new Log
+                    {
+                        accion = 2,
+                        contenido = combustible.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -218,6 +237,7 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             if (_context.Combustible == null)
             {
                 return Problem("Entity set 'Context.Combustible'  is null.");
@@ -227,6 +247,15 @@ namespace InventarioGEI.Controllers
             {
                 combustible.enabled = false;
                 _context.Combustible.Update(combustible);
+
+                Log log = new Log
+                {
+                    accion = 3,
+                    contenido = combustible.ToString(),
+                    idUsuario = user.idUsuario,
+                    fechaAccion = DateTime.UtcNow
+                };
+                _context.Log.Add(log);
             }
             
             await _context.SaveChangesAsync();

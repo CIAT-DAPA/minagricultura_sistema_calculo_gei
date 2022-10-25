@@ -33,5 +33,10 @@ namespace InventarioGEI.Models
         [ForeignKey("idFuenteEmision")]
         [Display(Name = "Fuente de Emisión")]
         public FuenteEmision? fuenteEmision { get; set; }
+
+        public override string ToString()
+        {
+            return idConfiguracion.ToString() + "|" + enabled.ToString() + "|" + idCombustible.ToString() + "|" + idSubcategoria.ToString() + "|" + idFuenteEmision.ToString();
+        }
     }
 }

@@ -48,6 +48,10 @@ namespace InventarioGEI.Models
         [ForeignKey("idConfiguracion")]
         [Display(Name = "Configuracion")]
         public ConfiguracionActividad? configuracion { get; set; }
-
+        public override string ToString()
+        {
+            return idFE.ToString() + "|" + factorEmision.ToString() + "|" + PCG.ToString() + "|" + incertidumbreMas.ToString() + "|" + incertidumbreMenos.ToString() + "|" + enabled.ToString()
+                + "|" + idGei.ToString() + "|" + idUsuario.ToString() + "|" + idConfiguracion.ToString();
+        }
     }
 }

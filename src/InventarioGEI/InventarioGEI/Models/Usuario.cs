@@ -26,5 +26,9 @@ namespace InventarioGEI.Models
         [Display(Name = "Rol")]
         public virtual Rol? rolUsuario { get; set; }
 
+        public override string ToString()
+        {
+            return idUsuario.ToString() + "|" + email.ToString() + "|" + enabled.ToString() + "|" + idRol.ToString();
+        }
     }
 }

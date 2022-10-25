@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Extensions.Configuration;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventarioGEI.Models
@@ -24,5 +25,10 @@ namespace InventarioGEI.Models
         [ForeignKey("idUsuario")]
         [Display(Name = "Usuario")]
         public Usuario? usuario { get; set; }
+
+        public override string ToString()
+        {
+            return idFuenteEmision.ToString() + "|" + nombreFuenteEmision.ToString() + "|" + enabled.ToString() + "|" + idUsuario.ToString();
+        }
     }
 }

@@ -35,5 +35,9 @@ namespace InventarioGEI.Models
         [ForeignKey("codMunicipio")]
         public virtual Municipio? municipio { get; set; }
 
+        public override string ToString()
+        {
+            return idSede.ToString() + "|" + nombreSede.ToString() + "|" + direccion.ToString() + "|" + enabled.ToString() + "|" + idUsuario.ToString() + "|" + codMunicipio.ToString();
+        }
     }
 }

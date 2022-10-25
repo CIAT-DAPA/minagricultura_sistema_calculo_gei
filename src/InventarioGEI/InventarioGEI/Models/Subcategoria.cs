@@ -30,5 +30,10 @@ namespace InventarioGEI.Models
         [ForeignKey("idUsuario")]
         [Display(Name = "Usuario")]
         public Usuario? usuario { get; set; }
+
+        public override string ToString()
+        {
+            return idSubcategoria.ToString() + "|" + nombreSubcategoria.ToString() + "|" + enabled.ToString() + "|" + idCategoria.ToString() + "|" + idUsuario.ToString();
+        }
     }
 }
