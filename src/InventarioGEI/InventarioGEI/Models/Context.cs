@@ -9,24 +9,27 @@ namespace InventarioGEI.Models
         {
 
         }
-        public DbSet<InventarioGEI.Models.Rol> Rol { get; set; }
-        public DbSet<InventarioGEI.Models.Usuario> Usuario { get; set; }
-        public DbSet<InventarioGEI.Models.Sede> Sede { get; set; }
-        public DbSet<InventarioGEI.Models.Departamento> Departamento { get; set; }
-        public DbSet<InventarioGEI.Models.Municipio> Municipio { get; set; }
-        public DbSet<InventarioGEI.Models.Alcance> Alcance { get; set; }
-        public DbSet<InventarioGEI.Models.Categoria> Categoria { get; set; }
-        public DbSet<InventarioGEI.Models.Subcategoria> Subcategoria { get; set; }
-        public DbSet<InventarioGEI.Models.FuenteEmision> FuenteEmision { get; set; }
-        public DbSet<InventarioGEI.Models.TipoActividad> TipoActividad { get; set; }
-        public DbSet<InventarioGEI.Models.ConfiguracionActividad> ConfiguracionActividad { get; set; }
-        public DbSet<InventarioGEI.Models.Combustible> Combustible { get; set; }
-        public DbSet<InventarioGEI.Models.GEI> Gei { get; set; }
-        public DbSet<InventarioGEI.Models.FactorEmision> FactorEmision { get; set; }
-        public DbSet<InventarioGEI.Models.Tipo> Tipo { get; set; }
-        public DbSet<InventarioGEI.Models.Unidad> Unidad { get; set; }
-        public DbSet<InventarioGEI.Models.RegistroActividad> RegistroActividad { get; set; }
-        public DbSet<InventarioGEI.Models.Log> Log { get; set; }
-        public DbSet<InventarioGEI.Models.RegistroAnual> RegistroAnual { get; set; }
+        public DbSet<Rol> Rol { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<Sede> Sede { get; set; }
+        public DbSet<Departamento> Departamento { get; set; }
+        public DbSet<Municipio> Municipio { get; set; }
+        public DbSet<Alcance> Alcance { get; set; }
+        public DbSet<Categoria> Categoria { get; set; }
+        public DbSet<Subcategoria> Subcategoria { get; set; }
+        public DbSet<FuenteEmision> FuenteEmision { get; set; }
+        public DbSet<TipoActividad> TipoActividad { get; set; }
+        public DbSet<ConfiguracionActividad> ConfiguracionActividad { get; set; }
+        public DbSet<Combustible> Combustible { get; set; }
+        public DbSet<GEI> Gei { get; set; }
+        public DbSet<FactorEmision> FactorEmision { get; set; }
+        public DbSet<Tipo> Tipo { get; set; }
+        public DbSet<Unidad> Unidad { get; set; }
+        public DbSet<RegistroActividad> RegistroActividad { get; set; }
+        public DbSet<Log> Log { get; set; }
+        public DbSet<RegistroAnual> RegistroAnual { get; set; }
+        public DbSet<Emision> Emision { get; set; }
+        public DbSet<EmisionGEI> EmisionGEI { get; set; }
+        
     }
 }
