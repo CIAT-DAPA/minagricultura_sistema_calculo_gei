@@ -15,46 +15,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <div style=" top: 0; z-index: 3; background-color: #3366CC; padding:5px;">
-        <img src="/img/govLogo2.png" class="img-fluid rounded-start" alt="gov.co" style="height:35px;" />
-    </div>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow" style="margin-bottom: 35px; box-shadow: none;">
-            <div class="container-fluid">
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <img src="/img/logoMinAgroHeader.png" alt="logo minAgri" class="img-fluid rounded-start" style="margin-left: 280px;" />
-                        </li>
-                        
-           
-                    </ul>
-                    <partial name="_LoginPartial" />
+    <div class="main">
+        <div class="navbar navbar-dark sticky-top" style="background-color: #3366CC; padding:5px;">
+            <img src="/img/govLogo2.png" class="img-fluid rounded-start" alt="gov.co" style="height:35px;" />
+            <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+        </div>
+
+        <div class="container-fluid d-flex p-0">
+            @*<partial name="/Views/Usuarios/NavBar.cshtml" />*@
+            <partial name="/Views/Usuarios/Nav.cshtml" />
+            <div role="main" class="pb-3 page content" id="content">
+                <button id="sidebarCollapse" type="button" class="btn rounded-pill shadow-sm sidebarCollapse bg-white "><i class="fa fa-bars mr-2"></i></button>
+                <header>
+                    <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow" style="box-shadow: none;">
+                        <div class="container-fluid">
+                            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                                <ul class="navbar-nav flex-grow-1">
+                                    <li class="nav-item">
+                                        <img src="/img/logoMinAgroHeader.png" alt="logo minAgri" class="img-fluid rounded-start" />
+                                    </li>
+                                </ul>
+                                <partial name="_LoginPartial" />
+                            </div>
+                        </div>
+                    </nav>
+                </header>
+                <div class="p-4 " >
+                    @RenderBody()
                 </div>
             </div>
-        </nav>
-    </header>
+        </div>
+        <div style="position: sticky; bottom: 0; background-color: #3366cc; width: 100%; z-index: 3; display: flex; justify-content: space-between; padding: 10px 10px 0px 10px;">
+            <div>
+                <img src="/img/colombiaLogo.png" class="img-fluid rounded-start" alt="gov.co" style="height:25px; padding-right: 15px; border-right: solid 1px rgba(255,255,255,0.5);" />
+                <img src="/img/govLogo2.png" class="img-fluid rounded-start" alt="gov.co" style="height:25px;" />
+            </div>
+            <div>
+                <ul style="list-style: none; display: flex; color: white;">
+                    <li style="margin-right:15px;"><a href="https://www.instagram.com/MinAgriculturaCol/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram" style="color:white;"></i></a></li>
+                    <li style="margin-right:15px;"><a href="https://www.facebook.com/MinisteriodeAgriculturayDesarrolloRural" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook" style="color:white;"></i></a></li>
+                    <li style="margin-right:15px;"><a href="https://twitter.com/MinAgricultura" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-twitter" style="color:white;"></i></a></li>
+                    <li style="margin-right:15px;"><a href="https://www.youtube.com/user/AgriculturaldiaMADR" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube" style="color:white;"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
     
-    <div class="container">
-        <partial name="/Views/Usuarios/NavBar.cshtml" />
-        <main role="main" class="pb-3" style="margin-right: 35px;">
-            @RenderBody()
-        </main>
-    </div>
-    <div style="background-color: #3366cc; position: fixed; bottom: 0; width: 100%; z-index: 3; display: flex; justify-content: space-between; padding: 10px 10px 0px 10px;">
-        <div>
-            <img src="/img/colombiaLogo.png" class="img-fluid rounded-start" alt="gov.co" style="height:25px; padding-right: 15px; border-right: solid 1px rgba(255,255,255,0.5);" />
-            <img src="/img/govLogo2.png" class="img-fluid rounded-start" alt="gov.co" style="height:25px;" /> 
-        </div>
-        <div>
-            <ul style="list-style: none; display: flex; color: white;">
-                <li style="margin-right:15px;"><a href="https://www.instagram.com/MinAgriculturaCol/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram" style="color:white;"></i></a></li>
-                <li style="margin-right:15px;"><a href="https://www.facebook.com/MinisteriodeAgriculturayDesarrolloRural" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook" style="color:white;"></i></a></li>
-                <li style="margin-right:15px;"><a href="https://twitter.com/MinAgricultura" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-twitter" style="color:white;"></i></a></li>
-                <li style="margin-right:15px;"><a href="https://www.youtube.com/user/AgriculturaldiaMADR" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube" style="color:white;"></i></a></li>
-            </ul>
-        </div>
-    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
