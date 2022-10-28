@@ -28,7 +28,7 @@ body {
 .main {
     display: grid;
     height: 100vh;
-    grid-template-rows: 8% 1fr 8%;
+    grid-template-rows: 40px 1fr 40px;
 }
 
 .page{
@@ -210,7 +210,7 @@ dl {
 
 .form-main {
     padding: 20px 40px;
-    height: 58vh;
+    height: 50vh;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -273,7 +273,6 @@ dl {
 
 .l-navbar {
     position: fixed;
-    top: 48px;
     left: -30%;
     width: var(--nav-width);
     height: calc(100vh - 98px);
@@ -293,7 +292,7 @@ dl {
     flex-flow: wrap;
 }
 
-.show {
+.show-nav {
     left: 0;
     width: auto 
 }
@@ -330,8 +329,8 @@ dl {
         /* padding: 1rem 00 0; */
     }
 
-    .show {
-        width: calc(var(--nav-width) + 190px)
+    .show-nav {
+          width: calc(var(--nav-width) + 190px)
     }
 
     .content-pd {

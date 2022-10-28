@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+    
+
     <div class="main">
         <div class="navbar navbar-dark sticky-top" style="background-color: #3366CC; padding:5px;">
             <img src="/img/govLogo2.png" class="img-fluid rounded-start" alt="gov.co" style="height:35px;" />
@@ -22,7 +24,6 @@
         </div>
 
         <div class="container-fluid d-flex p-0">
-            @*<partial name="/Views/Usuarios/NavBar.cshtml" />*@
             <partial name="/Views/Usuarios/Nav.cshtml" />
             <div role="main" class="pb-3 page content" id="content">
                 <button id="sidebarCollapse" type="button" class="btn rounded-pill shadow-sm sidebarCollapse bg-white "><i class="fa fa-bars mr-2"></i></button>
@@ -40,7 +41,7 @@
                         </div>
                     </nav>
                 </header>
-                <div class="p-4 " >
+                <div class="p-4 pb-0 " >
                     @RenderBody()
                 </div>
             </div>

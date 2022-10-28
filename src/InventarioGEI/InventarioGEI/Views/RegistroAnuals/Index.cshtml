@@ -36,12 +36,15 @@
                 <tr class="tr-body">
                     <td>
                         @Html.DisplayFor(modelItem => item.sede.nombreSede)
-                        @if(item.estado){
+                        @if (item.estado)
+                        {
                             <span class="badge rounded-pill bg-success">Habilitado</span>
-                        }else{
+                        }
+                        else
+                        {
                             <span class="badge rounded-pill bg-danger">Deshabilitado</span>
                         }
-                        
+
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.año)
@@ -61,3 +64,4 @@
             }
         </tbody>
     </table>
+</div>
