@@ -153,11 +153,14 @@ namespace InventarioGEI.Controllers
                 emision.coeficienteVariacion = coeficiente;
                 emision.factorT = factorT;
                 emision.incertidumbre = incertidumbre;
-                emision.emisionTotal = 00000;
                 emision.idConfiguracion = group.Key;
                 emision.idRegistroAnual = idRegAnual;
 
-                await CreateEmisionGEI(group.Key, valAnual, idRegAnual);
+                var resultEmGEI = await CreateEmisionGEI(group.Key, valAnual, idRegAnual) as OkObjectResult;
+                emision.emisionTotal = (double)resultEmGEI.Value;
+
+                _context.Add(emision);
+                await _context.SaveChangesAsync();
             }
             return Ok();
 

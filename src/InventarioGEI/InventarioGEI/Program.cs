@@ -59,4 +59,6 @@ app.MapControllerRoute(
 app.MapRazorPages();
 app.MapControllers();
 
+app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
+
 app.Run();
