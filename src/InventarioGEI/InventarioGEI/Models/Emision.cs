@@ -12,40 +12,40 @@ namespace InventarioGEI.Models
         public int idEmision { get; set; }
         [Column("mes1")]
         [Display(Name = "Enero")]
-        public double mes1 { get; set; }
+        public double? mes1 { get; set; }
         [Column("mes2")]
         [Display(Name = "Febrero")]
-        public double mes2 { get; set; }
+        public double? mes2 { get; set; }
         [Column("mes3")]
         [Display(Name = "Marzo")]
-        public double mes3 { get; set; }
+        public double? mes3 { get; set; }
         [Column("mes4")]
         [Display(Name = "Abril")]
-        public double mes4 { get; set; }
+        public double? mes4 { get; set; }
         [Column("mes5")]
         [Display(Name = "Mayo")]
-        public double mes5 { get; set; }
+        public double? mes5 { get; set; }
         [Column("mes6")]
         [Display(Name = "Junio")]
-        public double mes6 { get; set; }
+        public double? mes6 { get; set; }
         [Column("mes7")]
         [Display(Name = "Julio")]
-        public double mes7 { get; set; }
+        public double? mes7 { get; set; }
         [Column("mes8")]
         [Display(Name = "Agosto")]
-        public double mes8 { get; set; }
+        public double? mes8 { get; set; }
         [Column("mes9")]
         [Display(Name = "Septiembre")]
-        public double mes9 { get; set; }
+        public double? mes9 { get; set; }
         [Column("mes10")]
         [Display(Name = "Octubre")]
-        public double mes10 { get; set; }
+        public double? mes10 { get; set; }
         [Column("mes11")]
         [Display(Name = "Noviembre")]
-        public double mes11 { get; set; }
+        public double? mes11 { get; set; }
         [Column("mes12")]
         [Display(Name = "Diciembre")]
-        public double mes12 { get; set; }
+        public double? mes12 { get; set; }
         [Column("valoranual")]
         [Display(Name = "Valor anual")]
         public double valorAnual { get; set; }

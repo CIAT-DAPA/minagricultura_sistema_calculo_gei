@@ -135,10 +135,9 @@ namespace InventarioGEI.Controllers
                             break;
                     }
                     valAnual += reg.valor;
-                    if (reg.valor > 0)
-                    {
+                    
                         noDatos++;
-                    }
+                    
                 }
                 double promedio = valAnual / noDatos;
                 double desviacion = Math.Sqrt(Math.Pow(valAnual - promedio,2) / noDatos);

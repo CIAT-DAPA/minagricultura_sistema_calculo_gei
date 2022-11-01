@@ -273,7 +273,7 @@
 
         $("td").each(function () {
             var valueInput = $(this).find("input");
-            if (valueInput.val() !== undefined) {
+            if (valueInput.val() !== undefined && valueInput.val() != '') {
                 var id = valueInput.attr('id');
                 var ids = id.split('-');
                 var idConfiguracion = ids[0];
@@ -287,6 +287,8 @@
                 newJson.año = año;
                 newJson.enabled = true;
                 jsonVal.push(newJson);
+
+                console.log(newJson);
             }
         });
         if (checkYear() && checkAlcance() && checkCategoria() && jsonVal.length > 1) {
