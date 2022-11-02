@@ -49,6 +49,16 @@ namespace InventarioGEI.Controllers
             registroAnual.fechaRegistro = DateTime.UtcNow;
             if (ModelState.IsValid)
             {
+                var regAnualExists = await _context.RegistroAnual.Where(r => r.idSede == registroAnual.idSede && r.año == registroAnual.año).AnyAsync();
+                if (regAnualExists)
+                {
+                    var registrosAnualesAnt = await _context.RegistroAnual.Where(r => r.idSede == registroAnual.idSede && r.año == registroAnual.año && r.estado == true).ToListAsync();
+                    foreach (var regAnt in registrosAnualesAnt)
+                    {
+                        regAnt.estado = false;
+                        _context.RegistroAnual.Update(regAnt);
+                    }
+                }
                 _context.Add(registroAnual);
                 await _context.SaveChangesAsync();
                 await CreateEmision(registroAnual.año, registroAnual.idSede, registroAnual.idRegistroAnual);
@@ -92,7 +102,7 @@ namespace InventarioGEI.Controllers
                 Emision emision = new Emision();
                 double valAnual = 0;
                 int noDatos = 0;
-                Console.WriteLine("Users starting with " + group.Key + ":");
+                List<double> valList = new List<double>();
                 foreach (var reg in group)
                 {
                     switch (reg.mes)
@@ -134,13 +144,14 @@ namespace InventarioGEI.Controllers
                             emision.mes12 = reg.valor;
                             break;
                     }
+                    valList.Add(reg.valor);
                     valAnual += reg.valor;
                     
                         noDatos++;
                     
                 }
                 double promedio = valAnual / noDatos;
-                double desviacion = Math.Sqrt(Math.Pow(valAnual - promedio,2) / noDatos);
+                double desviacion = standardDeviation(valList);
                 double coeficiente =  desviacion / promedio;
                 double factorT = factoresT[noDatos];
                 double incertidumbre = 1 - ((promedio - (desviacion * factorT) / Math.Sqrt(noDatos)) / promedio);
@@ -189,6 +200,19 @@ namespace InventarioGEI.Controllers
                 await _context.SaveChangesAsync();
             }
             return Ok(emTotal);
+        }
+
+        static double standardDeviation(IEnumerable<double> sequence)
+        {
+            double result = 0;
+
+            if (sequence.Any())
+            {
+                double average = sequence.Average();
+                double sum = sequence.Sum(d => Math.Pow(d - average, 2));
+                result = Math.Sqrt((sum) / (sequence.Count()-1));
+            }
+            return result;
         }
 
         // GET: RegistroAnuals/Delete/5

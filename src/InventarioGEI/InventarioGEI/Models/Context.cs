@@ -30,6 +30,7 @@ namespace InventarioGEI.Models
         public DbSet<RegistroAnual> RegistroAnual { get; set; }
         public DbSet<Emision> Emision { get; set; }
         public DbSet<EmisionGEI> EmisionGEI { get; set; }
+        public DbSet<Reporte> Reporte { get; set; }
         
     }
 }

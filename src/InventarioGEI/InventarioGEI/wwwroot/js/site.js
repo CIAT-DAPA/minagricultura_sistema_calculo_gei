@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
         // Validate that all variables exist
         if (toggle && nav) {
             toggle.addEventListener('click', () => {
+                if (nav.classList.contains('show-nav') && (toggleId == "openNav1" || toggleId == "openNav2")) {
+                    return
+                }
                 // show navbar
                 nav.classList.toggle('show-nav')
                 // change icon
@@ -26,6 +29,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
 
     showNavbar('sidebarCollapse', 'nav-bar', 'content', 'header')
+    showNavbar('openNav1', 'nav-bar', 'content', 'header')
+    showNavbar('openNav2', 'nav-bar', 'content', 'header')
 
     /*===== LINK ACTIVE =====*/
     const linkColor = document.querySelectorAll('.nav_link')

@@ -1,0 +1,16 @@
+﻿@model InventarioGEI.Models.Reporte
+
+@{
+    ViewData["Title"] = "Reporte";
+}
+
+<div class="card mb-3 container-main">
+    <div class="card-header">
+        <h3 style="margin-top: 10px;">@Html.DisplayFor(model => model.nombreReporte)</h3>
+        <hr />
+    </div>
+
+    <div class="form-main">
+        <iframe height="100%" src="@Html.DisplayFor(model => model.link)" title="Habla tu espejo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+</div>
