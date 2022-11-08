@@ -21,18 +21,23 @@ namespace InventarioGEI.Controllers
         // GET: ConfiguracionActividads
         public async Task<IActionResult> Index()
         {
-            var context = _context.ConfiguracionActividad.Where(c => c.enabled == true).Include(c => c.combustible).Include(c => c.fuenteEmision).Include(c => c.subcategoria);
+            var context = _context.ConfiguracionActividad
+                                                .Where(c => c.enabled == true)
+                                                .Include(c => c.combustible)
+                                                .Include(c => c.combustible.unidad)
+                                                .Include(c => c.fuenteEmision)
+                                                .Include(c => c.subcategoria);
             return View(await context.ToListAsync());
         }
 
         // GET: ConfiguracionActividads/Create
         public IActionResult Create()
         {
-            List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).ToList();
+            List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).Include(c => c.unidad).ToList();
             var listaCombustibles = new List<SelectListItem>();
             foreach (var item in combustible)
             {
-                listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible, Value = item.idCombustible.ToString() });
+                listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible + " - " + item.unidad.unidad, Value = item.idCombustible.ToString() });
             }
             ViewData["idCombustible"] = listaCombustibles;
 
@@ -75,11 +80,11 @@ namespace InventarioGEI.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).ToList();
+            List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).Include(c => c.unidad).ToList();
             var listaCombustibles = new List<SelectListItem>();
             foreach (var item in combustible)
             {
-                listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible, Value = item.idCombustible.ToString() });
+                listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible + " - " + item.unidad.unidad, Value = item.idCombustible.ToString() });
             }
             ViewData["idCombustible"] = listaCombustibles;
 
@@ -114,11 +119,11 @@ namespace InventarioGEI.Controllers
             {
                 return NotFound();
             }
-            List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).ToList();
+            List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).Include(c => c.unidad).ToList();
             var listaCombustibles = new List<SelectListItem>();
             foreach (var item in combustible)
             {
-                listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible, Value = item.idCombustible.ToString() });
+                listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible + " - " + item.unidad.unidad, Value = item.idCombustible.ToString() });
             }
             ViewData["idCombustible"] = listaCombustibles;
 
@@ -182,11 +187,11 @@ namespace InventarioGEI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).ToList();
+            List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).Include(c => c.unidad).ToList();
             var listaCombustibles = new List<SelectListItem>();
             foreach (var item in combustible)
             {
-                listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible, Value = item.idCombustible.ToString() });
+                listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible + " - " + item.unidad.unidad, Value = item.idCombustible.ToString() });
             }
             ViewData["idCombustible"] = listaCombustibles;
 

@@ -21,7 +21,7 @@ namespace InventarioGEI.Controllers
         // GET: FactorEmisions
         public async Task<IActionResult> Index()
         {
-            var context = _context.FactorEmision.Where(f => f.enabled == true).Include(f => f.configuracion).Include(f=> f.configuracion.combustible).Include(f => f.configuracion.fuenteEmision).Include(f => f.configuracion.subcategoria).Include(f => f.gei).Include(f => f.usuario).Include(f => f.configuracion.combustible.unidad);
+            var context = _context.FactorEmision.Where(f => f.enabled == true).Include(f => f.configuracion).Include(f=> f.configuracion.combustible).Include(f => f.configuracion.fuenteEmision).Include(f => f.configuracion.subcategoria).Include(f => f.gei).Include(f => f.usuario).Include(f => f.configuracion.combustible.unidad).OrderBy(f => f.configuracion.subcategoria.nombreSubcategoria);
             return View(await context.ToListAsync());
         }
 

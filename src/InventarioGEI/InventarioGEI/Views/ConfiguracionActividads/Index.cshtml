@@ -43,7 +43,7 @@
                 @Html.DisplayFor(modelItem => item.fuenteEmision.nombreFuenteEmision)
             </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.combustible.nombreCombustible)
+                        @Html.DisplayFor(modelItem => item.combustible.nombreCombustible) - @Html.DisplayFor(modelItem => item.combustible.unidad.unidad)
                     </td>
                     <td>
                         <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idConfiguracion">
