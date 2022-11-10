@@ -17,6 +17,11 @@
             <input asp-for="nombreAlcance" placeholder="Ingrese el nombre del alcance" class="form-control input-text" />
             <span asp-validation-for="nombreAlcance" class="text-danger"></span>
         </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="isBiocombustible" /> @Html.DisplayNameFor(model => model.isBiocombustible)
+            </label>
+        </div>
         <div class="form-group group-buttons">
             <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
             <input type="submit" value="Crear" class="btn btn-primary" />

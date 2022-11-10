@@ -22,7 +22,7 @@ namespace InventarioGEI.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["numAlcances"] = _context.Alcance.Where(a => a.enabled == true).Count();
-            var context = _context.Alcance.Where(a => a.enabled == true).Include(a => a.usuario);
+            var context = _context.Alcance.Where(a => a.enabled == true).Include(a => a.usuario).OrderBy(a => a.nombreAlcance);
             return View(await context.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace InventarioGEI.Controllers
         // POST: Alcances/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("idAlcance,nombreAlcance")] Alcance alcance)
+        public async Task<IActionResult> Create([Bind("idAlcance,nombreAlcance,isBiocombustible")] Alcance alcance)
         {
             Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             alcance.idUsuario = user.idUsuario;
@@ -79,7 +79,7 @@ namespace InventarioGEI.Controllers
         // POST: Alcances/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("idAlcance,nombreAlcance")] Alcance alcance)
+        public async Task<IActionResult> Edit(int id, [Bind("idAlcance,nombreAlcance,isBiocombustible")] Alcance alcance)
         {
             if (id != alcance.idAlcance)
             {

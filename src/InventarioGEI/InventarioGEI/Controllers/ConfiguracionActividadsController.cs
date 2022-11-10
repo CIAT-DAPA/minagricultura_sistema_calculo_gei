@@ -26,7 +26,8 @@ namespace InventarioGEI.Controllers
                                                 .Include(c => c.combustible)
                                                 .Include(c => c.combustible.unidad)
                                                 .Include(c => c.fuenteEmision)
-                                                .Include(c => c.subcategoria);
+                                                .Include(c => c.subcategoria)
+                                                .OrderBy(c => c.subcategoria.nombreSubcategoria);
             return View(await context.ToListAsync());
         }
 
@@ -56,16 +57,34 @@ namespace InventarioGEI.Controllers
                 listaSubcategorias.Add(new SelectListItem { Text = item.nombreSubcategoria, Value = item.idSubcategoria.ToString() });
             }
             ViewData["idSubcategoria"] = listaSubcategorias;
+
+            List<ConfiguracionActividad> configuracionActividads = _context.ConfiguracionActividad.Where(c => c.enabled == true && c.subcategoria.categoria.alcance.isBiocombustible)
+                                                                                                .Include(c => c.combustible)
+                                                                                                .Include(c => c.combustible.unidad)
+                                                                                                .Include(c => c.fuenteEmision)
+                                                                                                .Include(c => c.subcategoria)
+                                                                                                .ToList();
+            var listaConfiguraciones = new List<SelectListItem>();
+            foreach (var item in configuracionActividads)
+            {
+                listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+            }
+            ViewData["idConfDependiente"] = listaConfiguraciones;
             return View();
         }
 
         // POST: ConfiguracionActividads/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("idConfiguracion,idCombustible,idSubcategoria,idFuenteEmision")] ConfiguracionActividad configuracionActividad)
+        public async Task<IActionResult> Create([Bind("idConfiguracion,idCombustible,idSubcategoria,idFuenteEmision,biocombustible,idConfDependiente, porcentaje")] ConfiguracionActividad configuracionActividad)
         {
             Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             configuracionActividad.enabled = true;
+            if (!configuracionActividad.biocombustible)
+            {
+                configuracionActividad.idConfDependiente = null;
+                configuracionActividad.porcentaje = null;
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(configuracionActividad);
@@ -104,6 +123,20 @@ namespace InventarioGEI.Controllers
             }
             ViewData["idSubcategoria"] = listaSubcategorias;
             return View(configuracionActividad);
+
+            List<ConfiguracionActividad> configuracionActividads = _context.ConfiguracionActividad.Where(c => c.enabled == true && c.subcategoria.categoria.alcance.isBiocombustible)
+                                                                                                .Include(c => c.combustible)
+                                                                                                .Include(c => c.combustible.unidad)
+                                                                                                .Include(c => c.fuenteEmision)
+                                                                                                .Include(c => c.subcategoria)
+                                                                                                .ToList();
+            var listaConfiguraciones = new List<SelectListItem>();
+            foreach (var item in configuracionActividads)
+            {
+                listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+            }
+            ViewData["idConfDependiente"] = listaConfiguraciones;
+            return View();
         }
 
         // GET: ConfiguracionActividads/Edit/5
@@ -142,13 +175,26 @@ namespace InventarioGEI.Controllers
                 listaSubcategorias.Add(new SelectListItem { Text = item.nombreSubcategoria, Value = item.idSubcategoria.ToString() });
             }
             ViewData["idSubcategoria"] = listaSubcategorias;
+
+            List<ConfiguracionActividad> configuracionActividads = _context.ConfiguracionActividad.Where(c => c.enabled == true && c.subcategoria.categoria.alcance.isBiocombustible)
+                                                                                               .Include(c => c.combustible)
+                                                                                               .Include(c => c.combustible.unidad)
+                                                                                               .Include(c => c.fuenteEmision)
+                                                                                               .Include(c => c.subcategoria)
+                                                                                               .ToList();
+            var listaConfiguraciones = new List<SelectListItem>();
+            foreach (var item in configuracionActividads)
+            {
+                listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+            }
+            ViewData["idConfDependiente"] = listaConfiguraciones;
             return View(configuracionActividad);
         }
 
         // POST: ConfiguracionActividads/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("idConfiguracion,idCombustible,idSubcategoria,idFuenteEmision")] ConfiguracionActividad configuracionActividad)
+        public async Task<IActionResult> Edit(int id, [Bind("idConfiguracion,idCombustible,idSubcategoria,idFuenteEmision,biocombustible,idConfDependiente, porcentaje")] ConfiguracionActividad configuracionActividad)
         {
             Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             if (id != configuracionActividad.idConfiguracion)
@@ -157,6 +203,11 @@ namespace InventarioGEI.Controllers
             }
 
             configuracionActividad.enabled = true;
+            if (!configuracionActividad.biocombustible)
+            {
+                configuracionActividad.idConfDependiente = null;
+                configuracionActividad.porcentaje = null;
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -210,6 +261,19 @@ namespace InventarioGEI.Controllers
                 listaSubcategorias.Add(new SelectListItem { Text = item.nombreSubcategoria, Value = item.idSubcategoria.ToString() });
             }
             ViewData["idSubcategoria"] = listaSubcategorias;
+
+            List<ConfiguracionActividad> configuracionActividads = _context.ConfiguracionActividad.Where(c => c.enabled == true && c.subcategoria.categoria.alcance.isBiocombustible)
+                                                                                               .Include(c => c.combustible)
+                                                                                               .Include(c => c.combustible.unidad)
+                                                                                               .Include(c => c.fuenteEmision)
+                                                                                               .Include(c => c.subcategoria)
+                                                                                               .ToList();
+            var listaConfiguraciones = new List<SelectListItem>();
+            foreach (var item in configuracionActividads)
+            {
+                listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+            }
+            ViewData["idConfDependiente"] = listaConfiguraciones;
             return View(configuracionActividad);
         }
 

@@ -13,6 +13,12 @@ namespace InventarioGEI.Models
         [Column("enabled")]
         [Display(Name = "Habilitado")]
         public bool enabled { get; set; }
+        [Column("biocombustible")]
+        [Display(Name = "Biocombustible")]
+        public bool biocombustible { get; set; }
+        [Column("porcentaje")]
+        [Display(Name = "Porcentaje destinado al biocombustible")]
+        public double? porcentaje { get; set; }
 
 
         [Column("idcombustible")]
@@ -33,6 +39,12 @@ namespace InventarioGEI.Models
         [ForeignKey("idFuenteEmision")]
         [Display(Name = "Fuente de Emisión")]
         public FuenteEmision? fuenteEmision { get; set; }
+        [Column("idconfdependiente")]
+        [Display(Name = "Configuración dependiente")]
+        public int? idConfDependiente { get; set; }
+        [ForeignKey("idConfDependiente")]
+        [Display(Name = "Configuración dependiente")]
+        public ConfiguracionActividad? configuracion { get; set; }
 
         public override string ToString()
         {

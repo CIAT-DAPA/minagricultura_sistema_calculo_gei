@@ -17,6 +17,9 @@ namespace InventarioGEI.Models
         [Column("enabled")]
         [Display(Name = "Habilitiado")]
         public bool? enabled { get; set; }
+        [Column("isBiocombustible")]
+        [Display(Name = "Alcance de biocombustible")]
+        public bool isBiocombustible { get; set; }
         //foreign key
         [Column("idusuario")]
         [Display(Name = "Usuario")]

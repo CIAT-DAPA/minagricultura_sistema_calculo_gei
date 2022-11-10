@@ -46,6 +46,9 @@
                     @Html.DisplayNameFor(model => model.nombreAlcance)
                 </th>
                 <th class="th-head">
+                    @Html.DisplayNameFor(model => model.isBiocombustible)
+                </th>
+                <th class="th-head">
                     @Html.DisplayNameFor(model => model.usuario)
                 </th>
                 <th class="th-head"></th>
@@ -58,6 +61,9 @@
                 <tr class="tr-body">
                     <td class="td-body-main">
                         @Html.DisplayFor(modelItem => item.nombreAlcance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.isBiocombustible)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.usuario.email)

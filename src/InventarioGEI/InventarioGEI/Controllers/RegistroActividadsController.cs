@@ -119,14 +119,8 @@ namespace InventarioGEI.Controllers
         public async Task<IActionResult> PostRegistros(List<RegistroActividad> registros)
         {
             Usuario user = await _context.Usuario.FirstOrDefaultAsync(u => u.email == User.Identity.Name);
-            Console.WriteLine("------------------------------------------------------------------------");
-            Console.WriteLine(registros);
-            Console.WriteLine("------------------------------------------------------------------------");
             foreach (var registro in registros)
             {
-                Console.WriteLine("------------------------------------------------------------------------");
-                Console.WriteLine(registro.valor);
-                Console.WriteLine("------------------------------------------------------------------------");
                 registro.idUsuario = user.idUsuario;
                 var query = await _context.RegistroActividad
                     .Where(r => r.idConfiguracion == registro.idConfiguracion)
@@ -134,12 +128,28 @@ namespace InventarioGEI.Controllers
                     .Where(r => r.mes == registro.mes)
                     .Where(r => r.año == registro.año)
                     .AnyAsync();
-                
+
+                var conf = await _context.ConfiguracionActividad.Include(c => c.configuracion).FirstAsync(c => c.idConfiguracion == registro.idConfiguracion);
+                bool hasBio = conf.biocombustible;
+
                 if (!query && registro.valor.HasValue)
                 {
-                    Console.WriteLine("------------------------------------------------------------------------");
-                    Console.WriteLine("añadir");
-                    Console.WriteLine("------------------------------------------------------------------------");
+                    if (hasBio)
+                    {
+                        RegistroActividad regBio = new RegistroActividad
+                        {
+                            idConfiguracion = conf.configuracion.idConfiguracion,
+                            idUsuario = registro.idUsuario,
+                            idSede = registro.idSede,
+                            valor = registro.valor * (conf.porcentaje / 100),
+                            mes = registro.mes,
+                            año = registro.año,
+                            enabled = true
+                        };
+                        _context.RegistroActividad.Add(regBio);
+                        await _context.SaveChangesAsync();
+                    }
+
                     _context.Add(registro);
                     await _context.SaveChangesAsync();
 
@@ -152,12 +162,11 @@ namespace InventarioGEI.Controllers
                     };
                     _context.Log.Add(log);
                     await _context.SaveChangesAsync();
+
+                    
                 }
                 else if (query)
                 {
-                    Console.WriteLine("------------------------------------------------------------------------");
-                    Console.WriteLine("Existe");
-                    Console.WriteLine("------------------------------------------------------------------------");
                     var queryExist = await _context.RegistroActividad
                     .Where(r => r.idConfiguracion == registro.idConfiguracion)
                     .Where(r => r.idSede == registro.idSede)
@@ -165,11 +174,33 @@ namespace InventarioGEI.Controllers
                     .Where(r => r.año == registro.año)
                     .FirstAsync();
 
+                    var bioExist = await _context.RegistroActividad
+                    .Where(r => r.idConfiguracion == conf.configuracion.idConfiguracion)
+                    .Where(r => r.idSede == registro.idSede)
+                    .Where(r => r.mes == registro.mes)
+                    .Where(r => r.año == registro.año)
+                    .FirstAsync();
+
                     if (!registro.valor.HasValue)
                     {
-                        Console.WriteLine("------------------------------------------------------------------------");
-                        Console.WriteLine("Borrar");
-                        Console.WriteLine("------------------------------------------------------------------------");
+                        if (hasBio)
+                        {
+                            RegistroActividad regBio = new RegistroActividad
+                            {
+                                idRegistroActividad = bioExist.idRegistroActividad,
+                                idConfiguracion = conf.configuracion.idConfiguracion,
+                                idUsuario = registro.idUsuario,
+                                idSede = registro.idSede,
+                                valor = registro.valor * (conf.porcentaje / 100),
+                                mes = registro.mes,
+                                año = registro.año,
+                                enabled = true
+                            };
+                            _context.ChangeTracker.Clear();
+                            _context.Remove(regBio);
+                            await _context.SaveChangesAsync();
+                        }
+
                         registro.idRegistroActividad = queryExist.idRegistroActividad;
                         _context.ChangeTracker.Clear();
                         _context.Remove(registro);
@@ -183,12 +214,28 @@ namespace InventarioGEI.Controllers
                         };
                         _context.Log.Add(log);
                         await _context.SaveChangesAsync();
+
+                        
                     }
                     else
                     {
-                        Console.WriteLine("------------------------------------------------------------------------");
-                        Console.WriteLine("Actualizar");
-                        Console.WriteLine("------------------------------------------------------------------------");
+                        if (hasBio)
+                        {
+                            RegistroActividad regBio = new RegistroActividad
+                            {
+                                idRegistroActividad = bioExist.idRegistroActividad,
+                                idConfiguracion = conf.configuracion.idConfiguracion,
+                                idUsuario = registro.idUsuario,
+                                idSede = registro.idSede,
+                                valor = registro.valor * (conf.porcentaje / 100),
+                                mes = registro.mes,
+                                año = registro.año,
+                                enabled = true
+                            };
+                            _context.ChangeTracker.Clear();
+                            _context.Update(regBio);
+                            await _context.SaveChangesAsync();
+                        }
                         registro.idRegistroActividad = queryExist.idRegistroActividad;
                         _context.ChangeTracker.Clear();
                         _context.Update(registro);
@@ -202,6 +249,8 @@ namespace InventarioGEI.Controllers
                         };
                         _context.Log.Add(log);
                         await _context.SaveChangesAsync();
+
+                        
                     }
 
                 }
