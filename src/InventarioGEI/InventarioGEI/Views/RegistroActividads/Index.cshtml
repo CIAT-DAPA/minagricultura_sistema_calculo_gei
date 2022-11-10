@@ -147,6 +147,11 @@
 </div>
 
 <script>
+    var checkedYear = false;
+    var checkedAlcance = false;
+    var checkedCategoria = false;
+    var checkedCombustibles = false;
+
     function filterCategoria(alcanceItem) {
         var selectedAlcance = alcanceItem.value;
         var selectCat = $('#selectCat');
@@ -165,13 +170,16 @@
                 };
             });
         }
-    };
+    }
 
     function filterCombustibles() {
         var selectedCategoria = $('#selectCat').val();
         var tableCombustibles = $('#tableCombustible');
         tableCombustibles.contents().remove();
         if (selectedCategoria != null && selectedCategoria != '') {
+            $('#year').attr("disabled", "disabled");
+            $('#selectAlc').attr("disabled", "disabled");
+            $('#selectCat').attr("disabled", "disabled");
             $.getJSON('@Url.Action("GetCombustibles")', { id: selectedCategoria }, function (unidad) {
                 if (unidad != null && !jQuery.isEmptyObject(unidad)) {
                     unidad.map(async f => {
@@ -226,40 +234,46 @@
                             $('#tableCombustible > tr').addClass('tr-body');
                             $('#loading').removeClass('d-block').addClass('d-none');
                             checkCombustibles();
+                            $('#year').removeAttr("disabled");
+                            $('#selectAlc').removeAttr("disabled");
+                            $('#selectCat').removeAttr("disabled");
                         })
                             .catch((result) => {
-                                const resultString = result.substr(result.indexOf("id"));
-                                const mes = resultString.substr(resultString.indexOf('"') + 1, resultString.indexOf('"') + 1).split("-")[1];
-                                tdMes += result;
+                                $('#year').removeAttr("disabled");
+                                $('#selectAlc').removeAttr("disabled");
+                                $('#selectCat').removeAttr("disabled");
+                                //const resultString = result.substr(result.indexOf("id"));
+                                //const mes = resultString.substr(resultString.indexOf('"') + 1, resultString.indexOf('"') + 1).split("-")[1];
+                                //tdMes += result;
 
-                                if (mes != 1) {
-                                    tableCombustibles
-                                        .children('tr:last')
-                                        .append(
-                                            '<td />' + f.combustible.nombreCombustible +
-                                            '<td />' + f.combustible.unidad.unidad +
-                                            tdMes
-                                        );
-                                } else {
-                                    tableCombustibles
-                                        .append('<tr />')
-                                        .children('tr:last')
-                                        .append(
-                                            '<td />' + f.combustible.nombreCombustible +
-                                            '<td />' + f.combustible.unidad.unidad +
-                                            tdMes
-                                        );
-                                }
-                                $('#tableCombustible > tr').addClass('tr-body');
-                                $('#loading').removeClass('d-block').addClass('d-none');
+                                //if (mes != 1) {
+                                //    tableCombustibles
+                                //        .children('tr:last')
+                                //        .append(
+                                //            '<td />' + f.combustible.nombreCombustible +
+                                //            '<td />' + f.combustible.unidad.unidad +
+                                //            tdMes
+                                //        );
+                                //} else {
+                                //    tableCombustibles
+                                //        .append('<tr />')
+                                //        .children('tr:last')
+                                //        .append(
+                                //            '<td />' + f.combustible.nombreCombustible +
+                                //            '<td />' + f.combustible.unidad.unidad +
+                                //            tdMes
+                                //        );
+                                //}
+                                //$('#tableCombustible > tr').addClass('tr-body');
+                                //$('#loading').removeClass('d-block').addClass('d-none');
 
                             });
 
                     });
 
-                } else {
-                    checkCombustibles();
-                }
+                } 
+                 
+                
             });
 
         }
@@ -270,10 +284,9 @@
         var jsonVal = [];
         var idSede = $("#sede").val();
         var año = $("#year").val();
-
         $("td").each(function () {
             var valueInput = $(this).find("input");
-            if (valueInput.val() !== undefined && valueInput.val() != '') {
+            if (valueInput.val() !== undefined) {
                 var id = valueInput.attr('id');
                 var ids = id.split('-');
                 var idConfiguracion = ids[0];
@@ -287,12 +300,13 @@
                 newJson.año = año;
                 newJson.enabled = true;
                 jsonVal.push(newJson);
-
-                console.log(newJson);
+                
             }
+            
         });
-        if (checkYear() && checkAlcance() && checkCategoria() && jsonVal.length > 1) {
+        if (checkedYear && checkedAlcance && checkedCategoria && jsonVal.length >= 1) {
             $('#staticBackdrop').modal('show');
+            console.log(jsonVal);
             $.post('@Url.Action("PostRegistros")', { registros: jsonVal }, function (result) {
                 filterCombustibles();
                 $('#staticBackdrop').modal('hide');
@@ -308,46 +322,52 @@
         if ($('#year').val() < 2005 || $('#year').val() > 2100) {
             $('#yearVerification').addClass('d-block').removeClass('d-none');
             $('#yearVerification').text("Debe ser un año entre 2005 y 2100");
-            return false;
+            checkedYear = false;
         } else if ($('#year').val() == null) {
             $('#yearVerification').addClass('d-block').removeClass('d-none');
             $('#yearVerification').text("Debes escoger un año");
-            return false;
+            checkedYear = false;
         } else {
             $('#yearVerification').addClass('d-none').removeClass('d-block');
             filterCombustibles()
-            return true;
+            checkedYear = true;
         }
     }
 
     function checkAlcance() {
         if ($('#selectAlc').val() != null) {
             $('#alcanceVerification').addClass('d-none').removeClass('d-block');
-            return true;
+            checkedAlcance = true;
+        }else{
+            $('#alcanceVerification').addClass('d-block').removeClass('d-none');
+            $('#alcanceVerification').text("Debes escoger un alcance");
+            checkedAlcance = false;
         }
-        $('#alcanceVerification').addClass('d-block').removeClass('d-none');
-        $('#alcanceVerification').text("Debes escoger un alcance");
-        return false;
+        
     }
 
     function checkCategoria() {
-
         if ($('#selectCat').val() != null) {
 
             $('#categoriaVerification').addClass('d-none').removeClass('d-block');
-            return true;
+            checkedCategoria = true;
+        } else {
+            $('#categoriaVerification').addClass('d-block').removeClass('d-none');
+            $('#categoriaVerification').text("Debes escoger una categoria");
+            checkedCategoria = false;
         }
-        $('#categoriaVerification').addClass('d-block').removeClass('d-none');
-        $('#categoriaVerification').text("Debes escoger una categoria");
-        return false;
+        
     }
 
     function checkCombustibles() {
         if ($('#tableCombustible').children().length >= 1) {
             $('#notFoundText').addClass('d-none').removeClass('d-block');
-            return true;
+            checkedCombustibles = true;
+        }else{
+            $('#notFoundText').addClass('d-block').removeClass('d-none');
+            checkedCombustibles = false;
         }
-        $('#notFoundText').addClass('d-block').removeClass('d-none');
-        return false;
+        $('#staticBackdrop').modal('hide');
     }
+
 </script>

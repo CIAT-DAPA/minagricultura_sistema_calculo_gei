@@ -12,7 +12,7 @@ namespace InventarioGEI.Models
         public int idRegistroActividad { get; set; }
         [Column("valor")]
         [Display(Name = "Valor")]
-        public double valor { get; set; }
+        public double? valor { get; set; }
         [Column("mes")]
         [Display(Name = "Mes")]
         public int mes { get; set; }

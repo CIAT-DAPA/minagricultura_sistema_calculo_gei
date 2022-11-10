@@ -119,8 +119,14 @@ namespace InventarioGEI.Controllers
         public async Task<IActionResult> PostRegistros(List<RegistroActividad> registros)
         {
             Usuario user = await _context.Usuario.FirstOrDefaultAsync(u => u.email == User.Identity.Name);
+            Console.WriteLine("------------------------------------------------------------------------");
+            Console.WriteLine(registros);
+            Console.WriteLine("------------------------------------------------------------------------");
             foreach (var registro in registros)
             {
+                Console.WriteLine("------------------------------------------------------------------------");
+                Console.WriteLine(registro.valor);
+                Console.WriteLine("------------------------------------------------------------------------");
                 registro.idUsuario = user.idUsuario;
                 var query = await _context.RegistroActividad
                     .Where(r => r.idConfiguracion == registro.idConfiguracion)
@@ -128,9 +134,12 @@ namespace InventarioGEI.Controllers
                     .Where(r => r.mes == registro.mes)
                     .Where(r => r.año == registro.año)
                     .AnyAsync();
-                ;
-                if (!query)
+                
+                if (!query && registro.valor.HasValue)
                 {
+                    Console.WriteLine("------------------------------------------------------------------------");
+                    Console.WriteLine("añadir");
+                    Console.WriteLine("------------------------------------------------------------------------");
                     _context.Add(registro);
                     await _context.SaveChangesAsync();
 
@@ -144,8 +153,11 @@ namespace InventarioGEI.Controllers
                     _context.Log.Add(log);
                     await _context.SaveChangesAsync();
                 }
-                else
+                else if (query)
                 {
+                    Console.WriteLine("------------------------------------------------------------------------");
+                    Console.WriteLine("Existe");
+                    Console.WriteLine("------------------------------------------------------------------------");
                     var queryExist = await _context.RegistroActividad
                     .Where(r => r.idConfiguracion == registro.idConfiguracion)
                     .Where(r => r.idSede == registro.idSede)
@@ -153,19 +165,45 @@ namespace InventarioGEI.Controllers
                     .Where(r => r.año == registro.año)
                     .FirstAsync();
 
-                    registro.idRegistroActividad = queryExist.idRegistroActividad;
-                    _context.ChangeTracker.Clear();
-                    _context.Update(registro);
-                    await _context.SaveChangesAsync();
-                    Log log = new Log
+                    if (!registro.valor.HasValue)
                     {
-                        accion = 2,
-                        contenido = registro.ToString(),
-                        idUsuario = user.idUsuario,
-                        fechaAccion = DateTime.UtcNow
-                    };
-                    _context.Log.Add(log);
-                    await _context.SaveChangesAsync();
+                        Console.WriteLine("------------------------------------------------------------------------");
+                        Console.WriteLine("Borrar");
+                        Console.WriteLine("------------------------------------------------------------------------");
+                        registro.idRegistroActividad = queryExist.idRegistroActividad;
+                        _context.ChangeTracker.Clear();
+                        _context.Remove(registro);
+                        await _context.SaveChangesAsync();
+                        Log log = new Log
+                        {
+                            accion = 3,
+                            contenido = registro.ToString(),
+                            idUsuario = user.idUsuario,
+                            fechaAccion = DateTime.UtcNow
+                        };
+                        _context.Log.Add(log);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("------------------------------------------------------------------------");
+                        Console.WriteLine("Actualizar");
+                        Console.WriteLine("------------------------------------------------------------------------");
+                        registro.idRegistroActividad = queryExist.idRegistroActividad;
+                        _context.ChangeTracker.Clear();
+                        _context.Update(registro);
+                        await _context.SaveChangesAsync();
+                        Log log = new Log
+                        {
+                            accion = 2,
+                            contenido = registro.ToString(),
+                            idUsuario = user.idUsuario,
+                            fechaAccion = DateTime.UtcNow
+                        };
+                        _context.Log.Add(log);
+                        await _context.SaveChangesAsync();
+                    }
+
                 }
             }
             return Ok(true);

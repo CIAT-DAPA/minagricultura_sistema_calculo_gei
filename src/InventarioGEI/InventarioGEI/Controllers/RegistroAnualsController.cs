@@ -144,8 +144,8 @@ namespace InventarioGEI.Controllers
                             emision.mes12 = reg.valor;
                             break;
                     }
-                    valList.Add(reg.valor);
-                    valAnual += reg.valor;
+                    valList.Add((double)reg.valor);
+                    valAnual += (double)reg.valor;
                     
                         noDatos++;
                     
