@@ -42,7 +42,7 @@ namespace InventarioGEI.Controllers
         // GET: Sedes/Create
         public IActionResult Create()
         {
-            if (GetAccesRol())
+            if (GetAccesRol("Sede"))
             {
                 ViewBag.departamentos = new SelectList(_context.Departamento, "codigoDepartamento", "nombreDepartamento");
 
@@ -106,7 +106,7 @@ namespace InventarioGEI.Controllers
         // GET: Sedes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (GetAccesRol())
+            if (GetAccesRol("Sede"))
             {
                 if (id == null || _context.Sede == null)
                 {

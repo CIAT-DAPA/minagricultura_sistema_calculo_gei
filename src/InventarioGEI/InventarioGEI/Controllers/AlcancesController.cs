@@ -21,15 +21,30 @@ namespace InventarioGEI.Controllers
         // GET: Alcances
         public async Task<IActionResult> Index()
         {
-            ViewData["numAlcances"] = _context.Alcance.Where(a => a.enabled == true).Count();
-            var context = _context.Alcance.Where(a => a.enabled == true).Include(a => a.usuario).OrderBy(a => a.nombreAlcance);
-            return View(await context.ToListAsync());
+            if (GetAccesRol("Conf"))
+            {
+                ViewData["numAlcances"] = _context.Alcance.Where(a => a.enabled == true).Count();
+                var context = _context.Alcance.Where(a => a.enabled == true).Include(a => a.usuario).OrderBy(a => a.nombreAlcance);
+                return View(await context.ToListAsync());
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
+
         }
 
         // GET: Alcances/Create
         public IActionResult Create()
         {
-            return View();
+            if (GetAccesRol("Conf"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: Alcances/Create
@@ -37,43 +52,57 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idAlcance,nombreAlcance,isBiocombustible")] Alcance alcance)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            alcance.idUsuario = user.idUsuario;
-            alcance.enabled = true;
-            if (ModelState.IsValid)
+            if (GetAccesRol("Conf"))
             {
-                _context.Add(alcance);
-                await _context.SaveChangesAsync();
-
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                alcance.idUsuario = user.idUsuario;
+                alcance.enabled = true;
+                if (ModelState.IsValid)
                 {
-                    accion = 1,
-                    contenido = alcance.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow                    
-                };
-                _context.Log.Add(log);
+                    _context.Add(alcance);
+                    await _context.SaveChangesAsync();
 
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    Log log = new Log
+                    {
+                        accion = 1,
+                        contenido = alcance.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(alcance);
             }
-            return View(alcance);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: Alcances/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Alcance == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.Alcance == null)
+                {
+                    return NotFound();
+                }
 
-            var alcance = await _context.Alcance.FindAsync(id);
-            if (alcance == null)
-            {
-                return NotFound();
+                var alcance = await _context.Alcance.FindAsync(id);
+                if (alcance == null)
+                {
+                    return NotFound();
+                }
+                return View(alcance);
             }
-            return View(alcance);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: Alcances/Edit/5
@@ -81,66 +110,80 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idAlcance,nombreAlcance,isBiocombustible")] Alcance alcance)
         {
-            if (id != alcance.idAlcance)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
+                if (id != alcance.idAlcance)
+                {
+                    return NotFound();
+                }
+
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                alcance.idUsuario = user.idUsuario;
+                alcance.enabled = true;
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(alcance);
+                        await _context.SaveChangesAsync();
+
+                        Log log = new Log
+                        {
+                            accion = 2,
+                            contenido = alcance.ToString(),
+                            idUsuario = user.idUsuario,
+                            fechaAccion = DateTime.UtcNow
+                        };
+                        _context.Log.Add(log);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!AlcanceExists(alcance.idAlcance))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", alcance.idUsuario);
+                return View(alcance);
             }
-
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            alcance.idUsuario = user.idUsuario;
-            alcance.enabled = true;
-
-            if (ModelState.IsValid)
+            else
             {
-                try
-                {
-                    _context.Update(alcance);
-                    await _context.SaveChangesAsync();
-
-                    Log log = new Log
-                    {
-                        accion = 2,
-                        contenido = alcance.ToString(),
-                        idUsuario = user.idUsuario,
-                        fechaAccion = DateTime.UtcNow
-                    };
-                    _context.Log.Add(log);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AlcanceExists(alcance.idAlcance))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("AccesDenied", "Home");
             }
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", alcance.idUsuario);
-            return View(alcance);
         }
 
         // GET: Alcances/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Alcance == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.Alcance == null)
+                {
+                    return NotFound();
+                }
 
-            var alcance = await _context.Alcance
-                .Include(a => a.usuario)
-                .FirstOrDefaultAsync(m => m.idAlcance == id);
-            if (alcance == null)
+                var alcance = await _context.Alcance
+                    .Include(a => a.usuario)
+                    .FirstOrDefaultAsync(m => m.idAlcance == id);
+                if (alcance == null)
+                {
+                    return NotFound();
+                }
+
+                return View(alcance);
+            }
+            else
             {
-                return NotFound();
+                return RedirectToAction("AccesDenied", "Home");
             }
-
-            return View(alcance);
         }
 
         // POST: Alcances/Delete/5
@@ -148,34 +191,41 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            if (_context.Alcance == null)
+            if (GetAccesRol("Conf"))
             {
-                return Problem("Entity set 'Context.Alcance'  is null.");
-            }
-            var alcance = await _context.Alcance.FindAsync(id);
-            if (alcance != null)
-            {
-                alcance.enabled = false;
-                _context.Alcance.Update(alcance);
-
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                if (_context.Alcance == null)
                 {
-                    accion = 3,
-                    contenido = alcance.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
+                    return Problem("Entity set 'Context.Alcance'  is null.");
+                }
+                var alcance = await _context.Alcance.FindAsync(id);
+                if (alcance != null)
+                {
+                    alcance.enabled = false;
+                    _context.Alcance.Update(alcance);
+
+                    Log log = new Log
+                    {
+                        accion = 3,
+                        contenido = alcance.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         private bool AlcanceExists(int id)
         {
-          return _context.Alcance.Any(e => e.idAlcance == id);
+            return _context.Alcance.Any(e => e.idAlcance == id);
         }
     }
 }

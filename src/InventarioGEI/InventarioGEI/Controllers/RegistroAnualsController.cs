@@ -79,6 +79,7 @@ namespace InventarioGEI.Controllers
         {
             var registros = await _context.RegistroActividad
                                                    .Where(r => r.año == año && r.idSede == idSede)
+                                                   .Include(r => r.configuracion)
                                                    .ToListAsync();
             var registrosGroup = registros.GroupBy(r => r.idConfiguracion);
             Dictionary<int, double> factoresT = new Dictionary<int, double>()
@@ -144,15 +145,25 @@ namespace InventarioGEI.Controllers
                             emision.mes12 = reg.valor;
                             break;
                     }
-                    valList.Add((double)reg.valor);
-                    valAnual += (double)reg.valor;
                     
-                        noDatos++;
+                    if (reg.configuracion.biocombustible)
+                    {
+                        valList.Add((double)reg.valor * (1 - ((double)reg.configuracion.porcentaje / 100)));
+                        valAnual += ((double)reg.valor * (1 - ((double)reg.configuracion.porcentaje / 100)));
+                    }
+                    else
+                    {
+                        valList.Add((double)reg.valor);
+                        valAnual += (double)reg.valor;
+                    }
                     
+
+                    noDatos++;
+
                 }
                 double promedio = valAnual / noDatos;
                 double desviacion = standardDeviation(valList);
-                double coeficiente =  desviacion / promedio;
+                double coeficiente = desviacion / promedio;
                 double factorT = factoresT[noDatos];
                 double incertidumbre = 1 - ((promedio - (desviacion * factorT) / Math.Sqrt(noDatos)) / promedio);
 
@@ -210,7 +221,7 @@ namespace InventarioGEI.Controllers
             {
                 double average = sequence.Average();
                 double sum = sequence.Sum(d => Math.Pow(d - average, 2));
-                result = Math.Sqrt((sum) / (sequence.Count()-1));
+                result = Math.Sqrt((sum) / (sequence.Count() - 1));
             }
             return result;
         }

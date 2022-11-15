@@ -22,7 +22,7 @@ namespace InventarioGEI.Controllers
         // GET: Rols
         public async Task<IActionResult> Index()
         {
-            if (GetAccesRol())
+            if (GetAccesRol("Rol"))
             {
                 return View(await _context.Rol.Where(r => r.enabled == true).ToListAsync());
             }
@@ -30,14 +30,14 @@ namespace InventarioGEI.Controllers
             {
                 return RedirectToAction("AccesDenied", "Home");
             }
-            
+
         }
 
         // GET: Rols/Create
         public IActionResult Create()
         {
-            if (GetAccesRol())
-            {   
+            if (GetAccesRol("Rol"))
+            {
                 return View();
             }
             else
@@ -53,29 +53,36 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idRol,nombreRol,permisoRol,permisoSede,permisoConfiguracion,permisoRegistro,permisoVisualizacion")] Rol rol)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            rol.enabled = true;
-            if (ModelState.IsValid)
+            if (GetAccesRol("Rol"))
             {
-                _context.Add(rol);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                rol.enabled = true;
+                if (ModelState.IsValid)
                 {
-                    accion = 1,
-                    contenido = rol.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    _context.Add(rol);
+                    Log log = new Log
+                    {
+                        accion = 1,
+                        contenido = rol.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(rol);
             }
-            return View(rol);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: Rols/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (GetAccesRol())
+            if (GetAccesRol("Rol"))
             {
                 if (id == null || _context.Rol == null)
                 {
@@ -102,61 +109,78 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idRol,nombreRol,permisoRol,permisoSede,permisoConfiguracion,permisoRegistro,permisoVisualizacion")] Rol rol)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            if (id != rol.idRol)
+            if (GetAccesRol("Rol"))
             {
-                return NotFound();
-            }
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                if (id != rol.idRol)
+                {
+                    return NotFound();
+                }
 
-            rol.enabled = true;
-            if (ModelState.IsValid)
-            {
-                try
+                rol.enabled = true;
+                if (ModelState.IsValid)
                 {
-                    _context.Update(rol);
-                    await _context.SaveChangesAsync();
-                    Log log = new Log
+                    try
                     {
-                        accion = 2,
-                        contenido = rol.ToString(),
-                        idUsuario = user.idUsuario,
-                        fechaAccion = DateTime.UtcNow
-                    };
-                    _context.Log.Add(log);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RolExists(rol.idRol))
-                    {
-                        return NotFound();
+                        _context.Update(rol);
+                        await _context.SaveChangesAsync();
+                        Log log = new Log
+                        {
+                            accion = 2,
+                            contenido = rol.ToString(),
+                            idUsuario = user.idUsuario,
+                            fechaAccion = DateTime.UtcNow
+                        };
+                        _context.Log.Add(log);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!RolExists(rol.idRol))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(rol);
             }
-            return View(rol);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: Rols/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Rol == null)
+            if (GetAccesRol("Rol"))
+
             {
-                return NotFound();
+                if (id == null || _context.Rol == null)
+                {
+                    return NotFound();
+                }
+
+                var rol = await _context.Rol
+                    .FirstOrDefaultAsync(m => m.idRol == id);
+                if (rol == null)
+                {
+                    return NotFound();
+                }
+
+                return View(rol);
             }
 
-            var rol = await _context.Rol
-                .FirstOrDefaultAsync(m => m.idRol == id);
-            if (rol == null)
+            else
             {
-                return NotFound();
+                return RedirectToAction("AccesDenied", "Home");
             }
 
-            return View(rol);
         }
 
         // POST: Rols/Delete/5
@@ -183,14 +207,14 @@ namespace InventarioGEI.Controllers
                 };
                 _context.Log.Add(log);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool RolExists(int id)
         {
-          return _context.Rol.Any(e => e.idRol == id);
+            return _context.Rol.Any(e => e.idRol == id);
         }
     }
 }

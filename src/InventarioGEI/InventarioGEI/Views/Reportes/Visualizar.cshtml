@@ -9,8 +9,5 @@
         <h3 style="margin-top: 10px;">@Html.DisplayFor(model => model.nombreReporte)</h3>
         <hr />
     </div>
-
-    <div class="form-main">
-        <iframe height="100%" src="@Html.DisplayFor(model => model.link)" title="Habla tu espejo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
+    <iframe title="@Html.DisplayFor(model => model.nombreReporte)" width="auto" height="700px" src="@Html.DisplayFor(model => model.link)" frameborder="0" allowFullScreen="true"></iframe>
 </div>

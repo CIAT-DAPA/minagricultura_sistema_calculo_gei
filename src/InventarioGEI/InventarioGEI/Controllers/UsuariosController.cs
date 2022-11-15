@@ -22,7 +22,7 @@ namespace InventarioGEI.Controllers
         // GET: Usuarios
         public async Task<IActionResult> Index()
         {
-            if (GetAccesRol())
+            if (GetAccesRol("Rol"))
             {
                 var context = _context.Usuario.Where(u => u.enabled == true).Include(u => u.rolUsuario);
                 return View(await context.ToListAsync());
@@ -36,7 +36,7 @@ namespace InventarioGEI.Controllers
         // GET: Usuarios/Create
         public  IActionResult Create()
         {
-            if (GetAccesRol())
+            if (GetAccesRol("Rol"))
             {
                 List<Rol> roles = _context.Rol.Where(r => r.enabled == true).ToList();
                 var listaRoles = new List<SelectListItem>();
@@ -83,7 +83,7 @@ namespace InventarioGEI.Controllers
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (GetAccesRol())
+            if (GetAccesRol("Rol"))
             {
                 if (id == null || _context.Usuario == null)
                 {
@@ -159,7 +159,7 @@ namespace InventarioGEI.Controllers
         // GET: Usuarios/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (GetAccesRol())
+            if (GetAccesRol("Rol"))
             {
                 if (id == null || _context.Usuario == null)
                 {

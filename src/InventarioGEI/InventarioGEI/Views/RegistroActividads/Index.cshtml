@@ -89,6 +89,9 @@
                     Combustible
                 </th>
                 <th class="th-head">
+                    @Html.DisplayNameFor(model => model.configuracion.fuenteEmision.nombreFuenteEmision)
+                </th>
+                <th class="th-head">
                     @Html.DisplayNameFor(model => model.configuracion.combustible.unidad.unidad)
                 </th>
                 <th class="th-head">
@@ -195,20 +198,20 @@
                                             $('#loading').addClass('d-block').removeClass('d-none');
                                             if (registro != null && !jQuery.isEmptyObject(registro)) {
                                                 const tdMesTemp = '<td>' +
-                                                    '<input type="number" min="0" onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '" value="' + registro.valor + '"/>' +
+                                                    '<input type="number" min="0" onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57)|| (event.charCode == 46))" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '" value="' + registro.valor + '"/>' +
                                                     '</td>';
                                                 myResolve(tdMesTemp);
                                             }
                                             else {
                                                 const tdMesTemp = '<td>' +
-                                                    '<input type="number" min="0" onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '"/>' +
+                                                    '<input type="number" min="0" onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57)|| (event.charCode == 46))" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '"/>' +
                                                     '</td>';
                                                 myReject(tdMesTemp);
                                             }
                                         });
                                     } catch (error) {
                                         const tdMesTemp = '<td>' +
-                                            '<input type="number" min="0" onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '"/>' +
+                                            '<input type="number" min="0" onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57)|| (event.charCode == 46))" class="form-control input-text text-center" id="' + f.idConfiguracion + '-' + mes + '"/>' +
                                             '</td>';
                                         myResolve(tdMesTemp);
                                     }
@@ -228,6 +231,7 @@
                                 .children('tr:last')
                                 .append(
                                     '<td />' + f.combustible.nombreCombustible +
+                                    '<td />' + f.fuenteEmision.nombreFuenteEmision +
                                     '<td />' + f.combustible.unidad.unidad +
                                     tdMes
                                 );
