@@ -22,14 +22,28 @@ namespace InventarioGEI.Controllers
         // GET: FuenteEmisions
         public async Task<IActionResult> Index()
         {
-            var context = _context.FuenteEmision.Where(f => f.enabled == true).Include(f => f.usuario);
-            return View(await context.ToListAsync());
+            if (GetAccesRol("Conf"))
+            {
+                var context = _context.FuenteEmision.Where(f => f.enabled == true).Include(f => f.usuario);
+                return View(await context.ToListAsync());
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: FuenteEmisions/Create
         public IActionResult Create()
         {
-            return View();
+            if (GetAccesRol("Conf"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: FuenteEmisions/Create
@@ -39,40 +53,54 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idFuenteEmision,nombreFuenteEmision")] FuenteEmision fuenteEmision)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            fuenteEmision.idUsuario = user.idUsuario;
-            fuenteEmision.enabled = true;
-            if (ModelState.IsValid)
+            if (GetAccesRol("Conf"))
             {
-                _context.Add(fuenteEmision);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                fuenteEmision.idUsuario = user.idUsuario;
+                fuenteEmision.enabled = true;
+                if (ModelState.IsValid)
                 {
-                    accion = 1,
-                    contenido = fuenteEmision.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    _context.Add(fuenteEmision);
+                    Log log = new Log
+                    {
+                        accion = 1,
+                        contenido = fuenteEmision.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(fuenteEmision);
             }
-            return View(fuenteEmision);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: FuenteEmisions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.FuenteEmision == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.FuenteEmision == null)
+                {
+                    return NotFound();
+                }
 
-            var fuenteEmision = await _context.FuenteEmision.FindAsync(id);
-            if (fuenteEmision == null)
-            {
-                return NotFound();
+                var fuenteEmision = await _context.FuenteEmision.FindAsync(id);
+                if (fuenteEmision == null)
+                {
+                    return NotFound();
+                }
+                return View(fuenteEmision);
             }
-            return View(fuenteEmision);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: FuenteEmisions/Edit/5
@@ -80,64 +108,78 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idFuenteEmision,nombreFuenteEmision")] FuenteEmision fuenteEmision)
         {
-            if (id != fuenteEmision.idFuenteEmision)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
+                if (id != fuenteEmision.idFuenteEmision)
+                {
+                    return NotFound();
+                }
+
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                fuenteEmision.idUsuario = user.idUsuario;
+                fuenteEmision.enabled = true;
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(fuenteEmision);
+                        await _context.SaveChangesAsync();
+                        Log log = new Log
+                        {
+                            accion = 2,
+                            contenido = fuenteEmision.ToString(),
+                            idUsuario = user.idUsuario,
+                            fechaAccion = DateTime.UtcNow
+                        };
+                        _context.Log.Add(log);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!FuenteEmisionExists(fuenteEmision.idFuenteEmision))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(fuenteEmision);
             }
-
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            fuenteEmision.idUsuario = user.idUsuario;
-            fuenteEmision.enabled = true;
-
-            if (ModelState.IsValid)
+            else
             {
-                try
-                {
-                    _context.Update(fuenteEmision);
-                    await _context.SaveChangesAsync();
-                    Log log = new Log
-                    {
-                        accion = 2,
-                        contenido = fuenteEmision.ToString(),
-                        idUsuario = user.idUsuario,
-                        fechaAccion = DateTime.UtcNow
-                    };
-                    _context.Log.Add(log);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FuenteEmisionExists(fuenteEmision.idFuenteEmision))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("AccesDenied", "Home");
             }
-            return View(fuenteEmision);
         }
 
         // GET: FuenteEmisions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.FuenteEmision == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.FuenteEmision == null)
+                {
+                    return NotFound();
+                }
 
-            var fuenteEmision = await _context.FuenteEmision
-                .Include(f => f.usuario)
-                .FirstOrDefaultAsync(m => m.idFuenteEmision == id);
-            if (fuenteEmision == null)
+                var fuenteEmision = await _context.FuenteEmision
+                    .Include(f => f.usuario)
+                    .FirstOrDefaultAsync(m => m.idFuenteEmision == id);
+                if (fuenteEmision == null)
+                {
+                    return NotFound();
+                }
+
+                return View(fuenteEmision);
+            }
+            else
             {
-                return NotFound();
+                return RedirectToAction("AccesDenied", "Home");
             }
-
-            return View(fuenteEmision);
         }
 
         // POST: FuenteEmisions/Delete/5
@@ -145,33 +187,40 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            if (_context.FuenteEmision == null)
+            if (GetAccesRol("Conf"))
             {
-                return Problem("Entity set 'Context.FuenteEmision'  is null.");
-            }
-            var fuenteEmision = await _context.FuenteEmision.FindAsync(id);
-            if (fuenteEmision != null)
-            {
-                fuenteEmision.enabled = false;
-                _context.FuenteEmision.Update(fuenteEmision);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                if (_context.FuenteEmision == null)
                 {
-                    accion = 3,
-                    contenido = fuenteEmision.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
+                    return Problem("Entity set 'Context.FuenteEmision'  is null.");
+                }
+                var fuenteEmision = await _context.FuenteEmision.FindAsync(id);
+                if (fuenteEmision != null)
+                {
+                    fuenteEmision.enabled = false;
+                    _context.FuenteEmision.Update(fuenteEmision);
+                    Log log = new Log
+                    {
+                        accion = 3,
+                        contenido = fuenteEmision.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         private bool FuenteEmisionExists(int id)
         {
-          return _context.FuenteEmision.Any(e => e.idFuenteEmision == id);
+            return _context.FuenteEmision.Any(e => e.idFuenteEmision == id);
         }
     }
 }

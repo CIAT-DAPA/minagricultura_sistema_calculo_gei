@@ -24,7 +24,8 @@
         </div>
 
         <div class="container-fluid d-flex p-0">
-            <partial name="/Views/Usuarios/Nav.cshtml" />
+           <partial name="Navs/Nav"/>
+           @*@(await Component.InvokeAsync("NavComponent"))*@
             <div role="main" class="pb-3 page content" id="content">
                 <button id="sidebarCollapse" type="button" class="btn rounded-pill shadow-sm sidebarCollapse bg-white "><i class="fa fa-bars mr-2"></i></button>
                 <header>

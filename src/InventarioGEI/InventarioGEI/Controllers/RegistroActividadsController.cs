@@ -25,164 +25,166 @@ namespace InventarioGEI.Controllers
         // GET: RegistroActividads
         public async Task<IActionResult> Index()
         {
-            var context = _context.RegistroActividad.Where(r => r.enabled == true)
+            if (GetAccesRol("Reg"))
+            {
+                var context = _context.RegistroActividad.Where(r => r.enabled == true)
                                                     .Include(r => r.configuracion.combustible)
                                                     .Include(r => r.configuracion.combustible.unidad)
                                                     .Include(r => r.sede)
                                                     .Include(r => r.configuracion.fuenteEmision)
                                                     .Include(r => r.usuario);
 
-            List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true && a.isBiocombustible == false).ToList();
-            var listaAlcances = new List<SelectListItem>();
-            foreach (var item in alcances)
-            {
-                listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+                List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true && a.isBiocombustible == false).ToList();
+                var listaAlcances = new List<SelectListItem>();
+                foreach (var item in alcances)
+                {
+                    listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+                }
+                ViewData["alcance"] = listaAlcances;
+
+                List<Sede> sede = _context.Sede.Where(s => s.enabled == true).ToList();
+                var listaSedes = new List<SelectListItem>();
+                foreach (var item in sede)
+                {
+                    listaSedes.Add(new SelectListItem { Text = item.nombreSede, Value = item.idSede.ToString() });
+                }
+                ViewData["sede"] = listaSedes;
+
+
+
+                return View(await context.ToListAsync());
             }
-            ViewData["alcance"] = listaAlcances;
-
-            List<Sede> sede = _context.Sede.Where(s => s.enabled == true).ToList();
-            var listaSedes = new List<SelectListItem>();
-            foreach (var item in sede)
+            else
             {
-                listaSedes.Add(new SelectListItem { Text = item.nombreSede, Value = item.idSede.ToString() });
+                return RedirectToAction("AccesDenied", "Home");
             }
-            ViewData["sede"] = listaSedes;
-
-
-
-            return View(await context.ToListAsync());
         }
 
         [HttpGet]
         public ActionResult GetCategorias(int id)
         {
-            if (id > 0)
+            if (GetAccesRol("Reg"))
             {
-                List<Categoria> categorias = _context.Categoria.Where(c => c.enabled == true).Where(c => c.idAlcance == id).ToList();
-                var listaCategorias = new List<SelectListItem>();
-                foreach (var item in categorias)
+                if (id > 0)
                 {
-                    listaCategorias.Add(new SelectListItem { Text = item.nombreCategoria, Value = item.idCategoria.ToString() });
+                    List<Categoria> categorias = _context.Categoria.Where(c => c.enabled == true).Where(c => c.idAlcance == id).ToList();
+                    var listaCategorias = new List<SelectListItem>();
+                    foreach (var item in categorias)
+                    {
+                        listaCategorias.Add(new SelectListItem { Text = item.nombreCategoria, Value = item.idCategoria.ToString() });
+                    }
+                    return Json(listaCategorias);
                 }
-                return Json(listaCategorias);
+                return null;
             }
-            return null;
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCombustibles(int id)
         {
-            if (id > 0)
+            if (GetAccesRol("Reg"))
             {
-                List<Subcategoria> subcategorias = await _context.Subcategoria.Where(s => s.enabled == true).Where(s => s.idCategoria == id).ToListAsync();
-                List<ConfiguracionActividad> configuraciones = new List<ConfiguracionActividad>();
-                foreach (var item in subcategorias)
+                if (id > 0)
                 {
-                    var configuracion = _context.ConfiguracionActividad
-                        .Where(c => c.enabled)
-                        .Where(c => c.idSubcategoria == item.idSubcategoria)
-                        .Include(c => c.combustible)
-                        .Include(c => c.combustible.unidad)
-                        .Include(c => c.fuenteEmision)
-                        .ToList();
-                    configuracion.ForEach(delegate (ConfiguracionActividad conf)
+                    List<Subcategoria> subcategorias = await _context.Subcategoria.Where(s => s.enabled == true).Where(s => s.idCategoria == id).ToListAsync();
+                    List<ConfiguracionActividad> configuraciones = new List<ConfiguracionActividad>();
+                    foreach (var item in subcategorias)
                     {
-                        configuraciones.Add(conf);
-                    });
-                }
+                        var configuracion = _context.ConfiguracionActividad
+                            .Where(c => c.enabled)
+                            .Where(c => c.idSubcategoria == item.idSubcategoria)
+                            .Include(c => c.combustible)
+                            .Include(c => c.combustible.unidad)
+                            .Include(c => c.fuenteEmision)
+                            .ToList();
+                        configuracion.ForEach(delegate (ConfiguracionActividad conf)
+                        {
+                            configuraciones.Add(conf);
+                        });
+                    }
 
-                return Json(configuraciones);
+                    return Json(configuraciones);
+                }
+                return null;
             }
-            return null;
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetValorDeRegistros(int idConfiguracion, int mes, int año, int sede)
         {
-
-            var query = _context.RegistroActividad
+            if (GetAccesRol("Reg"))
+            {
+                var query = _context.RegistroActividad
                     .Where(r => r.idConfiguracion == idConfiguracion)
                     .Where(r => r.idSede == sede)
                     .Where(r => r.mes == mes)
                     .Where(r => r.año == año)
                     .Any();
-            ;
-            if (query)
-            {
-                var queryExist = await _context.RegistroActividad
-                    .Where(r => r.idConfiguracion == idConfiguracion)
-                    .Where(r => r.idSede == sede)
-                    .Where(r => r.mes == mes)
-                    .Where(r => r.año == año)
-                    .FirstAsync();
+                ;
+                if (query)
+                {
+                    var queryExist = await _context.RegistroActividad
+                        .Where(r => r.idConfiguracion == idConfiguracion)
+                        .Where(r => r.idSede == sede)
+                        .Where(r => r.mes == mes)
+                        .Where(r => r.año == año)
+                        .FirstAsync();
 
-                return Json(queryExist);
+                    return Json(queryExist);
+                }
+                return NotFound();
             }
-            return NotFound();
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
 
         [HttpPost]
         public async Task<IActionResult> PostRegistros(List<RegistroActividad> registros)
         {
-            Usuario user = await _context.Usuario.FirstOrDefaultAsync(u => u.email == User.Identity.Name);
-
-            var regWithBioRem = await _context.RegistroActividad
-                    .Where(r => r.configuracion.subcategoria.categoria.alcance.isBiocombustible)
-                    .ToListAsync();
-            foreach (var r in regWithBioRem)
+            if (GetAccesRol("Reg"))
             {
-                _context.RegistroActividad.Remove(r);
-                await _context.SaveChangesAsync();
-            }
-            foreach (var registro in registros)
-            {
-                registro.idUsuario = user.idUsuario;
-                var query = await _context.RegistroActividad
-                    .Where(r => r.idConfiguracion == registro.idConfiguracion)
-                    .Where(r => r.idSede == registro.idSede)
-                    .Where(r => r.mes == registro.mes)
-                    .Where(r => r.año == registro.año)
-                    .AnyAsync();
+                Usuario user = await _context.Usuario.FirstOrDefaultAsync(u => u.email == User.Identity.Name);
 
-                var conf = await _context.ConfiguracionActividad.Include(c => c.configuracion).FirstAsync(c => c.idConfiguracion == registro.idConfiguracion);
-                bool hasBio = conf.biocombustible;
-
-                if (!query && registro.valor.HasValue)
+                var regWithBioRem = await _context.RegistroActividad
+                        .Where(r => r.configuracion.subcategoria.categoria.alcance.isBiocombustible)
+                        .ToListAsync();
+                foreach (var r in regWithBioRem)
                 {
-                    _context.Add(registro);
+                    _context.RegistroActividad.Remove(r);
                     await _context.SaveChangesAsync();
-
-                    Log log = new Log
-                    {
-                        accion = 1,
-                        contenido = registro.ToString(),
-                        idUsuario = user.idUsuario,
-                        fechaAccion = DateTime.UtcNow
-                    };
-                    _context.Log.Add(log);
-                    await _context.SaveChangesAsync();
-
-
                 }
-                else if (query)
+                foreach (var registro in registros)
                 {
-                    var queryExist = await _context.RegistroActividad
-                    .Where(r => r.idConfiguracion == registro.idConfiguracion)
-                    .Where(r => r.idSede == registro.idSede)
-                    .Where(r => r.mes == registro.mes)
-                    .Where(r => r.año == registro.año)
-                    .FirstAsync();
+                    registro.idUsuario = user.idUsuario;
+                    var query = await _context.RegistroActividad
+                        .Where(r => r.idConfiguracion == registro.idConfiguracion)
+                        .Where(r => r.idSede == registro.idSede)
+                        .Where(r => r.mes == registro.mes)
+                        .Where(r => r.año == registro.año)
+                        .AnyAsync();
 
-                    if (!registro.valor.HasValue)
+                    var conf = await _context.ConfiguracionActividad.Include(c => c.configuracion).FirstAsync(c => c.idConfiguracion == registro.idConfiguracion);
+                    bool hasBio = conf.biocombustible;
+
+                    if (!query && registro.valor.HasValue)
                     {
-                        registro.idRegistroActividad = queryExist.idRegistroActividad;
-                        _context.ChangeTracker.Clear();
-                        _context.Remove(registro);
+                        _context.Add(registro);
                         await _context.SaveChangesAsync();
+
                         Log log = new Log
                         {
-                            accion = 3,
+                            accion = 1,
                             contenido = registro.ToString(),
                             idUsuario = user.idUsuario,
                             fechaAccion = DateTime.UtcNow
@@ -192,79 +194,112 @@ namespace InventarioGEI.Controllers
 
 
                     }
-                    else
+                    else if (query)
                     {
-                        registro.idRegistroActividad = queryExist.idRegistroActividad;
-                        _context.ChangeTracker.Clear();
-                        _context.Update(registro);
-                        await _context.SaveChangesAsync();
-                        Log log = new Log
-                        {
-                            accion = 2,
-                            contenido = registro.ToString(),
-                            idUsuario = user.idUsuario,
-                            fechaAccion = DateTime.UtcNow
-                        };
-                        _context.Log.Add(log);
-                        await _context.SaveChangesAsync();
-                    }
+                        var queryExist = await _context.RegistroActividad
+                        .Where(r => r.idConfiguracion == registro.idConfiguracion)
+                        .Where(r => r.idSede == registro.idSede)
+                        .Where(r => r.mes == registro.mes)
+                        .Where(r => r.año == registro.año)
+                        .FirstAsync();
 
-                }
-            }
-
-            var regWithBio = await _context.RegistroActividad
-                    .Where(r => r.configuracion.biocombustible)
-                    .Include(r => r.configuracion.combustible.unidad)
-                    .Include(r => r.configuracion.configuracion)
-                    .ToListAsync();
-            var regWithBioGroupConf = regWithBio.GroupBy(r => r.configuracion.idConfDependiente);
-            foreach (var group in regWithBioGroupConf)
-            {
-                var regWithBioGroupSede = group.GroupBy(r => r.idSede);
-                foreach (var groupSede in regWithBioGroupSede)
-                {
-                    var regWithBioGroupAño = groupSede.GroupBy(r => r.año);
-                    foreach (var groupAño in regWithBioGroupAño)
-                    {
-                        var regWithBioGroupMes = groupAño.GroupBy(r => r.mes);
-                        foreach (var groupMes in regWithBioGroupMes)
+                        if (!registro.valor.HasValue)
                         {
-                            double valor = 0;
-                            RegistroActividad regBio = new RegistroActividad
-                            {
-                                idConfiguracion = (int)groupMes.First().configuracion.idConfDependiente,
-                                idUsuario = groupMes.First().idUsuario,
-                                idSede = groupMes.First().idSede,
-                                valor = valor,
-                                mes = groupMes.First().mes,
-                                año = groupMes.First().año,
-                                enabled = true
-                            };
-                            foreach (var reg in groupMes)
-                            {
-                                if (reg.configuracion.combustible.unidad.unidad == "Km")
-                                {
-                                    if (reg.configuracion.combustible.nombreCombustible.StartsWith("Diesel") || reg.configuracion.combustible.nombreCombustible.StartsWith("Diésel"))
-                                    {
-                                        regBio.valor += ((reg.valor * (reg.configuracion.porcentaje / 100)) / 39);
-                                    } else
-                                    {
-                                        regBio.valor += ((reg.valor * (reg.configuracion.porcentaje/100)) / 29);
-                                    }
-                                        
-                                }
-                                else
-                                {
-                                    regBio.valor += (reg.valor * (reg.configuracion.porcentaje / 100));
-                                }
-                            }
-                            _context.RegistroActividad.Add(regBio);
+                            registro.idRegistroActividad = queryExist.idRegistroActividad;
+                            _context.ChangeTracker.Clear();
+                            _context.Remove(registro);
                             await _context.SaveChangesAsync();
+                            Log log = new Log
+                            {
+                                accion = 3,
+                                contenido = registro.ToString(),
+                                idUsuario = user.idUsuario,
+                                fechaAccion = DateTime.UtcNow
+                            };
+                            _context.Log.Add(log);
+                            await _context.SaveChangesAsync();
+
+
+                        }
+                        else
+                        {
+                            registro.idRegistroActividad = queryExist.idRegistroActividad;
+                            _context.ChangeTracker.Clear();
+                            _context.Update(registro);
+                            await _context.SaveChangesAsync();
+                            Log log = new Log
+                            {
+                                accion = 2,
+                                contenido = registro.ToString(),
+                                idUsuario = user.idUsuario,
+                                fechaAccion = DateTime.UtcNow
+                            };
+                            _context.Log.Add(log);
+                            await _context.SaveChangesAsync();
+                        }
+
+                    }
+                }
+
+                var regWithBio = await _context.RegistroActividad
+                        .Where(r => r.configuracion.biocombustible)
+                        .Include(r => r.configuracion.combustible.unidad)
+                        .Include(r => r.configuracion.configuracion)
+                        .ToListAsync();
+                var regWithBioGroupConf = regWithBio.GroupBy(r => r.configuracion.idConfDependiente);
+                foreach (var group in regWithBioGroupConf)
+                {
+                    var regWithBioGroupSede = group.GroupBy(r => r.idSede);
+                    foreach (var groupSede in regWithBioGroupSede)
+                    {
+                        var regWithBioGroupAño = groupSede.GroupBy(r => r.año);
+                        foreach (var groupAño in regWithBioGroupAño)
+                        {
+                            var regWithBioGroupMes = groupAño.GroupBy(r => r.mes);
+                            foreach (var groupMes in regWithBioGroupMes)
+                            {
+                                double valor = 0;
+                                RegistroActividad regBio = new RegistroActividad
+                                {
+                                    idConfiguracion = (int)groupMes.First().configuracion.idConfDependiente,
+                                    idUsuario = groupMes.First().idUsuario,
+                                    idSede = groupMes.First().idSede,
+                                    valor = valor,
+                                    mes = groupMes.First().mes,
+                                    año = groupMes.First().año,
+                                    enabled = true
+                                };
+                                foreach (var reg in groupMes)
+                                {
+                                    if (reg.configuracion.combustible.unidad.unidad == "Km")
+                                    {
+                                        if (reg.configuracion.combustible.nombreCombustible.StartsWith("Diesel") || reg.configuracion.combustible.nombreCombustible.StartsWith("Diésel"))
+                                        {
+                                            regBio.valor += ((reg.valor * (reg.configuracion.porcentaje / 100)) / 39);
+                                        }
+                                        else
+                                        {
+                                            regBio.valor += ((reg.valor * (reg.configuracion.porcentaje / 100)) / 29);
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        regBio.valor += (reg.valor * (reg.configuracion.porcentaje / 100));
+                                    }
+                                }
+                                _context.RegistroActividad.Add(regBio);
+                                await _context.SaveChangesAsync();
+                            }
                         }
                     }
                 }
+                return Ok(true);
             }
-            return Ok(true);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
 
         }
     }

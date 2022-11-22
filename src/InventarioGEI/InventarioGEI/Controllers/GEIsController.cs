@@ -21,14 +21,28 @@ namespace InventarioGEI.Controllers
         // GET: GEIs
         public async Task<IActionResult> Index()
         {
-            var context = _context.Gei.Where(g => g.enabled == true).Include(g => g.usuario);
-            return View(await context.ToListAsync());
+            if (GetAccesRol("Conf"))
+            {
+                var context = _context.Gei.Where(g => g.enabled == true).Include(g => g.usuario);
+                return View(await context.ToListAsync());
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: GEIs/Create
         public IActionResult Create()
         {
-            return View();
+            if (GetAccesRol("Conf"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: GEIs/Create
@@ -36,40 +50,54 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idGei,nombreGei")] GEI gEI)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            gEI.idUsuario = user.idUsuario;
-            gEI.enabled = true;
-            if (ModelState.IsValid)
+            if (GetAccesRol("Conf"))
             {
-                _context.Add(gEI);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                gEI.idUsuario = user.idUsuario;
+                gEI.enabled = true;
+                if (ModelState.IsValid)
                 {
-                    accion = 1,
-                    contenido = gEI.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    _context.Add(gEI);
+                    Log log = new Log
+                    {
+                        accion = 1,
+                        contenido = gEI.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(gEI);
             }
-            return View(gEI);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: GEIs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Gei == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.Gei == null)
+                {
+                    return NotFound();
+                }
 
-            var gEI = await _context.Gei.FindAsync(id);
-            if (gEI == null)
-            {
-                return NotFound();
+                var gEI = await _context.Gei.FindAsync(id);
+                if (gEI == null)
+                {
+                    return NotFound();
+                }
+                return View(gEI);
             }
-            return View(gEI);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: GEIs/Edit/5
@@ -77,64 +105,78 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idGei,nombreGei")] GEI gEI)
         {
-            if (id != gEI.idGei)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
+                if (id != gEI.idGei)
+                {
+                    return NotFound();
+                }
+
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                gEI.idUsuario = user.idUsuario;
+                gEI.enabled = true;
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(gEI);
+                        await _context.SaveChangesAsync();
+                        Log log = new Log
+                        {
+                            accion = 2,
+                            contenido = gEI.ToString(),
+                            idUsuario = user.idUsuario,
+                            fechaAccion = DateTime.UtcNow
+                        };
+                        _context.Log.Add(log);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!GEIExists(gEI.idGei))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(gEI);
             }
-
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            gEI.idUsuario = user.idUsuario;
-            gEI.enabled = true;
-
-            if (ModelState.IsValid)
+            else
             {
-                try
-                {
-                    _context.Update(gEI);
-                    await _context.SaveChangesAsync();
-                    Log log = new Log
-                    {
-                        accion = 2,
-                        contenido = gEI.ToString(),
-                        idUsuario = user.idUsuario,
-                        fechaAccion = DateTime.UtcNow
-                    };
-                    _context.Log.Add(log);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GEIExists(gEI.idGei))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("AccesDenied", "Home");
             }
-            return View(gEI);
         }
 
         // GET: GEIs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Gei == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.Gei == null)
+                {
+                    return NotFound();
+                }
 
-            var gEI = await _context.Gei
-                .Include(g => g.usuario)
-                .FirstOrDefaultAsync(m => m.idGei == id);
-            if (gEI == null)
+                var gEI = await _context.Gei
+                    .Include(g => g.usuario)
+                    .FirstOrDefaultAsync(m => m.idGei == id);
+                if (gEI == null)
+                {
+                    return NotFound();
+                }
+
+                return View(gEI);
+            }
+            else
             {
-                return NotFound();
+                return RedirectToAction("AccesDenied", "Home");
             }
-
-            return View(gEI);
         }
 
         // POST: GEIs/Delete/5
@@ -142,33 +184,40 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            if (_context.Gei == null)
+            if (GetAccesRol("Conf"))
             {
-                return Problem("Entity set 'Context.Gei'  is null.");
-            }
-            var gEI = await _context.Gei.FindAsync(id);
-            if (gEI != null)
-            {
-                gEI.enabled = false;
-                _context.Gei.Update(gEI);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                if (_context.Gei == null)
                 {
-                    accion = 3,
-                    contenido = gEI.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
+                    return Problem("Entity set 'Context.Gei'  is null.");
+                }
+                var gEI = await _context.Gei.FindAsync(id);
+                if (gEI != null)
+                {
+                    gEI.enabled = false;
+                    _context.Gei.Update(gEI);
+                    Log log = new Log
+                    {
+                        accion = 3,
+                        contenido = gEI.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         private bool GEIExists(int id)
         {
-          return _context.Gei.Any(e => e.idGei == id);
+            return _context.Gei.Any(e => e.idGei == id);
         }
     }
 }

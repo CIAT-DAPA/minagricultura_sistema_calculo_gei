@@ -188,28 +188,37 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            if (_context.Rol == null)
+            if (GetAccesRol("Rol"))
+
             {
-                return Problem("Entity set 'Context.Rol'  is null.");
-            }
-            var rol = await _context.Rol.FindAsync(id);
-            if (rol != null)
-            {
-                rol.enabled = false;
-                _context.Rol.Update(rol);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                if (_context.Rol == null)
                 {
-                    accion = 3,
-                    contenido = rol.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
+                    return Problem("Entity set 'Context.Rol'  is null.");
+                }
+                var rol = await _context.Rol.FindAsync(id);
+                if (rol != null)
+                {
+                    rol.enabled = false;
+                    _context.Rol.Update(rol);
+                    Log log = new Log
+                    {
+                        accion = 3,
+                        contenido = rol.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         private bool RolExists(int id)

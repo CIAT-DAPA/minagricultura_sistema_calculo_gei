@@ -1,0 +1,74 @@
+﻿<div class="l-navbar" id="nav-bar">
+    <nav class="nav" style="padding: 25px 0 0px 25px;">
+        <div class="navbar-header">
+            <div class="brand-wrapper">
+                <div class="brand-name-wrapper">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                        <spam class="header-nav">
+                            Inventario GEI @ViewBag.Rol
+                        </spam>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="side-menu-container">
+            <ul class="navbar-nav">
+
+
+                @if (ViewBag.Rol != null)
+                {
+                    <li class="nav-item" style="margin-bottom:15px;">
+                        <a asp-area="" asp-controller="Rols" asp-action="Index"><i class="fa fa-user navbar-icon"></i>Rol</a>
+                    </li>
+                    <li class="nav-item" style="margin-bottom:15px;">
+                        <a asp-area="" asp-controller="Usuarios" asp-action="Index"><i class="fa fa-address-book navbar-icon"></i>Usuarios</a>
+                    </li>
+                }
+                @if (ViewBag.Sedes != null)
+                {
+                    <li class="nav-item" style="margin-bottom:15px;">
+                        <a asp-area="" asp-controller="Sedes" asp-action="Index"><i class="fa fa-building navbar-icon"></i>Sedes</a>
+                    </li>
+                }
+                @if (ViewBag.Conf != null)
+                {
+                    <li class="nav-item dropdown" role="button" style="margin-bottom:15px;" id="openNav1" for="collapseDivisiones" data-bs-toggle="collapse" href="#collapseDivisiones" aria-expanded="false" aria-controls="collapseDivisiones">
+                        <a class="dropdown-toggle"><i class="fa-solid fa-layer-group navbar-icon"></i>Divisiones GEI</a>
+                    </li>
+                    <div class="collapse border pt-2 px-3 rounded-2" id="collapseDivisiones">
+                    <li class="nav-item"><a asp-area="" asp-controller="Alcances" asp-action="Index">Alcances</a></li>
+                    <li class="nav-item"><a asp-area="" asp-controller="Categorias" asp-action="Index">Categorías</a></li>
+                    <li class="nav-item"><a asp-area="" asp-controller="Subcategorias" asp-action="Index">Subcategorías</a></li>
+                    <li class="nav-item"><a asp-area="" asp-controller="FuenteEmisions" asp-action="Index">Fuentes de emisión</a></li>
+                    <li class="nav-item"><a asp-area="" asp-controller="ConfiguracionActividads" asp-action="Index">Configuración de GEI</a></li>
+                    <li class="nav-item dropdown" style="margin-bottom:15px;">
+                        <a data-bs-toggle="collapse" href="#collapseCombustible" role="button" aria-expanded="false" aria-controls="collapseCombustible" class="dropdown-toggle">Combustibles y GEI</a>
+                    </li>
+                    <div class="collapse border pt-2 px-3 rounded-2" id="collapseCombustible">
+                    <li class="nav-item"><a asp-area="" asp-controller="TipoActividads" asp-action="Index">Tipos de actividad</a></li>
+                    <li class="nav-item"><a asp-area="" asp-controller="Combustibles" asp-action="Index">Combustibles</a></li>
+                    <li class="nav-item"><a asp-area="" asp-controller="GEIs" asp-action="Index">GEI</a></li>
+                    <li class="nav-item"><a asp-area="" asp-controller="FactorEmisions" asp-action="Index">Factores de emisión</a></li>
+            </div>
+    </div>
+                }
+                @if (ViewBag.Reg != null)
+                {
+    <li class="nav-item dropdown" style="margin-bottom:15px;" id="openNav2">
+        <a data-bs-toggle="collapse" href="#collapseRegistros" role="button" aria-expanded="false" aria-controls="collapseRegistros" class="dropdown-toggle"><i class="fa-solid fa-pen-to-square navbar-icon"></i>Modulo Registros</a>
+    </li>
+    <div class="collapse border pt-2 px-3 rounded-2l" id="collapseRegistros">
+        <li class="nav-item"><a asp-area="" asp-controller="RegistroActividads" asp-action="Index">Registros de consumos</a></li>
+        <li class="nav-item"><a asp-area="" asp-controller="RegistroAnuals" asp-action="Index">Cierres</a></li>
+    </div>
+                }
+                @if (ViewBag.Visualizacion != null)
+                {
+    <li class="nav-item" style="margin-bottom:15px;">
+        <a asp-area="" asp-controller="Reportes" asp-action="Index"><i class="fa-solid fa-chart-simple navbar-icon"></i>Reportes</a>
+    </li>
+                }
+            </ul>
+        </div>
+    </nav>
+</div>

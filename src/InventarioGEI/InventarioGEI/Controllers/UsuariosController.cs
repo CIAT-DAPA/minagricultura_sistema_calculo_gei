@@ -32,9 +32,9 @@ namespace InventarioGEI.Controllers
                 return RedirectToAction("AccesDenied", "Home");
             }
         }
-        
+
         // GET: Usuarios/Create
-        public  IActionResult Create()
+        public IActionResult Create()
         {
             if (GetAccesRol("Rol"))
             {
@@ -42,7 +42,7 @@ namespace InventarioGEI.Controllers
                 var listaRoles = new List<SelectListItem>();
                 foreach (var item in roles)
                 {
-                    listaRoles.Add(new SelectListItem {Text = item.nombreRol, Value = item.idRol.ToString() });
+                    listaRoles.Add(new SelectListItem { Text = item.nombreRol, Value = item.idRol.ToString() });
                 }
                 ViewData["idRol"] = listaRoles;
                 return View();
@@ -60,29 +60,37 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idUsuario,email,idRol")] Usuario usuario)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            usuario.enabled = true;
-            if (ModelState.IsValid)
+            if (GetAccesRol("Rol"))
             {
-                _context.Add(usuario);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                usuario.enabled = true;
+                if (ModelState.IsValid)
                 {
-                    accion = 1,
-                    contenido = usuario.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    _context.Add(usuario);
+                    Log log = new Log
+                    {
+                        accion = 1,
+                        contenido = usuario.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["idRol"] = new SelectList(_context.Rol, "idRol", "idRol", usuario.idRol);
+                return View(usuario);
             }
-            ViewData["idRol"] = new SelectList(_context.Rol, "idRol", "idRol", usuario.idRol);
-            return View(usuario);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
             if (GetAccesRol("Rol"))
             {
                 if (id == null || _context.Usuario == null)
@@ -117,43 +125,50 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idUsuario,email,idRol")] Usuario usuario)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            if (id != usuario.idUsuario)
+            if (GetAccesRol("Rol"))
             {
-                return NotFound();
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                if (id != usuario.idUsuario)
+                {
+                    return NotFound();
+                }
+                usuario.enabled = true;
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(usuario);
+                        await _context.SaveChangesAsync();
+                        Log log = new Log
+                        {
+                            accion = 2,
+                            contenido = usuario.ToString(),
+                            idUsuario = user.idUsuario,
+                            fechaAccion = DateTime.UtcNow
+                        };
+                        _context.Log.Add(log);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!UsuarioExists(usuario.idUsuario))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["idRol"] = new SelectList(_context.Rol, "idRol", "idRol", usuario.idRol);
+                return View(usuario);
             }
-            usuario.enabled = true;
-            if (ModelState.IsValid)
+            else
             {
-                try
-                {
-                    _context.Update(usuario);
-                    await _context.SaveChangesAsync();
-                    Log log = new Log
-                    {
-                        accion = 2,
-                        contenido = usuario.ToString(),
-                        idUsuario = user.idUsuario,
-                        fechaAccion = DateTime.UtcNow
-                    };
-                    _context.Log.Add(log);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UsuarioExists(usuario.idUsuario))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("AccesDenied", "Home");
             }
-            ViewData["idRol"] = new SelectList(_context.Rol, "idRol", "idRol", usuario.idRol);
-            return View(usuario);
         }
 
         // GET: Usuarios/Delete/5
@@ -187,33 +202,40 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            if (_context.Usuario == null)
+            if (GetAccesRol("Rol"))
             {
-                return Problem("Entity set 'Context.Usuario'  is null.");
-            }
-            var usuario = await _context.Usuario.FindAsync(id);
-            if (usuario != null)
-            {
-                usuario.enabled = false;
-                _context.Usuario.Update(usuario);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                if (_context.Usuario == null)
                 {
-                    accion = 3,
-                    contenido = usuario.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
+                    return Problem("Entity set 'Context.Usuario'  is null.");
+                }
+                var usuario = await _context.Usuario.FindAsync(id);
+                if (usuario != null)
+                {
+                    usuario.enabled = false;
+                    _context.Usuario.Update(usuario);
+                    Log log = new Log
+                    {
+                        accion = 3,
+                        contenido = usuario.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         private bool UsuarioExists(int id)
         {
-          return _context.Usuario.Any(e => e.idUsuario == id);
+            return _context.Usuario.Any(e => e.idUsuario == id);
         }
     }
 }

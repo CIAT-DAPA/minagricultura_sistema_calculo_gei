@@ -21,56 +21,70 @@ namespace InventarioGEI.Controllers
         // GET: ConfiguracionActividads
         public async Task<IActionResult> Index()
         {
-            var context = _context.ConfiguracionActividad
+            if (GetAccesRol("Conf"))
+            {
+                var context = _context.ConfiguracionActividad
                                                 .Where(c => c.enabled == true)
                                                 .Include(c => c.combustible)
                                                 .Include(c => c.combustible.unidad)
                                                 .Include(c => c.fuenteEmision)
                                                 .Include(c => c.subcategoria)
                                                 .OrderBy(c => c.subcategoria.nombreSubcategoria);
-            return View(await context.ToListAsync());
+                return View(await context.ToListAsync());
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: ConfiguracionActividads/Create
         public IActionResult Create()
         {
-            List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).Include(c => c.unidad).ToList();
-            var listaCombustibles = new List<SelectListItem>();
-            foreach (var item in combustible)
+            if (GetAccesRol("Conf"))
             {
-                listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible + " - " + item.unidad.unidad, Value = item.idCombustible.ToString() });
-            }
-            ViewData["idCombustible"] = listaCombustibles;
+                List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).Include(c => c.unidad).ToList();
+                var listaCombustibles = new List<SelectListItem>();
+                foreach (var item in combustible)
+                {
+                    listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible + " - " + item.unidad.unidad, Value = item.idCombustible.ToString() });
+                }
+                ViewData["idCombustible"] = listaCombustibles;
 
-            List<FuenteEmision> fuenteEmision = _context.FuenteEmision.Where(f => f.enabled == true).ToList();
-            var listafuenteEmision = new List<SelectListItem>();
-            foreach (var item in fuenteEmision)
-            {
-                listafuenteEmision.Add(new SelectListItem { Text = item.nombreFuenteEmision, Value = item.idFuenteEmision.ToString() });
-            }
-            ViewData["idFuenteEmision"] = listafuenteEmision;
+                List<FuenteEmision> fuenteEmision = _context.FuenteEmision.Where(f => f.enabled == true).ToList();
+                var listafuenteEmision = new List<SelectListItem>();
+                foreach (var item in fuenteEmision)
+                {
+                    listafuenteEmision.Add(new SelectListItem { Text = item.nombreFuenteEmision, Value = item.idFuenteEmision.ToString() });
+                }
+                ViewData["idFuenteEmision"] = listafuenteEmision;
 
-            List<Subcategoria> subcategoria = _context.Subcategoria.Where(s => s.enabled == true).ToList();
-            var listaSubcategorias = new List<SelectListItem>();
-            foreach (var item in subcategoria)
-            {
-                listaSubcategorias.Add(new SelectListItem { Text = item.nombreSubcategoria, Value = item.idSubcategoria.ToString() });
-            }
-            ViewData["idSubcategoria"] = listaSubcategorias;
+                List<Subcategoria> subcategoria = _context.Subcategoria.Where(s => s.enabled == true).ToList();
+                var listaSubcategorias = new List<SelectListItem>();
+                foreach (var item in subcategoria)
+                {
+                    listaSubcategorias.Add(new SelectListItem { Text = item.nombreSubcategoria, Value = item.idSubcategoria.ToString() });
+                }
+                ViewData["idSubcategoria"] = listaSubcategorias;
 
-            List<ConfiguracionActividad> configuracionActividads = _context.ConfiguracionActividad.Where(c => c.enabled == true && c.subcategoria.categoria.alcance.isBiocombustible)
-                                                                                                .Include(c => c.combustible)
-                                                                                                .Include(c => c.combustible.unidad)
-                                                                                                .Include(c => c.fuenteEmision)
-                                                                                                .Include(c => c.subcategoria)
-                                                                                                .ToList();
-            var listaConfiguraciones = new List<SelectListItem>();
-            foreach (var item in configuracionActividads)
-            {
-                listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+                List<ConfiguracionActividad> configuracionActividads = _context.ConfiguracionActividad.Where(c => c.enabled == true && c.subcategoria.categoria.alcance.isBiocombustible)
+                                                                                                    .Include(c => c.combustible)
+                                                                                                    .Include(c => c.combustible.unidad)
+                                                                                                    .Include(c => c.fuenteEmision)
+                                                                                                    .Include(c => c.subcategoria)
+                                                                                                    .ToList();
+                var listaConfiguraciones = new List<SelectListItem>();
+                foreach (var item in configuracionActividads)
+                {
+                    listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+                }
+                ViewData["idConfDependiente"] = listaConfiguraciones;
+                return View();
             }
-            ViewData["idConfDependiente"] = listaConfiguraciones;
-            return View();
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: ConfiguracionActividads/Create
@@ -78,117 +92,131 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idConfiguracion,idCombustible,idSubcategoria,idFuenteEmision,biocombustible,idConfDependiente, porcentaje")] ConfiguracionActividad configuracionActividad)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            configuracionActividad.enabled = true;
-            if (!configuracionActividad.biocombustible)
+            if (GetAccesRol("Conf"))
             {
-                configuracionActividad.idConfDependiente = null;
-                configuracionActividad.porcentaje = null;
-            }
-            if (ModelState.IsValid)
-            {
-                _context.Add(configuracionActividad);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                configuracionActividad.enabled = true;
+                if (!configuracionActividad.biocombustible)
                 {
-                    accion = 1,
-                    contenido = configuracionActividad.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).Include(c => c.unidad).ToList();
-            var listaCombustibles = new List<SelectListItem>();
-            foreach (var item in combustible)
-            {
-                listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible + " - " + item.unidad.unidad, Value = item.idCombustible.ToString() });
-            }
-            ViewData["idCombustible"] = listaCombustibles;
+                    configuracionActividad.idConfDependiente = null;
+                    configuracionActividad.porcentaje = null;
+                }
+                if (ModelState.IsValid)
+                {
+                    _context.Add(configuracionActividad);
+                    Log log = new Log
+                    {
+                        accion = 1,
+                        contenido = configuracionActividad.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).Include(c => c.unidad).ToList();
+                var listaCombustibles = new List<SelectListItem>();
+                foreach (var item in combustible)
+                {
+                    listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible + " - " + item.unidad.unidad, Value = item.idCombustible.ToString() });
+                }
+                ViewData["idCombustible"] = listaCombustibles;
 
-            List<FuenteEmision> fuenteEmision = _context.FuenteEmision.Where(f => f.enabled == true).ToList();
-            var listafuenteEmision = new List<SelectListItem>();
-            foreach (var item in fuenteEmision)
-            {
-                listafuenteEmision.Add(new SelectListItem { Text = item.nombreFuenteEmision, Value = item.idFuenteEmision.ToString() });
-            }
-            ViewData["idFuenteEmision"] = listafuenteEmision;
+                List<FuenteEmision> fuenteEmision = _context.FuenteEmision.Where(f => f.enabled == true).ToList();
+                var listafuenteEmision = new List<SelectListItem>();
+                foreach (var item in fuenteEmision)
+                {
+                    listafuenteEmision.Add(new SelectListItem { Text = item.nombreFuenteEmision, Value = item.idFuenteEmision.ToString() });
+                }
+                ViewData["idFuenteEmision"] = listafuenteEmision;
 
-            List<Subcategoria> subcategoria = _context.Subcategoria.Where(s => s.enabled == true).ToList();
-            var listaSubcategorias = new List<SelectListItem>();
-            foreach (var item in subcategoria)
-            {
-                listaSubcategorias.Add(new SelectListItem { Text = item.nombreSubcategoria, Value = item.idSubcategoria.ToString() });
-            }
-            ViewData["idSubcategoria"] = listaSubcategorias;
-            return View(configuracionActividad);
+                List<Subcategoria> subcategoria = _context.Subcategoria.Where(s => s.enabled == true).ToList();
+                var listaSubcategorias = new List<SelectListItem>();
+                foreach (var item in subcategoria)
+                {
+                    listaSubcategorias.Add(new SelectListItem { Text = item.nombreSubcategoria, Value = item.idSubcategoria.ToString() });
+                }
+                ViewData["idSubcategoria"] = listaSubcategorias;
+                return View(configuracionActividad);
 
-            List<ConfiguracionActividad> configuracionActividads = _context.ConfiguracionActividad.Where(c => c.enabled == true && c.subcategoria.categoria.alcance.isBiocombustible)
-                                                                                                .Include(c => c.combustible)
-                                                                                                .Include(c => c.combustible.unidad)
-                                                                                                .Include(c => c.fuenteEmision)
-                                                                                                .Include(c => c.subcategoria)
-                                                                                                .ToList();
-            var listaConfiguraciones = new List<SelectListItem>();
-            foreach (var item in configuracionActividads)
-            {
-                listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+                List<ConfiguracionActividad> configuracionActividads = _context.ConfiguracionActividad.Where(c => c.enabled == true && c.subcategoria.categoria.alcance.isBiocombustible)
+                                                                                                    .Include(c => c.combustible)
+                                                                                                    .Include(c => c.combustible.unidad)
+                                                                                                    .Include(c => c.fuenteEmision)
+                                                                                                    .Include(c => c.subcategoria)
+                                                                                                    .ToList();
+                var listaConfiguraciones = new List<SelectListItem>();
+                foreach (var item in configuracionActividads)
+                {
+                    listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+                }
+                ViewData["idConfDependiente"] = listaConfiguraciones;
+                return View();
             }
-            ViewData["idConfDependiente"] = listaConfiguraciones;
-            return View();
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: ConfiguracionActividads/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.ConfiguracionActividad == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.ConfiguracionActividad == null)
+                {
+                    return NotFound();
+                }
 
-            var configuracionActividad = await _context.ConfiguracionActividad.FindAsync(id);
-            if (configuracionActividad == null)
-            {
-                return NotFound();
-            }
-            List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).Include(c => c.unidad).ToList();
-            var listaCombustibles = new List<SelectListItem>();
-            foreach (var item in combustible)
-            {
-                listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible + " - " + item.unidad.unidad, Value = item.idCombustible.ToString() });
-            }
-            ViewData["idCombustible"] = listaCombustibles;
+                var configuracionActividad = await _context.ConfiguracionActividad.FindAsync(id);
+                if (configuracionActividad == null)
+                {
+                    return NotFound();
+                }
+                List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).Include(c => c.unidad).ToList();
+                var listaCombustibles = new List<SelectListItem>();
+                foreach (var item in combustible)
+                {
+                    listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible + " - " + item.unidad.unidad, Value = item.idCombustible.ToString() });
+                }
+                ViewData["idCombustible"] = listaCombustibles;
 
-            List<FuenteEmision> fuenteEmision = _context.FuenteEmision.Where(f => f.enabled == true).ToList();
-            var listafuenteEmision = new List<SelectListItem>();
-            foreach (var item in fuenteEmision)
-            {
-                listafuenteEmision.Add(new SelectListItem { Text = item.nombreFuenteEmision, Value = item.idFuenteEmision.ToString() });
-            }
-            ViewData["idFuenteEmision"] = listafuenteEmision;
+                List<FuenteEmision> fuenteEmision = _context.FuenteEmision.Where(f => f.enabled == true).ToList();
+                var listafuenteEmision = new List<SelectListItem>();
+                foreach (var item in fuenteEmision)
+                {
+                    listafuenteEmision.Add(new SelectListItem { Text = item.nombreFuenteEmision, Value = item.idFuenteEmision.ToString() });
+                }
+                ViewData["idFuenteEmision"] = listafuenteEmision;
 
-            List<Subcategoria> subcategoria = _context.Subcategoria.Where(s => s.enabled == true).ToList();
-            var listaSubcategorias = new List<SelectListItem>();
-            foreach (var item in subcategoria)
-            {
-                listaSubcategorias.Add(new SelectListItem { Text = item.nombreSubcategoria, Value = item.idSubcategoria.ToString() });
-            }
-            ViewData["idSubcategoria"] = listaSubcategorias;
+                List<Subcategoria> subcategoria = _context.Subcategoria.Where(s => s.enabled == true).ToList();
+                var listaSubcategorias = new List<SelectListItem>();
+                foreach (var item in subcategoria)
+                {
+                    listaSubcategorias.Add(new SelectListItem { Text = item.nombreSubcategoria, Value = item.idSubcategoria.ToString() });
+                }
+                ViewData["idSubcategoria"] = listaSubcategorias;
 
-            List<ConfiguracionActividad> configuracionActividads = _context.ConfiguracionActividad.Where(c => c.enabled == true && c.subcategoria.categoria.alcance.isBiocombustible)
-                                                                                               .Include(c => c.combustible)
-                                                                                               .Include(c => c.combustible.unidad)
-                                                                                               .Include(c => c.fuenteEmision)
-                                                                                               .Include(c => c.subcategoria)
-                                                                                               .ToList();
-            var listaConfiguraciones = new List<SelectListItem>();
-            foreach (var item in configuracionActividads)
-            {
-                listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+                List<ConfiguracionActividad> configuracionActividads = _context.ConfiguracionActividad.Where(c => c.enabled == true && c.subcategoria.categoria.alcance.isBiocombustible)
+                                                                                                   .Include(c => c.combustible)
+                                                                                                   .Include(c => c.combustible.unidad)
+                                                                                                   .Include(c => c.fuenteEmision)
+                                                                                                   .Include(c => c.subcategoria)
+                                                                                                   .ToList();
+                var listaConfiguraciones = new List<SelectListItem>();
+                foreach (var item in configuracionActividads)
+                {
+                    listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+                }
+                ViewData["idConfDependiente"] = listaConfiguraciones;
+                return View(configuracionActividad);
             }
-            ViewData["idConfDependiente"] = listaConfiguraciones;
-            return View(configuracionActividad);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: ConfiguracionActividads/Edit/5
@@ -196,106 +224,120 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idConfiguracion,idCombustible,idSubcategoria,idFuenteEmision,biocombustible,idConfDependiente, porcentaje")] ConfiguracionActividad configuracionActividad)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            if (id != configuracionActividad.idConfiguracion)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
-
-            configuracionActividad.enabled = true;
-            if (!configuracionActividad.biocombustible)
-            {
-                configuracionActividad.idConfDependiente = null;
-                configuracionActividad.porcentaje = null;
-            }
-            if (ModelState.IsValid)
-            {
-                try
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                if (id != configuracionActividad.idConfiguracion)
                 {
-                    _context.Update(configuracionActividad);
-                    await _context.SaveChangesAsync();
-
-                    Log log = new Log
-                    {
-                        accion = 2,
-                        contenido = configuracionActividad.ToString(),
-                        idUsuario = user.idUsuario,
-                        fechaAccion = DateTime.UtcNow
-                    };
-                    _context.Log.Add(log);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                configuracionActividad.enabled = true;
+                if (!configuracionActividad.biocombustible)
                 {
-                    if (!ConfiguracionActividadExists(configuracionActividad.idConfiguracion))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    configuracionActividad.idConfDependiente = null;
+                    configuracionActividad.porcentaje = null;
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).Include(c => c.unidad).ToList();
-            var listaCombustibles = new List<SelectListItem>();
-            foreach (var item in combustible)
-            {
-                listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible + " - " + item.unidad.unidad, Value = item.idCombustible.ToString() });
-            }
-            ViewData["idCombustible"] = listaCombustibles;
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(configuracionActividad);
+                        await _context.SaveChangesAsync();
 
-            List<FuenteEmision> fuenteEmision = _context.FuenteEmision.Where(f => f.enabled == true).ToList();
-            var listafuenteEmision = new List<SelectListItem>();
-            foreach (var item in fuenteEmision)
-            {
-                listafuenteEmision.Add(new SelectListItem { Text = item.nombreFuenteEmision, Value = item.idFuenteEmision.ToString() });
-            }
-            ViewData["idFuenteEmision"] = listafuenteEmision;
+                        Log log = new Log
+                        {
+                            accion = 2,
+                            contenido = configuracionActividad.ToString(),
+                            idUsuario = user.idUsuario,
+                            fechaAccion = DateTime.UtcNow
+                        };
+                        _context.Log.Add(log);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!ConfiguracionActividadExists(configuracionActividad.idConfiguracion))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).Include(c => c.unidad).ToList();
+                var listaCombustibles = new List<SelectListItem>();
+                foreach (var item in combustible)
+                {
+                    listaCombustibles.Add(new SelectListItem { Text = item.nombreCombustible + " - " + item.unidad.unidad, Value = item.idCombustible.ToString() });
+                }
+                ViewData["idCombustible"] = listaCombustibles;
 
-            List<Subcategoria> subcategoria = _context.Subcategoria.Where(s => s.enabled == true).ToList();
-            var listaSubcategorias = new List<SelectListItem>();
-            foreach (var item in subcategoria)
-            {
-                listaSubcategorias.Add(new SelectListItem { Text = item.nombreSubcategoria, Value = item.idSubcategoria.ToString() });
-            }
-            ViewData["idSubcategoria"] = listaSubcategorias;
+                List<FuenteEmision> fuenteEmision = _context.FuenteEmision.Where(f => f.enabled == true).ToList();
+                var listafuenteEmision = new List<SelectListItem>();
+                foreach (var item in fuenteEmision)
+                {
+                    listafuenteEmision.Add(new SelectListItem { Text = item.nombreFuenteEmision, Value = item.idFuenteEmision.ToString() });
+                }
+                ViewData["idFuenteEmision"] = listafuenteEmision;
 
-            List<ConfiguracionActividad> configuracionActividads = _context.ConfiguracionActividad.Where(c => c.enabled == true && c.subcategoria.categoria.alcance.isBiocombustible)
-                                                                                               .Include(c => c.combustible)
-                                                                                               .Include(c => c.combustible.unidad)
-                                                                                               .Include(c => c.fuenteEmision)
-                                                                                               .Include(c => c.subcategoria)
-                                                                                               .ToList();
-            var listaConfiguraciones = new List<SelectListItem>();
-            foreach (var item in configuracionActividads)
-            {
-                listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+                List<Subcategoria> subcategoria = _context.Subcategoria.Where(s => s.enabled == true).ToList();
+                var listaSubcategorias = new List<SelectListItem>();
+                foreach (var item in subcategoria)
+                {
+                    listaSubcategorias.Add(new SelectListItem { Text = item.nombreSubcategoria, Value = item.idSubcategoria.ToString() });
+                }
+                ViewData["idSubcategoria"] = listaSubcategorias;
+
+                List<ConfiguracionActividad> configuracionActividads = _context.ConfiguracionActividad.Where(c => c.enabled == true && c.subcategoria.categoria.alcance.isBiocombustible)
+                                                                                                   .Include(c => c.combustible)
+                                                                                                   .Include(c => c.combustible.unidad)
+                                                                                                   .Include(c => c.fuenteEmision)
+                                                                                                   .Include(c => c.subcategoria)
+                                                                                                   .ToList();
+                var listaConfiguraciones = new List<SelectListItem>();
+                foreach (var item in configuracionActividads)
+                {
+                    listaConfiguraciones.Add(new SelectListItem { Text = item.subcategoria.nombreSubcategoria + " - " + item.fuenteEmision.nombreFuenteEmision + " - " + item.combustible.nombreCombustible, Value = item.idConfiguracion.ToString() });
+                }
+                ViewData["idConfDependiente"] = listaConfiguraciones;
+                return View(configuracionActividad);
             }
-            ViewData["idConfDependiente"] = listaConfiguraciones;
-            return View(configuracionActividad);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: ConfiguracionActividads/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.ConfiguracionActividad == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.ConfiguracionActividad == null)
+                {
+                    return NotFound();
+                }
 
-            var configuracionActividad = await _context.ConfiguracionActividad
-                .Include(c => c.combustible)
-                .Include(c => c.fuenteEmision)
-                .Include(c => c.subcategoria)
-                .FirstOrDefaultAsync(m => m.idConfiguracion == id);
-            if (configuracionActividad == null)
+                var configuracionActividad = await _context.ConfiguracionActividad
+                    .Include(c => c.combustible)
+                    .Include(c => c.fuenteEmision)
+                    .Include(c => c.subcategoria)
+                    .FirstOrDefaultAsync(m => m.idConfiguracion == id);
+                if (configuracionActividad == null)
+                {
+                    return NotFound();
+                }
+
+                return View(configuracionActividad);
+            }
+            else
             {
-                return NotFound();
+                return RedirectToAction("AccesDenied", "Home");
             }
-
-            return View(configuracionActividad);
         }
 
         // POST: ConfiguracionActividads/Delete/5
@@ -303,33 +345,40 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            if (_context.ConfiguracionActividad == null)
+            if (GetAccesRol("Conf"))
             {
-                return Problem("Entity set 'Context.ConfiguracionActividad'  is null.");
-            }
-            var configuracionActividad = await _context.ConfiguracionActividad.FindAsync(id);
-            if (configuracionActividad != null)
-            {
-                configuracionActividad.enabled = false;
-                _context.ConfiguracionActividad.Update(configuracionActividad);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                if (_context.ConfiguracionActividad == null)
                 {
-                    accion = 3,
-                    contenido = configuracionActividad.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
+                    return Problem("Entity set 'Context.ConfiguracionActividad'  is null.");
+                }
+                var configuracionActividad = await _context.ConfiguracionActividad.FindAsync(id);
+                if (configuracionActividad != null)
+                {
+                    configuracionActividad.enabled = false;
+                    _context.ConfiguracionActividad.Update(configuracionActividad);
+                    Log log = new Log
+                    {
+                        accion = 3,
+                        contenido = configuracionActividad.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         private bool ConfiguracionActividadExists(int id)
         {
-          return _context.ConfiguracionActividad.Any(e => e.idConfiguracion == id);
+            return _context.ConfiguracionActividad.Any(e => e.idConfiguracion == id);
         }
     }
 }

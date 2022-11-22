@@ -16,7 +16,7 @@ namespace InventarioGEI.Controllers
         {
             Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             Rol rolAsig = _context.Rol.FirstOrDefault(r => r.idRol == user.idRol);
-
+            //ViewData["Rol"] = rolAsig.permisoRol;
             switch (moduloPermiso)
             {
                 case "Rol":

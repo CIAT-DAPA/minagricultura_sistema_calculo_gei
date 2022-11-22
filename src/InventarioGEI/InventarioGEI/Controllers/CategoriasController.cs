@@ -21,21 +21,35 @@ namespace InventarioGEI.Controllers
         // GET: Categorias
         public async Task<IActionResult> Index()
         {
-            var context = _context.Categoria.Where(c => c.enabled == true).Include(c => c.alcance).Include(c => c.usuarios).OrderBy(c => c.alcance.nombreAlcance);
-            return View(await context.ToListAsync());
+            if (GetAccesRol("Conf"))
+            {
+                var context = _context.Categoria.Where(c => c.enabled == true).Include(c => c.alcance).Include(c => c.usuarios).OrderBy(c => c.alcance.nombreAlcance);
+                return View(await context.ToListAsync());
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: Categorias/Create
         public IActionResult Create()
         {
-            List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true).ToList();
-            var listaAlcances = new List<SelectListItem>();
-            foreach (var item in alcances)
+            if (GetAccesRol("Conf"))
             {
-                listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+                List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true).ToList();
+                var listaAlcances = new List<SelectListItem>();
+                foreach (var item in alcances)
+                {
+                    listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+                }
+                ViewData["idAlcance"] = listaAlcances;
+                return View();
             }
-            ViewData["idAlcance"] = listaAlcances;
-            return View();
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: Categorias/Create
@@ -43,56 +57,70 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idCategoria,nombreCategoria,idAlcance")] Categoria categoria)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            categoria.enabled = true;
-            categoria.idUsuario = user.idUsuario;
-            if (ModelState.IsValid)
+            if (GetAccesRol("Conf"))
             {
-                _context.Add(categoria);
-
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                categoria.enabled = true;
+                categoria.idUsuario = user.idUsuario;
+                if (ModelState.IsValid)
                 {
-                    accion = 1,
-                    contenido = categoria.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
+                    _context.Add(categoria);
 
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    Log log = new Log
+                    {
+                        accion = 1,
+                        contenido = categoria.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true).ToList();
+                var listaAlcances = new List<SelectListItem>();
+                foreach (var item in alcances)
+                {
+                    listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+                }
+                ViewData["idAlcance"] = listaAlcances;
+                return View(categoria);
             }
-            List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true).ToList();
-            var listaAlcances = new List<SelectListItem>();
-            foreach (var item in alcances)
+            else
             {
-                listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+                return RedirectToAction("AccesDenied", "Home");
             }
-            ViewData["idAlcance"] = listaAlcances;
-            return View(categoria);
         }
 
         // GET: Categorias/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Categoria == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.Categoria == null)
+                {
+                    return NotFound();
+                }
 
-            var categoria = await _context.Categoria.FindAsync(id);
-            if (categoria == null)
-            {
-                return NotFound();
+                var categoria = await _context.Categoria.FindAsync(id);
+                if (categoria == null)
+                {
+                    return NotFound();
+                }
+                List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true).ToList();
+                var listaAlcances = new List<SelectListItem>();
+                foreach (var item in alcances)
+                {
+                    listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+                }
+                ViewData["idAlcance"] = listaAlcances;
+                return View(categoria);
             }
-            List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true).ToList();
-            var listaAlcances = new List<SelectListItem>();
-            foreach (var item in alcances)
+            else
             {
-                listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+                return RedirectToAction("AccesDenied", "Home");
             }
-            ViewData["idAlcance"] = listaAlcances;
-            return View(categoria);
         }
 
         // POST: Categorias/Edit/5
@@ -100,72 +128,86 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idCategoria,nombreCategoria,idAlcance")] Categoria categoria)
         {
-            if (id != categoria.idCategoria)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
-
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            categoria.idUsuario = user.idUsuario;
-            categoria.enabled = true;
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (id != categoria.idCategoria)
                 {
-                    _context.Update(categoria);
-                    await _context.SaveChangesAsync();
-                    Log log = new Log
-                    {
-                        accion = 2,
-                        contenido = categoria.ToString(),
-                        idUsuario = user.idUsuario,
-                        fechaAccion = DateTime.UtcNow
-                    };
-                    _context.Log.Add(log);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                categoria.idUsuario = user.idUsuario;
+                categoria.enabled = true;
+
+                if (ModelState.IsValid)
                 {
-                    if (!CategoriaExists(categoria.idCategoria))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(categoria);
+                        await _context.SaveChangesAsync();
+                        Log log = new Log
+                        {
+                            accion = 2,
+                            contenido = categoria.ToString(),
+                            idUsuario = user.idUsuario,
+                            fechaAccion = DateTime.UtcNow
+                        };
+                        _context.Log.Add(log);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!CategoriaExists(categoria.idCategoria))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true).ToList();
+                var listaAlcances = new List<SelectListItem>();
+                foreach (var item in alcances)
+                {
+                    listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+                }
+                ViewData["idAlcance"] = listaAlcances;
+                return View(categoria);
             }
-            List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true).ToList();
-            var listaAlcances = new List<SelectListItem>();
-            foreach (var item in alcances)
+            else
             {
-                listaAlcances.Add(new SelectListItem { Text = item.nombreAlcance, Value = item.idAlcance.ToString() });
+                return RedirectToAction("AccesDenied", "Home");
             }
-            ViewData["idAlcance"] = listaAlcances;
-            return View(categoria);
         }
 
         // GET: Categorias/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Categoria == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.Categoria == null)
+                {
+                    return NotFound();
+                }
 
-            var categoria = await _context.Categoria
-                .Include(c => c.alcance)
-                .Include(c => c.usuarios)
-                .FirstOrDefaultAsync(m => m.idCategoria == id);
-            if (categoria == null)
+                var categoria = await _context.Categoria
+                    .Include(c => c.alcance)
+                    .Include(c => c.usuarios)
+                    .FirstOrDefaultAsync(m => m.idCategoria == id);
+                if (categoria == null)
+                {
+                    return NotFound();
+                }
+
+                return View(categoria);
+            }
+            else
             {
-                return NotFound();
+                return RedirectToAction("AccesDenied", "Home");
             }
-
-            return View(categoria);
         }
 
         // POST: Categorias/Delete/5
@@ -173,33 +215,40 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            if (_context.Categoria == null)
+            if (GetAccesRol("Conf"))
             {
-                return Problem("Entity set 'Context.Categoria'  is null.");
-            }
-            var categoria = await _context.Categoria.FindAsync(id);
-            if (categoria != null)
-            {
-                categoria.enabled = false;
-                _context.Categoria.Update(categoria);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                if (_context.Categoria == null)
                 {
-                    accion = 3,
-                    contenido = categoria.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
+                    return Problem("Entity set 'Context.Categoria'  is null.");
+                }
+                var categoria = await _context.Categoria.FindAsync(id);
+                if (categoria != null)
+                {
+                    categoria.enabled = false;
+                    _context.Categoria.Update(categoria);
+                    Log log = new Log
+                    {
+                        accion = 3,
+                        contenido = categoria.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         private bool CategoriaExists(int id)
         {
-          return _context.Categoria.Any(e => e.idCategoria == id);
+            return _context.Categoria.Any(e => e.idCategoria == id);
         }
     }
 }

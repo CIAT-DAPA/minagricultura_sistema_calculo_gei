@@ -21,37 +21,51 @@ namespace InventarioGEI.Controllers
         // GET: Combustibles
         public async Task<IActionResult> Index()
         {
-            var context = _context.Combustible.Where(c => c.enabled == true).Include(c => c.actividad).Include(c => c.tipo).Include(c => c.unidad).Include(c => c.usuario);
-            return View(await context.ToListAsync());
+            if (GetAccesRol("Conf"))
+            {
+                var context = _context.Combustible.Where(c => c.enabled == true).Include(c => c.actividad).Include(c => c.tipo).Include(c => c.unidad).Include(c => c.usuario);
+                return View(await context.ToListAsync());
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: Combustibles/Create
         public IActionResult Create()
         {
-            List<TipoActividad> tiposActividad = _context.TipoActividad.Where(t => t.enabled == true).ToList();
-            var listaActividades = new List<SelectListItem>();
-            foreach (var item in tiposActividad)
+            if (GetAccesRol("Conf"))
             {
-                listaActividades.Add(new SelectListItem { Text = item.nombreTipoActividad, Value = item.idTipoActividad.ToString() });
-            }
-            ViewData["idActividad"] = listaActividades;
+                List<TipoActividad> tiposActividad = _context.TipoActividad.Where(t => t.enabled == true).ToList();
+                var listaActividades = new List<SelectListItem>();
+                foreach (var item in tiposActividad)
+                {
+                    listaActividades.Add(new SelectListItem { Text = item.nombreTipoActividad, Value = item.idTipoActividad.ToString() });
+                }
+                ViewData["idActividad"] = listaActividades;
 
-            List<Tipo> tipos = _context.Tipo.ToList();
-            var listaTipos = new List<SelectListItem>();
-            foreach (var item in tipos)
-            {
-                listaTipos.Add(new SelectListItem { Text = item.tipo, Value = item.idTipo.ToString() });
-            }
-            ViewData["idTipo"] = listaTipos;
+                List<Tipo> tipos = _context.Tipo.ToList();
+                var listaTipos = new List<SelectListItem>();
+                foreach (var item in tipos)
+                {
+                    listaTipos.Add(new SelectListItem { Text = item.tipo, Value = item.idTipo.ToString() });
+                }
+                ViewData["idTipo"] = listaTipos;
 
-            List<Unidad> unidades = _context.Unidad.ToList();
-            var listaUnidades = new List<SelectListItem>();
-            foreach (var item in unidades)
-            {
-                listaUnidades.Add(new SelectListItem { Text = item.unidad, Value = item.idUnidad.ToString() });
+                List<Unidad> unidades = _context.Unidad.ToList();
+                var listaUnidades = new List<SelectListItem>();
+                foreach (var item in unidades)
+                {
+                    listaUnidades.Add(new SelectListItem { Text = item.unidad, Value = item.idUnidad.ToString() });
+                }
+                ViewData["idUnidad"] = listaUnidades;
+                return View();
             }
-            ViewData["idUnidad"] = listaUnidades;
-            return View();
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: Combustibles/Create
@@ -59,87 +73,101 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idCombustible,nombreCombustible,idUnidad,idTipo,idActividad")] Combustible combustible)
         {
-            combustible.enabled = true;
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            combustible.idUsuario = user.idUsuario;
-            if (ModelState.IsValid)
+            if (GetAccesRol("Conf"))
             {
-                _context.Add(combustible);
-                Log log = new Log
+                combustible.enabled = true;
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                combustible.idUsuario = user.idUsuario;
+                if (ModelState.IsValid)
                 {
-                    accion = 1,
-                    contenido = combustible.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
+                    _context.Add(combustible);
+                    Log log = new Log
+                    {
+                        accion = 1,
+                        contenido = combustible.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
 
-                await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
-            }
-            List<TipoActividad> tiposActividad = _context.TipoActividad.Where(t => t.enabled == true).ToList();
-            var listaActividades = new List<SelectListItem>();
-            foreach (var item in tiposActividad)
-            {
-                listaActividades.Add(new SelectListItem { Text = item.nombreTipoActividad, Value = item.idTipoActividad.ToString() });
-            }
-            ViewData["idActividad"] = listaActividades;
-            List<Tipo> tipos = _context.Tipo.ToList();
-            var listaTipos = new List<SelectListItem>();
-            foreach (var item in tipos)
-            {
-                listaTipos.Add(new SelectListItem { Text = item.tipo, Value = item.idTipo.ToString() });
-            }
-            ViewData["idTipo"] = listaTipos;
+                    return RedirectToAction(nameof(Index));
+                }
+                List<TipoActividad> tiposActividad = _context.TipoActividad.Where(t => t.enabled == true).ToList();
+                var listaActividades = new List<SelectListItem>();
+                foreach (var item in tiposActividad)
+                {
+                    listaActividades.Add(new SelectListItem { Text = item.nombreTipoActividad, Value = item.idTipoActividad.ToString() });
+                }
+                ViewData["idActividad"] = listaActividades;
+                List<Tipo> tipos = _context.Tipo.ToList();
+                var listaTipos = new List<SelectListItem>();
+                foreach (var item in tipos)
+                {
+                    listaTipos.Add(new SelectListItem { Text = item.tipo, Value = item.idTipo.ToString() });
+                }
+                ViewData["idTipo"] = listaTipos;
 
-            List<Unidad> unidades = _context.Unidad.ToList();
-            var listaUnidades = new List<SelectListItem>();
-            foreach (var item in unidades)
-            {
-                listaUnidades.Add(new SelectListItem { Text = item.unidad, Value = item.idUnidad.ToString() });
+                List<Unidad> unidades = _context.Unidad.ToList();
+                var listaUnidades = new List<SelectListItem>();
+                foreach (var item in unidades)
+                {
+                    listaUnidades.Add(new SelectListItem { Text = item.unidad, Value = item.idUnidad.ToString() });
+                }
+                ViewData["idUnidad"] = listaUnidades;
+                return View(combustible);
             }
-            ViewData["idUnidad"] = listaUnidades; 
-            return View(combustible);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: Combustibles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Combustible == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.Combustible == null)
+                {
+                    return NotFound();
+                }
 
-            var combustible = await _context.Combustible.FindAsync(id);
-            if (combustible == null)
-            {
-                return NotFound();
-            }
+                var combustible = await _context.Combustible.FindAsync(id);
+                if (combustible == null)
+                {
+                    return NotFound();
+                }
 
-            List<TipoActividad> tiposActividad = _context.TipoActividad.Where(t => t.enabled == true).ToList();
-            var listaActividades = new List<SelectListItem>();
-            foreach (var item in tiposActividad)
-            {
-                listaActividades.Add(new SelectListItem { Text = item.nombreTipoActividad, Value = item.idTipoActividad.ToString() });
-            }
-            ViewData["idActividad"] = listaActividades;
-            List<Tipo> tipos = _context.Tipo.ToList();
-            var listaTipos = new List<SelectListItem>();
-            foreach (var item in tipos)
-            {
-                listaTipos.Add(new SelectListItem { Text = item.tipo, Value = item.idTipo.ToString() });
-            }
-            ViewData["idTipo"] = listaTipos;
+                List<TipoActividad> tiposActividad = _context.TipoActividad.Where(t => t.enabled == true).ToList();
+                var listaActividades = new List<SelectListItem>();
+                foreach (var item in tiposActividad)
+                {
+                    listaActividades.Add(new SelectListItem { Text = item.nombreTipoActividad, Value = item.idTipoActividad.ToString() });
+                }
+                ViewData["idActividad"] = listaActividades;
+                List<Tipo> tipos = _context.Tipo.ToList();
+                var listaTipos = new List<SelectListItem>();
+                foreach (var item in tipos)
+                {
+                    listaTipos.Add(new SelectListItem { Text = item.tipo, Value = item.idTipo.ToString() });
+                }
+                ViewData["idTipo"] = listaTipos;
 
-            List<Unidad> unidades = _context.Unidad.ToList();
-            var listaUnidades = new List<SelectListItem>();
-            foreach (var item in unidades)
-            {
-                listaUnidades.Add(new SelectListItem { Text = item.unidad, Value = item.idUnidad.ToString() });
+                List<Unidad> unidades = _context.Unidad.ToList();
+                var listaUnidades = new List<SelectListItem>();
+                foreach (var item in unidades)
+                {
+                    listaUnidades.Add(new SelectListItem { Text = item.unidad, Value = item.idUnidad.ToString() });
+                }
+                ViewData["idUnidad"] = listaUnidades;
+                return View(combustible);
             }
-            ViewData["idUnidad"] = listaUnidades; 
-            return View(combustible);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: Combustibles/Edit/5
@@ -147,89 +175,103 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idCombustible,nombreCombustible,idUnidad,idTipo,idActividad")] Combustible combustible)
         {
-            if (id != combustible.idCombustible)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
-
-            combustible.enabled = true;
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            combustible.idUsuario = user.idUsuario;
-            if (ModelState.IsValid)
-            {
-                try
+                if (id != combustible.idCombustible)
                 {
-                    _context.Update(combustible);
-                    await _context.SaveChangesAsync();
-                    Log log = new Log
-                    {
-                        accion = 2,
-                        contenido = combustible.ToString(),
-                        idUsuario = user.idUsuario,
-                        fechaAccion = DateTime.UtcNow
-                    };
-                    _context.Log.Add(log);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                combustible.enabled = true;
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                combustible.idUsuario = user.idUsuario;
+                if (ModelState.IsValid)
                 {
-                    if (!CombustibleExists(combustible.idCombustible))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(combustible);
+                        await _context.SaveChangesAsync();
+                        Log log = new Log
+                        {
+                            accion = 2,
+                            contenido = combustible.ToString(),
+                            idUsuario = user.idUsuario,
+                            fechaAccion = DateTime.UtcNow
+                        };
+                        _context.Log.Add(log);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!CombustibleExists(combustible.idCombustible))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
-            }
 
-            List<TipoActividad> tiposActividad = _context.TipoActividad.Where(t => t.enabled == true).ToList();
-            var listaActividades = new List<SelectListItem>();
-            foreach (var item in tiposActividad)
-            {
-                listaActividades.Add(new SelectListItem { Text = item.nombreTipoActividad, Value = item.idTipoActividad.ToString() });
-            }
-            ViewData["idActividad"] = listaActividades;
-            List<Tipo> tipos = _context.Tipo.ToList();
-            var listaTipos = new List<SelectListItem>();
-            foreach (var item in tipos)
-            {
-                listaTipos.Add(new SelectListItem { Text = item.tipo, Value = item.idTipo.ToString() });
-            }
-            ViewData["idTipo"] = listaTipos;
+                List<TipoActividad> tiposActividad = _context.TipoActividad.Where(t => t.enabled == true).ToList();
+                var listaActividades = new List<SelectListItem>();
+                foreach (var item in tiposActividad)
+                {
+                    listaActividades.Add(new SelectListItem { Text = item.nombreTipoActividad, Value = item.idTipoActividad.ToString() });
+                }
+                ViewData["idActividad"] = listaActividades;
+                List<Tipo> tipos = _context.Tipo.ToList();
+                var listaTipos = new List<SelectListItem>();
+                foreach (var item in tipos)
+                {
+                    listaTipos.Add(new SelectListItem { Text = item.tipo, Value = item.idTipo.ToString() });
+                }
+                ViewData["idTipo"] = listaTipos;
 
-            List<Unidad> unidades = _context.Unidad.ToList();
-            var listaUnidades = new List<SelectListItem>();
-            foreach (var item in unidades)
-            {
-                listaUnidades.Add(new SelectListItem { Text = item.unidad, Value = item.idUnidad.ToString() });
+                List<Unidad> unidades = _context.Unidad.ToList();
+                var listaUnidades = new List<SelectListItem>();
+                foreach (var item in unidades)
+                {
+                    listaUnidades.Add(new SelectListItem { Text = item.unidad, Value = item.idUnidad.ToString() });
+                }
+                ViewData["idUnidad"] = listaUnidades;
+                return View(combustible);
             }
-            ViewData["idUnidad"] = listaUnidades; 
-            return View(combustible);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: Combustibles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Combustible == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.Combustible == null)
+                {
+                    return NotFound();
+                }
 
-            var combustible = await _context.Combustible
-                .Include(c => c.actividad)
-                .Include(c => c.tipo)
-                .Include(c => c.unidad)
-                .Include(c => c.usuario)
-                .FirstOrDefaultAsync(m => m.idCombustible == id);
-            if (combustible == null)
+                var combustible = await _context.Combustible
+                    .Include(c => c.actividad)
+                    .Include(c => c.tipo)
+                    .Include(c => c.unidad)
+                    .Include(c => c.usuario)
+                    .FirstOrDefaultAsync(m => m.idCombustible == id);
+                if (combustible == null)
+                {
+                    return NotFound();
+                }
+
+                return View(combustible);
+            }
+            else
             {
-                return NotFound();
+                return RedirectToAction("AccesDenied", "Home");
             }
-
-            return View(combustible);
         }
 
         // POST: Combustibles/Delete/5
@@ -237,34 +279,41 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            if (_context.Combustible == null)
+            if (GetAccesRol("Conf"))
             {
-                return Problem("Entity set 'Context.Combustible'  is null.");
-            }
-            var combustible = await _context.Combustible.FindAsync(id);
-            if (combustible != null)
-            {
-                combustible.enabled = false;
-                _context.Combustible.Update(combustible);
-
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                if (_context.Combustible == null)
                 {
-                    accion = 3,
-                    contenido = combustible.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
+                    return Problem("Entity set 'Context.Combustible'  is null.");
+                }
+                var combustible = await _context.Combustible.FindAsync(id);
+                if (combustible != null)
+                {
+                    combustible.enabled = false;
+                    _context.Combustible.Update(combustible);
+
+                    Log log = new Log
+                    {
+                        accion = 3,
+                        contenido = combustible.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         private bool CombustibleExists(int id)
         {
-          return _context.Combustible.Any(e => e.idCombustible == id);
+            return _context.Combustible.Any(e => e.idCombustible == id);
         }
     }
 }

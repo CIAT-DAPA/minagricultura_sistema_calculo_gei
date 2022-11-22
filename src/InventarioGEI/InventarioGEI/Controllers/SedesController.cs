@@ -24,19 +24,27 @@ namespace InventarioGEI.Controllers
         //[Authorize("rol-only")]
         public async Task<IActionResult> Index(string? filter)
         {
-            ViewBag.filter = new SelectList(_context.Departamento, "codigoDepartamento", "nombreDepartamento");
-
-            var sedes = new Object();
-
-            if (!String.IsNullOrEmpty(filter))
+            if (GetAccesRol("Sede"))
             {
-                sedes = await _context.Sede.Include("municipio").Include("municipio.departamento").Where(s => s.municipio.departamento.codigoDepartamento == Int32.Parse(filter)).Where(s => s.enabled == true).ToListAsync(); 
-            } else
-            {
-                sedes = await _context.Sede.Include("municipio").Include("municipio.departamento").Where(s => s.enabled == true).ToListAsync();
+                ViewBag.filter = new SelectList(_context.Departamento, "codigoDepartamento", "nombreDepartamento");
+
+                var sedes = new Object();
+
+                if (!String.IsNullOrEmpty(filter))
+                {
+                    sedes = await _context.Sede.Include("municipio").Include("municipio.departamento").Where(s => s.municipio.departamento.codigoDepartamento == Int32.Parse(filter)).Where(s => s.enabled == true).ToListAsync();
+                }
+                else
+                {
+                    sedes = await _context.Sede.Include("municipio").Include("municipio.departamento").Where(s => s.enabled == true).ToListAsync();
+                }
+
+                return View(sedes);
             }
-
-            return View(sedes);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: Sedes/Create
@@ -73,34 +81,41 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idSede,nombreSede,direccion,idUsuario,codMunicipio")] Sede sede)
         {
-            try
+            if (GetAccesRol("Sede"))
             {
-                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-                sede.enabled = true;
-                sede.idUsuario = user.idUsuario;
-                if (ModelState.IsValid)
+                try
                 {
-                    _context.Sede.Add(sede);
-                    await _context.SaveChangesAsync();
-                    Log log = new Log
+                    Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                    sede.enabled = true;
+                    sede.idUsuario = user.idUsuario;
+                    if (ModelState.IsValid)
                     {
-                        accion = 1,
-                        contenido = sede.ToString(),
-                        idUsuario = user.idUsuario,
-                        fechaAccion = DateTime.UtcNow
-                    };
-                    _context.Log.Add(log);
-                    return RedirectToAction(nameof(Index));
+                        _context.Sede.Add(sede);
+                        await _context.SaveChangesAsync();
+                        Log log = new Log
+                        {
+                            accion = 1,
+                            contenido = sede.ToString(),
+                            idUsuario = user.idUsuario,
+                            fechaAccion = DateTime.UtcNow
+                        };
+                        _context.Log.Add(log);
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
-            }
-            catch (DataException e)
-            {
-                Console.WriteLine("Exception information: {0}", e); ;
+                catch (DataException e)
+                {
+                    Console.WriteLine("Exception information: {0}", e); ;
+                    ModelState.AddModelError("", "No se pueden guardar los cambios. Inténtelo de nuevo y, si el problema persiste, consulte al administrador del sistema.");
+                }
                 ModelState.AddModelError("", "No se pueden guardar los cambios. Inténtelo de nuevo y, si el problema persiste, consulte al administrador del sistema.");
+                ViewBag.departamentos = new SelectList(_context.Departamento, "codigoDepartamento", "nombreDepartamento");
+                return View(sede);
             }
-            ModelState.AddModelError("", "No se pueden guardar los cambios. Inténtelo de nuevo y, si el problema persiste, consulte al administrador del sistema.");
-            ViewBag.departamentos = new SelectList(_context.Departamento, "codigoDepartamento", "nombreDepartamento");
-            return View(sede);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: Sedes/Edit/5
@@ -120,7 +135,7 @@ namespace InventarioGEI.Controllers
                     return NotFound();
                 }
                 ViewBag.departamentos = new SelectList(_context.Departamento, "codigoDepartamento", "nombreDepartamento");
-                ViewBag.municipios = new SelectList(_context.Municipio.Where(m => m.codDepartamento == sede.municipio.codDepartamento ), "codigoMunicipio", "nombreMunicipio");
+                ViewBag.municipios = new SelectList(_context.Municipio.Where(m => m.codDepartamento == sede.municipio.codDepartamento), "codigoMunicipio", "nombreMunicipio");
                 return View(sede);
             }
             else
@@ -136,52 +151,65 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idSede,nombreSede,direccion,idUsuario,codMunicipio")] Sede sede)
         {
-            
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            sede.enabled = true;
-            sede.idUsuario = user.idUsuario;
-            sede.idSede = id;
-            if (ModelState.IsValid)
+            if (GetAccesRol("Sede"))
             {
-                try
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                sede.enabled = true;
+                sede.idUsuario = user.idUsuario;
+                sede.idSede = id;
+                if (ModelState.IsValid)
                 {
-                    _context.Update(sede);
-                    await _context.SaveChangesAsync();
-                    Log log = new Log
+                    try
                     {
-                        accion = 2,
-                        contenido = sede.ToString(),
-                        idUsuario = user.idUsuario,
-                        fechaAccion = DateTime.UtcNow
-                    };
-                    _context.Log.Add(log);
-                    await _context.SaveChangesAsync();
+                        _context.Update(sede);
+                        await _context.SaveChangesAsync();
+                        Log log = new Log
+                        {
+                            accion = 2,
+                            contenido = sede.ToString(),
+                            idUsuario = user.idUsuario,
+                            fechaAccion = DateTime.UtcNow
+                        };
+                        _context.Log.Add(log);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+
+                    }
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    
-                }
-                return RedirectToAction(nameof(Index));
+                return View(sede);
             }
-            return View(sede);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: Sedes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Sede == null)
+            if (GetAccesRol("Sede"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.Sede == null)
+                {
+                    return NotFound();
+                }
 
-            var sede = await _context.Sede.Include("municipio").Include("municipio.departamento")
-                .FirstOrDefaultAsync(m => m.idSede == id);
-            if (sede == null)
+                var sede = await _context.Sede.Include("municipio").Include("municipio.departamento")
+                    .FirstOrDefaultAsync(m => m.idSede == id);
+                if (sede == null)
+                {
+                    return NotFound();
+                }
+
+                return View(sede);
+            }
+            else
             {
-                return NotFound();
+                return RedirectToAction("AccesDenied", "Home");
             }
-
-            return View(sede);
         }
 
         // POST: Sedes/Delete/5
@@ -189,35 +217,42 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            if (_context.Sede == null)
+            if (GetAccesRol("Sede"))
             {
-                return Problem("Entity set 'Context.Sede'  is null.");
-            }
-            var sede = await _context.Sede.FindAsync(id);
-            if (sede != null)
-            {
-                sede.enabled = false;
-                _context.Sede.Update(sede);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                if (_context.Sede == null)
                 {
-                    accion = 3,
-                    contenido = sede.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
-            }
+                    return Problem("Entity set 'Context.Sede'  is null.");
+                }
+                var sede = await _context.Sede.FindAsync(id);
+                if (sede != null)
+                {
+                    sede.enabled = false;
+                    _context.Sede.Update(sede);
+                    Log log = new Log
+                    {
+                        accion = 3,
+                        contenido = sede.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         private bool SedeExists(int id)
         {
             return _context.Sede.Any(e => e.idSede == id);
         }
-    
+
 
     }
 }

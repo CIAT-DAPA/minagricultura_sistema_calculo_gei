@@ -21,14 +21,28 @@ namespace InventarioGEI.Controllers
         // GET: TipoActividads
         public async Task<IActionResult> Index()
         {
-            var context = _context.TipoActividad.Where(t => t.enabled == true).Include(t => t.usuario);
-            return View(await context.ToListAsync());
+            if (GetAccesRol("Conf"))
+            {
+                var context = _context.TipoActividad.Where(t => t.enabled == true).Include(t => t.usuario);
+                return View(await context.ToListAsync());
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: TipoActividads/Create
         public IActionResult Create()
         {
-            return View();
+            if (GetAccesRol("Conf"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: TipoActividads/Create
@@ -38,41 +52,55 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idTipoActividad,nombreTipoActividad")] TipoActividad tipoActividad)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            tipoActividad.enabled = true;
-            tipoActividad.idUsuario = user.idUsuario;
-            if (ModelState.IsValid)
+            if (GetAccesRol("Conf"))
             {
-                _context.Add(tipoActividad);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                tipoActividad.enabled = true;
+                tipoActividad.idUsuario = user.idUsuario;
+                if (ModelState.IsValid)
                 {
-                    accion = 1,
-                    contenido = tipoActividad.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    _context.Add(tipoActividad);
+                    Log log = new Log
+                    {
+                        accion = 1,
+                        contenido = tipoActividad.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", tipoActividad.idUsuario);
+                return View(tipoActividad);
             }
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", tipoActividad.idUsuario);
-            return View(tipoActividad);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: TipoActividads/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.TipoActividad == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.TipoActividad == null)
+                {
+                    return NotFound();
+                }
 
-            var tipoActividad = await _context.TipoActividad.FindAsync(id);
-            if (tipoActividad == null)
-            {
-                return NotFound();
+                var tipoActividad = await _context.TipoActividad.FindAsync(id);
+                if (tipoActividad == null)
+                {
+                    return NotFound();
+                }
+                return View(tipoActividad);
             }
-            return View(tipoActividad);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: TipoActividads/Edit/5
@@ -82,63 +110,77 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idTipoActividad,nombreTipoActividad")] TipoActividad tipoActividad)
         {
-            if (id != tipoActividad.idTipoActividad)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
+                if (id != tipoActividad.idTipoActividad)
+                {
+                    return NotFound();
+                }
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                tipoActividad.enabled = true;
+                tipoActividad.idUsuario = user.idUsuario;
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(tipoActividad);
+                        await _context.SaveChangesAsync();
+                        Log log = new Log
+                        {
+                            accion = 2,
+                            contenido = tipoActividad.ToString(),
+                            idUsuario = user.idUsuario,
+                            fechaAccion = DateTime.UtcNow
+                        };
+                        _context.Log.Add(log);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!TipoActividadExists(tipoActividad.idTipoActividad))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", tipoActividad.idUsuario);
+                return View(tipoActividad);
             }
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            tipoActividad.enabled = true;
-            tipoActividad.idUsuario = user.idUsuario;
-            if (ModelState.IsValid)
+            else
             {
-                try
-                {
-                    _context.Update(tipoActividad);
-                    await _context.SaveChangesAsync();
-                    Log log = new Log
-                    {
-                        accion = 2,
-                        contenido = tipoActividad.ToString(),
-                        idUsuario = user.idUsuario,
-                        fechaAccion = DateTime.UtcNow
-                    };
-                    _context.Log.Add(log);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TipoActividadExists(tipoActividad.idTipoActividad))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("AccesDenied", "Home");
             }
-            ViewData["idUsuario"] = new SelectList(_context.Usuario, "idUsuario", "email", tipoActividad.idUsuario);
-            return View(tipoActividad);
         }
 
         // GET: TipoActividads/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.TipoActividad == null)
+            if (GetAccesRol("Conf"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.TipoActividad == null)
+                {
+                    return NotFound();
+                }
 
-            var tipoActividad = await _context.TipoActividad
-                .Include(t => t.usuario)
-                .FirstOrDefaultAsync(m => m.idTipoActividad == id);
-            if (tipoActividad == null)
+                var tipoActividad = await _context.TipoActividad
+                    .Include(t => t.usuario)
+                    .FirstOrDefaultAsync(m => m.idTipoActividad == id);
+                if (tipoActividad == null)
+                {
+                    return NotFound();
+                }
+
+                return View(tipoActividad);
+            }
+            else
             {
-                return NotFound();
+                return RedirectToAction("AccesDenied", "Home");
             }
-
-            return View(tipoActividad);
         }
 
         // POST: TipoActividads/Delete/5
@@ -146,33 +188,40 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
-            if (_context.TipoActividad == null)
+            if (GetAccesRol("Conf"))
             {
-                return Problem("Entity set 'Context.TipoActividad'  is null.");
-            }
-            var tipoActividad = await _context.TipoActividad.FindAsync(id);
-            if (tipoActividad != null)
-            {
-                tipoActividad.enabled = false;
-                _context.TipoActividad.Update(tipoActividad);
-                Log log = new Log
+                Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+                if (_context.TipoActividad == null)
                 {
-                    accion = 3,
-                    contenido = tipoActividad.ToString(),
-                    idUsuario = user.idUsuario,
-                    fechaAccion = DateTime.UtcNow
-                };
-                _context.Log.Add(log);
+                    return Problem("Entity set 'Context.TipoActividad'  is null.");
+                }
+                var tipoActividad = await _context.TipoActividad.FindAsync(id);
+                if (tipoActividad != null)
+                {
+                    tipoActividad.enabled = false;
+                    _context.TipoActividad.Update(tipoActividad);
+                    Log log = new Log
+                    {
+                        accion = 3,
+                        contenido = tipoActividad.ToString(),
+                        idUsuario = user.idUsuario,
+                        fechaAccion = DateTime.UtcNow
+                    };
+                    _context.Log.Add(log);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         private bool TipoActividadExists(int id)
         {
-          return _context.TipoActividad.Any(e => e.idTipoActividad == id);
+            return _context.TipoActividad.Any(e => e.idTipoActividad == id);
         }
     }
 }
