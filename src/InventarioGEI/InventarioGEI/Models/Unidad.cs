@@ -8,7 +8,7 @@ namespace InventarioGEI.Models
     {
         [Key]
         [Column("idunidad")]
-        [Display(Name = "Id de la Unidad")]
+        [Display(Name = "Id de la unidad")]
         public int idUnidad { get; set; }
         [Column("unidad")]
         [Display(Name = "Unidad")]

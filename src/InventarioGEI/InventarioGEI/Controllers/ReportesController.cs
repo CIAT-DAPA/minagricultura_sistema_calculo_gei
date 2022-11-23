@@ -21,7 +21,13 @@ namespace InventarioGEI.Controllers
         // GET: Reportes
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Reporte.ToListAsync());
+            Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
+            Rol rolAsig = _context.Rol.FirstOrDefault(r => r.idRol == user.idRol);
+            if (rolAsig.permisoVisualizacion)
+            {
+                ViewData["Edit"] = "si";
+            }
+            return View(await _context.Reporte.ToListAsync());
         }
 
         // GET: Reportes/Details/5
@@ -45,7 +51,15 @@ namespace InventarioGEI.Controllers
         // GET: Reportes/Create
         public IActionResult Create()
         {
-            return View();
+            if (GetAccesRol("Visualizacion"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
+
         }
 
         // POST: Reportes/Create
@@ -55,17 +69,25 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idReporte,nombreReporte,link")] Reporte reporte)
         {
-            if (ModelState.IsValid)
+            if (GetAccesRol("Visualizacion"))
             {
-                _context.Add(reporte);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(reporte);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(reporte);
             }
-            return View(reporte);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         public async Task<IActionResult> Visualizar(int? id)
         {
+
             if (id == null || _context.Reporte == null)
             {
                 return NotFound();
@@ -82,17 +104,24 @@ namespace InventarioGEI.Controllers
         // GET: Reportes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Reporte == null)
+            if (GetAccesRol("Visualizacion"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.Reporte == null)
+                {
+                    return NotFound();
+                }
 
-            var reporte = await _context.Reporte.FindAsync(id);
-            if (reporte == null)
-            {
-                return NotFound();
+                var reporte = await _context.Reporte.FindAsync(id);
+                if (reporte == null)
+                {
+                    return NotFound();
+                }
+                return View(reporte);
             }
-            return View(reporte);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // POST: Reportes/Edit/5
@@ -102,50 +131,64 @@ namespace InventarioGEI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idReporte,nombreReporte,link")] Reporte reporte)
         {
-            if (id != reporte.idReporte)
+            if (GetAccesRol("Visualizacion"))
             {
-                return NotFound();
-            }
+                if (id != reporte.idReporte)
+                {
+                    return NotFound();
+                }
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(reporte);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReporteExists(reporte.idReporte))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(reporte);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!ReporteExists(reporte.idReporte))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(reporte);
             }
-            return View(reporte);
+            else
+            {
+                return RedirectToAction("AccesDenied", "Home");
+            }
         }
 
         // GET: Reportes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Reporte == null)
+            if (GetAccesRol("Visualizacion"))
             {
-                return NotFound();
-            }
+                if (id == null || _context.Reporte == null)
+                {
+                    return NotFound();
+                }
 
-            var reporte = await _context.Reporte
-                .FirstOrDefaultAsync(m => m.idReporte == id);
-            if (reporte == null)
+                var reporte = await _context.Reporte
+                    .FirstOrDefaultAsync(m => m.idReporte == id);
+                if (reporte == null)
+                {
+                    return NotFound();
+                }
+
+                return View(reporte);
+            }
+            else
             {
-                return NotFound();
+                return RedirectToAction("AccesDenied", "Home");
             }
-
-            return View(reporte);
         }
 
         // POST: Reportes/Delete/5
@@ -162,14 +205,14 @@ namespace InventarioGEI.Controllers
             {
                 _context.Reporte.Remove(reporte);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ReporteExists(int id)
         {
-          return _context.Reporte.Any(e => e.idReporte == id);
+            return _context.Reporte.Any(e => e.idReporte == id);
         }
     }
 }

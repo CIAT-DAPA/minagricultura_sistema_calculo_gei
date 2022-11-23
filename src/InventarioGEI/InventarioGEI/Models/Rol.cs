@@ -24,7 +24,7 @@ namespace InventarioGEI.Models
         public bool permisoSede { get; set; }
 
         [Column("moduloConfiguracion")]
-        [Display(Name = "Permiso de configuracion")]
+        [Display(Name = "Permiso de configuración")]
         public bool permisoConfiguracion { get; set; }
 
         [Column("moduloRegistro")]
@@ -32,7 +32,7 @@ namespace InventarioGEI.Models
         public bool permisoRegistro { get; set; }
 
         [Column("moduloVisualizacion")]
-        [Display(Name = "Permiso de visualizacion")]
+        [Display(Name = "Permiso de CRUD de reportes")]
         public bool permisoVisualizacion { get; set; }
 
         [Column("enabled")]

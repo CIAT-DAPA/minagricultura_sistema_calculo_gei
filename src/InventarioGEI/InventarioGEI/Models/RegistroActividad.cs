@@ -24,10 +24,10 @@ namespace InventarioGEI.Models
         public bool enabled { get; set; }
 
         [Column("idconfiguracion")]
-        [Display(Name = "Configuracion")]
+        [Display(Name = "Configuración")]
         public int idConfiguracion { get; set; }
         [ForeignKey("idConfiguracion")]
-        [Display(Name = "Configuracion")]
+        [Display(Name = "Configuración")]
         public ConfiguracionActividad? configuracion { get; set; }
         [Column("idusuario")]
         [Display(Name = "Usuario")]

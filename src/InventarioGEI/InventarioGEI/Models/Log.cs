@@ -11,7 +11,7 @@ namespace InventarioGEI.Models
         [Display(Name = "id")]
         public int idLog { get; set; }
         [Column("accion")]
-        [Display(Name = "Accion")]
+        [Display(Name = "Acción")]
         public int accion { get; set; }
         [Column("contenido")]
         [Display(Name = "Contenido")]

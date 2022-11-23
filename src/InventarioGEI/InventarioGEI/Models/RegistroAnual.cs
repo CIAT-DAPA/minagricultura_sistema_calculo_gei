@@ -11,7 +11,7 @@ namespace InventarioGEI.Models
         [Display(Name = "Id")]
         public int idRegistroAnual { get; set; }
         [Column("fecharegistro")]
-        [Display(Name = "Fecha del Cierre")]
+        [Display(Name = "Fecha del cierre")]
         public DateTime fechaRegistro { get; set; }
         [Column("año")]
         [Display(Name = "Año")]

@@ -11,7 +11,7 @@ namespace InventarioGEI.Models
         [Display(Name = "Id de tipo de actividad")]
         public int idTipoActividad { get; set; }
         [Column("nombretipoactividad")]
-        [Display(Name = "Tipo de Actividad")]
+        [Display(Name = "Tipo de actividad")]
         [Required(ErrorMessage = "Es necesario que el tipo de actividad tenga un nombre")]
         public string nombreTipoActividad { get; set; }
         [Column("enabled")]

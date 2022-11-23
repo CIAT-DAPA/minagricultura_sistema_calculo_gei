@@ -17,24 +17,24 @@ namespace InventarioGEI.Models
         [Display(Name = "Emisión GEI equivalente")]
         public double emisionGEIEqui { get; set; }
         [Column("factorEmision")]
-        [Display(Name = "Factor de Emisión")]
+        [Display(Name = "Factor de emisión")]
         public double factorEmision { get; set; }
         [Column("potencialcalentamientoglobal")]
-        [Display(Name = "Potencial de Calentamiento Global")]
+        [Display(Name = "Potencial de calentamiento global")]
         public double PCG { get; set; }
 
 
         [Column("idfe")]
-        [Display(Name = "Factor de Emisión Modelo")]
+        [Display(Name = "Factor de emisión modelo")]
         public int idFE { get; set; }
         [ForeignKey("idFE")]
-        [Display(Name = "Factor de Emisión Modelo")]
+        [Display(Name = "Factor de emisión modelo")]
         public FactorEmision? factorEmisionModel { get; set; }
         [Column("idregistroanual")]
-        [Display(Name = "Registro Anual")]
+        [Display(Name = "Registro anual")]
         public int idRegistroAnual { get; set; }
         [ForeignKey("idRegistroAnual")]
-        [Display(Name = "Registro Anual")]
+        [Display(Name = "Registro anual")]
         public RegistroAnual? registroAnual { get; set; }
     }
 }

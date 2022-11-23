@@ -8,7 +8,7 @@ namespace InventarioGEI.Models
     {
         [Key]
         [Column("codigodepartamento")]
-        [Display(Name = "Codigo")]
+        [Display(Name = "Código")]
         public int codigoDepartamento { get; set; }
 
         [Column("nombredepartamento")]

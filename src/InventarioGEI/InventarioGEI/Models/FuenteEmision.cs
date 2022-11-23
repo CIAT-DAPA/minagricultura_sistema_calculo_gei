@@ -9,7 +9,7 @@ namespace InventarioGEI.Models
     {
         [Key]
         [Column("idfuenteemision")]
-        [Display(Name = "Id Fuente de emisión")]
+        [Display(Name = "Id fuente de emisión")]
         public int idFuenteEmision { get; set; }
         [Column("nombrefuenteemision")]
         [Display(Name = "Fuente de emisión")]

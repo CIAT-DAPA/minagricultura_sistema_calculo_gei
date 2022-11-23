@@ -30,7 +30,7 @@ namespace InventarioGEI.Models
         public virtual Usuario? usuCreador { get; set; }
 
         [Column("codigomunicipio")]
-        [Display(Name = "Codigo Municipio")]
+        [Display(Name = "Codigo municipio")]
         public int codMunicipio { get; set; }
         [ForeignKey("codMunicipio")]
         public virtual Municipio? municipio { get; set; }

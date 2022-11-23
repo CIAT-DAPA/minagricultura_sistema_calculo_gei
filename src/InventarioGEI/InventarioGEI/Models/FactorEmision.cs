@@ -8,10 +8,10 @@ namespace InventarioGEI.Models
     {
         [Key]
         [Column("idfe")]
-        [Display(Name ="Id del Factor de Emisión")]
+        [Display(Name ="Id del factor de emisión")]
         public int idFE { get; set; }
         [Column("factoremision")]
-        [Display(Name = "Factor de Emisión")]
+        [Display(Name = "Factor de emisión")]
         [Required(ErrorMessage = "Es necesario que el factor de emisión")]
         public double factorEmision { get; set; }
         [Column("potencialcalentamientoglobal")]
@@ -43,10 +43,10 @@ namespace InventarioGEI.Models
         [Display(Name = "Última modificación hecha por")]
         public Usuario? usuario { get; set; }
         [Column("idconfiguracion")]
-        [Display(Name = "Configuracion")]
+        [Display(Name = "Configuración")]
         public int idConfiguracion { get; set; }
         [ForeignKey("idConfiguracion")]
-        [Display(Name = "Configuracion")]
+        [Display(Name = "Configuración")]
         public ConfiguracionActividad? configuracion { get; set; }
         public override string ToString()
         {

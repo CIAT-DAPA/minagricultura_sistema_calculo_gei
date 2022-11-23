@@ -8,7 +8,7 @@ namespace InventarioGEI.Models
     {
         [Key]
         [Column("codigomunicipio")]
-        [Display(Name = "Codigo")]
+        [Display(Name = "Código")]
         public int codigoMunicipio { get; set; }
 
         [Column("nombremunicipio")]
@@ -17,7 +17,7 @@ namespace InventarioGEI.Models
 
         //foreign key
         [Column("codigodepartamento")]
-        [Display(Name = "Codigo Departamento")]
+        [Display(Name = "Código departamento")]
         public int codDepartamento { get; set; }
         [ForeignKey("codDepartamento")]
         public virtual Departamento departamento { get; set; }
