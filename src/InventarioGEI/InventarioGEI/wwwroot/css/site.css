@@ -31,8 +31,8 @@ body {
     grid-template-rows: 40px 1fr 40px;
 }
 
-.page{
-        /* flex: 1 1 calc(100vh - 250px); */
+.page {
+    /* flex: 1 1 calc(100vh - 250px); */
 }
 
 /*main side bar*/
@@ -122,15 +122,15 @@ li > a {
     position: relative;
 }
 
-.selectdiv:after {
-    content: '\f078';
-    font: normal normal normal 17px/1 FontAwesome;
-    color: #0ebeff;
-    top: 10px;
-    right: 5px;
-    position: absolute;
-    pointer-events: none;
-}
+    .selectdiv:after {
+        content: '\f078';
+        font: normal normal normal 17px/1 FontAwesome;
+        color: #0ebeff;
+        top: 10px;
+        right: 5px;
+        position: absolute;
+        pointer-events: none;
+    }
 
 .form-select:focus {
     box-shadow: 0px 11px 8px 0px rgb(181 181 181 / 25%);
@@ -175,7 +175,7 @@ dl {
 
 .container-main {
     /* height: 100%; */
-    height: calc(100vh * 0.7);
+    height: calc(100vh * 0.55);
     overflow-x: auto;
     box-shadow: 0px 6px 18px 0px rgb(0 0 0 / 6%);
 }
@@ -295,7 +295,7 @@ dl {
 
 .show-nav {
     left: 0;
-    width: auto 
+    width: auto
 }
 
 .content-pd {
@@ -319,6 +319,7 @@ dl {
     z-index: 1;
     top: 58px;
 }
+
 @media screen and (min-width: 768px) {
     .content {
         width: inherit;
@@ -331,11 +332,50 @@ dl {
     }
 
     .show-nav {
-          width: calc(var(--nav-width) + 190px)
+        width: calc(var(--nav-width) + 190px)
     }
 
     .content-pd {
         padding-left: calc(var(--nav-width) + 190px)
     }
-    
 }
+
+/*------------------------Animations----------------------------------------*/
+
+
+.LoaderBalls {
+    width: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.LoaderBalls__item {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #109CF1;
+}
+
+    .LoaderBalls__item:nth-child(1) {
+        animation: bouncing 0.4s alternate infinite cubic-bezier(0.6, 0.05, 0.15, 0.95);
+    }
+
+    .LoaderBalls__item:nth-child(2) {
+        animation: bouncing 0.4s 0.1s alternate infinite cubic-bezier(0.6, 0.05, 0.15, 0.95) backwards;
+    }
+
+    .LoaderBalls__item:nth-child(3) {
+        animation: bouncing 0.4s 0.2s alternate infinite cubic-bezier(0.6, 0.05, 0.15, 0.95) backwards;
+    }
+
+@keyframes bouncing {
+    0% {
+        transform: translate3d(0, 10px, 0) scale(1.2, 0.85);
+    }
+
+    100% {
+        transform: translate3d(0, -20px, 0) scale(0.9, 1.1);
+    }
+}
+ 

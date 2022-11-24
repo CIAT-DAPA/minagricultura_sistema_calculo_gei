@@ -26,8 +26,13 @@
                     <h5 class="modal-title" id="staticBackdropLabel">Guardando tus cambios</h5>
                 </div>
                 <div class="modal-body d-flex justify-content-center py-5">
-                    <div class="spinner-border text-primary" role="status" id="loadingModal">
+                    @*<div class="spinner-border text-primary" role="status" id="loadingModal">
                         <span class="visually-hidden">Loading...</span>
+                    </div>*@
+                    <div class="LoaderBalls">
+                        <div class="LoaderBalls__item"></div>
+                        <div class="LoaderBalls__item"></div>
+                        <div class="LoaderBalls__item"></div>
                     </div>
                 </div>
             </div>
@@ -73,8 +78,8 @@
         <span class="text-danger d-none" id="categoriaVerification"></span>
     </div>
 </div>
-<div class="card mb-3 container-main" style="height: 70%">
-    <div class="spinner-border text-primary d-none" role="status" style="position: fixed; top: 50%; left: 55%;"
+<div class="card mb-3 container-main">
+    <div class="spinner-border text-primary d-none" role="status" style="position: absolute; top: 30%; left: 55%;"
          id="loading">
         <span class="visually-hidden">Loading...</span>
     </div>

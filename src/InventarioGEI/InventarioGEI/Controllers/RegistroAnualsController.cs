@@ -23,7 +23,7 @@ namespace InventarioGEI.Controllers
         {
             if (GetAccesRol("Reg"))
             {
-                var context = _context.RegistroAnual.Include(r => r.sede).Include(r => r.user).OrderByDescending(r => r.estado).ThenBy(r => r.sede.nombreSede);
+                var context = _context.RegistroAnual.Include(r => r.sede).Include(r => r.user).OrderByDescending(r => r.estado).ThenBy(r => r.sede.nombreSede).ThenByDescending(r  => r.año);
                 return View(await context.ToListAsync());
             }
             else
