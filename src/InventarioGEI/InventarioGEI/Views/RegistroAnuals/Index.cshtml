@@ -24,44 +24,68 @@
                 <th class="th-head">
                     @Html.DisplayNameFor(model => model.fechaRegistro)
                 </th>
-                <th class="th-head">
-                    @Html.DisplayNameFor(model => model.user)
-                </th>
+
                 <th class="th-head"></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr class="tr-body">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.sede.nombreSede)
-                        @if (item.estado)
-                        {
-                            <span class="badge rounded-pill bg-success">Habilitado</span>
-                        }
-                        else
-                        {
-                            <span class="badge rounded-pill bg-danger">Deshabilitado</span>
-                        }
+                if (item.estado)
+                {
+                    <tr class="tr-body">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.sede.nombreSede)
 
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.año)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fechaRegistro)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.user.email)
-                    </td>
-                    <td>
-                        <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idRegistroAnual" style="text-decoration: none; font-weight: 600; color: white;">
-                            Deshabilitar
-                        </a>
-                    </td>
-                </tr>
+                            <span class="badge rounded-pill bg-success">Habilitado</span>
+
+                            <br>
+                            <small class="text-muted">Creador por: @Html.DisplayFor(modelItem => item.user.email)</small>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.año)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.fechaRegistro)
+                        </td>
+
+                        <td>
+                            <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idRegistroAnual" style="text-decoration: none; font-weight: 600; color: white;">
+                                Deshabilitar
+                            </a>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr class="tr-body d-none tableHidden">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.sede.nombreSede)
+
+                            <span class="badge rounded-pill bg-danger">Deshabilitado</span>
+
+                            <br>
+                            <small class="text-muted">Creador por: @Html.DisplayFor(modelItem => item.user.email)</small>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.año)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.fechaRegistro)
+                        </td>
+
+
+                    </tr>
+                }
+
             }
+            <tr class="tr-body">
+                <td colspan="100%">
+                    <a class="text-reset" id="detail" type="button"><p class="text-muted">Ver todos los cierres</p></a>
+                    <a class="text-reset  d-none" id="detailHide" type="button"><p class="text-muted">Ver menos</p></a>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
+

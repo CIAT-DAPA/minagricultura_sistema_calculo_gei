@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      #- "./volume/postgres:/var/lib/postgresql/data"
+      - ./scriptsDB/dbSchema.sql:/docker-entrypoint-initdb.d/dbSchema.sql
+      - ./scriptsDB/dbData.sql:/docker-entrypoint-initdb.d/dbData.sql   
+    env_file:
+      - ./scriptsDB/.env
+    # environment:
+    #   DATABASE_HOST: 127.0.0.1
+    #   POSTGRES_USER: root
+    #   POSTGRES_PASSWORD: root 
+    #   POSTGRES_DB: root
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - 80:80
+    volumes:
+      - "./volume/pgadmin:/var/lib/pgadmin"
+    depends_on:
+      - postgres
+  
+  inventario:
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - 5000:5000
+      - 5001:5001
+    env_file:
+      - .env
+
+# volumes:
+#   postgres-data: 
+#     - C:\volumeDocker2\postgres
+#   pgadmin-data: 
+#     - C:\volumeDocker2\pgadmin

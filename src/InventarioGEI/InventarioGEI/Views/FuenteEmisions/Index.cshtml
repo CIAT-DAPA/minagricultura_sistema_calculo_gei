@@ -21,9 +21,7 @@
                 <th class="th-head">
                     @Html.DisplayNameFor(model => model.nombreFuenteEmision)
                 </th>
-                <th class="th-head">
-                    @Html.DisplayNameFor(model => model.usuario)
-                </th>
+              
                 <th class="th-head"></th>
                 <th class="th-head"></th>
             </tr>
@@ -34,10 +32,10 @@
                 <tr class="tr-body">
                     <td class="td-body-main">
                         @Html.DisplayFor(modelItem => item.nombreFuenteEmision)
+                        <br>
+                        <small class="text-muted">Creador por: @Html.DisplayFor(modelItem => item.usuario.email)</small>
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.usuario.email)
-                    </td>
+                  
                     <td>
                         <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idFuenteEmision">
                             Editar
