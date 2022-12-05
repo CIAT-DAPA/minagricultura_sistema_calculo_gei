@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
@@ -20,12 +21,14 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("Sedes")]
         // GET: Sedes
         //[Authorize("rol-only")]
         public async Task<IActionResult> Index(string? filter)
         {
             if (GetAccesRol("Sede"))
             {
+                ViewBag.NavSede = true;
                 ViewBag.filter = new SelectList(_context.Departamento, "codigoDepartamento", "nombreDepartamento");
 
                 var sedes = new Object();
@@ -47,11 +50,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Crear")]
         // GET: Sedes/Create
         public IActionResult Create()
         {
             if (GetAccesRol("Sede"))
             {
+                ViewBag.NavSede = true;
                 ViewBag.departamentos = new SelectList(_context.Departamento, "codigoDepartamento", "nombreDepartamento");
 
                 return View();
@@ -118,11 +123,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Editar")]
         // GET: Sedes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (GetAccesRol("Sede"))
             {
+                ViewBag.NavSede = true;
                 if (id == null || _context.Sede == null)
                 {
                     return NotFound();
@@ -187,11 +194,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Eliminar")]
         // GET: Sedes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetAccesRol("Sede"))
             {
+                ViewBag.NavSede = true;
                 if (id == null || _context.Sede == null)
                 {
                     return NotFound();

@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SmartBreadcrumbs.Attributes;
 using System.Diagnostics;
 using System.Security.Claims;
 
 namespace InventarioGEI.Controllers
 {
+    [DefaultBreadcrumb("Inicio")]
     [AllowAnonymous]
     public class HomeController : Controller
     {
@@ -19,6 +21,12 @@ namespace InventarioGEI.Controllers
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [Breadcrumb("Manual")]
+        public IActionResult Manual()
         {
             return View();
         }

@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using static Azure.Core.HttpHeader;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Win32;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
@@ -22,11 +23,13 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("Registros")]
         // GET: RegistroActividads
         public async Task<IActionResult> Index()
         {
             if (GetAccesRol("Reg"))
             {
+                ViewBag.NavRegAct = true;
                 var context = _context.RegistroActividad.Where(r => r.enabled == true)
                                                     .Include(r => r.configuracion.combustible)
                                                     .Include(r => r.configuracion.combustible.unidad)

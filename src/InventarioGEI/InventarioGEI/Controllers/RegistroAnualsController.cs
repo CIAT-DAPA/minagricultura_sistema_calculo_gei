@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
+    
     public class RegistroAnualsController : AccesController
     {
         private readonly Context _context;
@@ -18,11 +20,13 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("Cierres")]
         // GET: RegistroAnuals
         public async Task<IActionResult> Index()
         {
             if (GetAccesRol("Reg"))
             {
+                ViewBag.NavRegAnu = true;
                 var context = _context.RegistroAnual.Include(r => r.sede).Include(r => r.user).OrderByDescending(r => r.estado).ThenBy(r => r.sede.nombreSede).ThenByDescending(r  => r.año);
                 return View(await context.ToListAsync());
             }
@@ -32,11 +36,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Generar")]
         // GET: RegistroAnuals/Create
         public IActionResult Create()
         {
             if (GetAccesRol("Reg"))
             {
+                ViewBag.NavRegAnu = true;
                 List<Sede> sedes = _context.Sede.Where(s => s.enabled == true).ToList();
                 var listaSedes = new List<SelectListItem>();
                 foreach (var item in sedes)
@@ -260,11 +266,13 @@ namespace InventarioGEI.Controllers
             return result;
         }
 
+        [Breadcrumb("Deshabilitar")]
         // GET: RegistroAnuals/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetAccesRol("Reg"))
             {
+                ViewBag.NavRegAnu = true;
                 if (id == null || _context.RegistroAnual == null)
                 {
                     return NotFound();

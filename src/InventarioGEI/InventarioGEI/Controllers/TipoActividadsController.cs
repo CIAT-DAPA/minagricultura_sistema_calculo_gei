@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
@@ -18,11 +19,13 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("Tipos de actividad")]
         // GET: TipoActividads
         public async Task<IActionResult> Index()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavTip = true;
                 var context = _context.TipoActividad.Where(t => t.enabled == true).Include(t => t.usuario);
                 return View(await context.ToListAsync());
             }
@@ -32,11 +35,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Crear")]
         // GET: TipoActividads/Create
         public IActionResult Create()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavTip = true;
                 return View();
             }
             else
@@ -80,11 +85,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Editar")]
         // GET: TipoActividads/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavTip = true;
                 if (id == null || _context.TipoActividad == null)
                 {
                     return NotFound();
@@ -157,11 +164,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Eliminar")]
         // GET: TipoActividads/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavTip = true;
                 if (id == null || _context.TipoActividad == null)
                 {
                     return NotFound();

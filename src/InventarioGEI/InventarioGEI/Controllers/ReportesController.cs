@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
@@ -18,9 +19,11 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("Reportes")]
         // GET: Reportes
         public async Task<IActionResult> Index()
         {
+            ViewBag.NavRep = true;
             Usuario user = _context.Usuario.FirstOrDefault(u => u.email == User.Identity.Name);
             Rol rolAsig = _context.Rol.FirstOrDefault(r => r.idRol == user.idRol);
             if (rolAsig.permisoVisualizacion)
@@ -30,29 +33,13 @@ namespace InventarioGEI.Controllers
             return View(await _context.Reporte.ToListAsync());
         }
 
-        // GET: Reportes/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Reporte == null)
-            {
-                return NotFound();
-            }
-
-            var reporte = await _context.Reporte
-                .FirstOrDefaultAsync(m => m.idReporte == id);
-            if (reporte == null)
-            {
-                return NotFound();
-            }
-
-            return View(reporte);
-        }
-
+        [Breadcrumb("Crear")]
         // GET: Reportes/Create
         public IActionResult Create()
         {
             if (GetAccesRol("Visualizacion"))
             {
+                ViewBag.NavRep = true;
                 return View();
             }
             else
@@ -85,9 +72,10 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Visualizar")]
         public async Task<IActionResult> Visualizar(int? id)
         {
-
+            ViewBag.NavRep = true;
             if (id == null || _context.Reporte == null)
             {
                 return NotFound();
@@ -101,11 +89,13 @@ namespace InventarioGEI.Controllers
             return View(reporte);
         }
 
+        [Breadcrumb("Editar")]
         // GET: Reportes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (GetAccesRol("Visualizacion"))
             {
+                ViewBag.NavRep = true;
                 if (id == null || _context.Reporte == null)
                 {
                     return NotFound();
@@ -166,11 +156,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Eliminar")]
         // GET: Reportes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetAccesRol("Visualizacion"))
             {
+                ViewBag.NavRep = true;
                 if (id == null || _context.Reporte == null)
                 {
                     return NotFound();

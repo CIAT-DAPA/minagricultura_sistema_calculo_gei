@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
@@ -18,11 +19,13 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("Subcategoría")]
         // GET: Subcategorias
         public async Task<IActionResult> Index()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavSub = true;
                 var context = _context.Subcategoria.Where(s => s.enabled == true).Include(s => s.categoria).Include(s => s.usuario).OrderBy(s => s.categoria.nombreCategoria);
                 return View(await context.ToListAsync());
             }
@@ -32,11 +35,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Crear")]
         // GET: Subcategorias/Create
         public IActionResult Create()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavSub = true;
                 List<Categoria> categorias = _context.Categoria.Where(c => c.enabled == true).Include(c => c.alcance).ToList();
                 var listaCategorias = new List<SelectListItem>();
                 foreach (var item in categorias)
@@ -95,11 +100,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Editar")]
         // GET: Subcategorias/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavSub = true;
                 if (id == null || _context.Subcategoria == null)
                 {
                     return NotFound();
@@ -188,11 +195,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Eliminar")]
         // GET: Subcategorias/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavSub = true;
                 if (id == null || _context.Subcategoria == null)
                 {
                     return NotFound();

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
 using Microsoft.AspNetCore.Authorization;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
@@ -19,11 +20,13 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("Usuarios")]
         // GET: Usuarios
         public async Task<IActionResult> Index()
         {
             if (GetAccesRol("Rol"))
             {
+                ViewBag.NavUsu = true;
                 var context = _context.Usuario.Where(u => u.enabled == true).Include(u => u.rolUsuario);
                 return View(await context.ToListAsync());
             }
@@ -33,11 +36,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Crear")]
         // GET: Usuarios/Create
         public IActionResult Create()
         {
             if (GetAccesRol("Rol"))
             {
+                ViewBag.NavUsu = true;
                 List<Rol> roles = _context.Rol.Where(r => r.enabled == true).ToList();
                 var listaRoles = new List<SelectListItem>();
                 foreach (var item in roles)
@@ -87,12 +92,14 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Editar")]
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
 
             if (GetAccesRol("Rol"))
             {
+                ViewBag.NavUsu = true;
                 if (id == null || _context.Usuario == null)
                 {
                     return NotFound();
@@ -171,11 +178,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Eliminar")]
         // GET: Usuarios/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetAccesRol("Rol"))
             {
+                ViewBag.NavUsu = true;
                 if (id == null || _context.Usuario == null)
                 {
                     return NotFound();

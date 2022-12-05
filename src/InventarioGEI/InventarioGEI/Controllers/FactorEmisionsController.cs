@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
@@ -18,11 +19,13 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("Factores de emisión")]
         // GET: FactorEmisions
         public async Task<IActionResult> Index()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavFac = true;
                 var context = _context.FactorEmision.Where(f => f.enabled == true).Include(f => f.configuracion).Include(f => f.configuracion.combustible).Include(f => f.configuracion.fuenteEmision).Include(f => f.configuracion.subcategoria).Include(f => f.gei).Include(f => f.usuario).Include(f => f.configuracion.combustible.unidad).OrderBy(f => f.configuracion.subcategoria.nombreSubcategoria);
                 return View(await context.ToListAsync());
             }
@@ -32,43 +35,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
-        // GET: FactorEmisions1/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (GetAccesRol("Conf"))
-            {
-                if (id == null || _context.FactorEmision == null)
-                {
-                    return NotFound();
-                }
-
-                var factorEmision = await _context.FactorEmision
-                    .Include(f => f.configuracion)
-                    .Include(f => f.configuracion.subcategoria)
-                    .Include(f => f.configuracion.fuenteEmision)
-                    .Include(f => f.configuracion.combustible)
-                    .Include(f => f.gei)
-                    .Include(f => f.usuario)
-                    .FirstOrDefaultAsync(m => m.idFE == id);
-                ViewData["configuracion"] = factorEmision.configuracion.subcategoria.nombreSubcategoria + " - " + factorEmision.configuracion.fuenteEmision.nombreFuenteEmision + " - " + factorEmision.configuracion.combustible.nombreCombustible;
-                if (factorEmision == null)
-                {
-                    return NotFound();
-                }
-
-                return View(factorEmision);
-            }
-            else
-            {
-                return RedirectToAction("AccesDenied", "Home");
-            }
-        }
-
+        [Breadcrumb("Crear")]
         // GET: FactorEmisions/Create
         public IActionResult Create()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavFac = true;
                 List<ConfiguracionActividad> configuraciones = _context.ConfiguracionActividad.Where(c => c.enabled == true).Include(c => c.subcategoria).Include(c => c.fuenteEmision).Include(c => c.combustible).ToList();
                 var listaConfiguraciones = new List<SelectListItem>();
                 foreach (var item in configuraciones)
@@ -139,11 +112,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Editar")]
         // GET: FactorEmisions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavFac = true;
                 if (id == null || _context.FactorEmision == null)
                 {
                     return NotFound();
@@ -245,11 +220,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Eliminar")]
         // GET: FactorEmisions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavFac = true;
                 if (id == null || _context.FactorEmision == null)
                 {
                     return NotFound();

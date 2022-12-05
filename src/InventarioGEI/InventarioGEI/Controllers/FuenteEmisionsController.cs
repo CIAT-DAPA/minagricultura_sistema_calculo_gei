@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
 using System.Numerics;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
@@ -19,11 +20,13 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("Fuentes de emisión")]
         // GET: FuenteEmisions
         public async Task<IActionResult> Index()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavFue = true;
                 var context = _context.FuenteEmision.Where(f => f.enabled == true).Include(f => f.usuario);
                 return View(await context.ToListAsync());
             }
@@ -33,11 +36,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Crear")]
         // GET: FuenteEmisions/Create
         public IActionResult Create()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavFue = true;
                 return View();
             }
             else
@@ -80,11 +85,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Editar")]
         // GET: FuenteEmisions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavFue = true;
                 if (id == null || _context.FuenteEmision == null)
                 {
                     return NotFound();
@@ -156,11 +163,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Eliminar")]
         // GET: FuenteEmisions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavFue = true;
                 if (id == null || _context.FuenteEmision == null)
                 {
                     return NotFound();

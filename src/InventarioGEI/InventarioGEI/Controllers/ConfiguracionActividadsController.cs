@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
@@ -18,11 +19,13 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("Configuraciones")]
         // GET: ConfiguracionActividads
         public async Task<IActionResult> Index()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavCon = true;
                 var context = _context.ConfiguracionActividad
                                                 .Where(c => c.enabled == true)
                                                 .Include(c => c.combustible)
@@ -38,11 +41,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Crear")]
         // GET: ConfiguracionActividads/Create
         public IActionResult Create()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavCon = true;
                 List<Combustible> combustible = _context.Combustible.Where(c => c.enabled == true).Include(c => c.unidad).ToList();
                 var listaCombustibles = new List<SelectListItem>();
                 foreach (var item in combustible)
@@ -160,11 +165,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Editar")]
         // GET: ConfiguracionActividads/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavCon = true;
                 if (id == null || _context.ConfiguracionActividad == null)
                 {
                     return NotFound();
@@ -312,11 +319,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Eliminar")]
         // GET: ConfiguracionActividads/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavCon = true;
                 if (id == null || _context.ConfiguracionActividad == null)
                 {
                     return NotFound();

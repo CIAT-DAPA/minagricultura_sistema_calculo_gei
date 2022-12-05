@@ -173,6 +173,12 @@ dl {
     margin-right: 12px;
 }
 
+.button-manual {
+    position: absolute;
+    top:2%;
+    left:2%;
+}
+
 .container-main {
     /* height: 100%; */
     height: calc(100vh * 0.55);
@@ -278,9 +284,32 @@ dl {
     width: var(--nav-width);
     height: calc(100vh - 98px);
     background-color: white;
-    padding: .5rem 1rem 0 0;
+    padding: .5rem 0.7rem 0 0;
     transition: .5s;
     z-index: 1
+}
+
+.nav-item {
+    padding: 0px 0px 0px 7px;
+}
+
+.visit {
+    background-color: #e7e7e7;
+    border-bottom: solid 2px;
+    border-radius: 5px;
+}
+
+*::-webkit-scrollbar {
+    width: 4px;
+}
+
+*::-webkit-scrollbar-track {
+    background: white;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #3366CC;
+    border-radius: 20px;
 }
 
 .nav {
@@ -301,23 +330,30 @@ dl {
 .content-pd {
 }
 
-.active {
-    color: var(--white-color)
+.text-manual{
+    padding: 10px 25px;
 }
-
-    .active::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        width: 2px;
-        height: 32px;
-        background-color: var(--white-color)
-    }
+/*.active {
+    color: var(--white-color)
+}*/
+.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 2px;
+    height: 32px;
+    background-color: var(--white-color)
+}
 
 .sidebarCollapse {
     position: absolute;
     z-index: 1;
     top: 58px;
+}
+
+.pills{
+    height:auto;
+    overflow-y:hidden
 }
 
 @media screen and (min-width: 768px) {

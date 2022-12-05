@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
@@ -18,11 +19,13 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("Categorías")]
         // GET: Categorias
         public async Task<IActionResult> Index()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavCat = true;
                 var context = _context.Categoria.Where(c => c.enabled == true).Include(c => c.alcance).Include(c => c.usuarios).OrderBy(c => c.alcance.nombreAlcance);
                 return View(await context.ToListAsync());
             }
@@ -32,11 +35,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Crear")]
         // GET: Categorias/Create
         public IActionResult Create()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavCat = true;
                 List<Alcance> alcances = _context.Alcance.Where(a => a.enabled == true).ToList();
                 var listaAlcances = new List<SelectListItem>();
                 foreach (var item in alcances)
@@ -93,11 +98,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Editar")]
         // GET: Categorias/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavCat = true;
                 if (id == null || _context.Categoria == null)
                 {
                     return NotFound();
@@ -183,11 +190,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Eliminar")]
         // GET: Categorias/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavCat = true;
                 if (id == null || _context.Categoria == null)
                 {
                     return NotFound();

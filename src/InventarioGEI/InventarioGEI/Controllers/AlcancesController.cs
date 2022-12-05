@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
@@ -18,11 +19,13 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("Alcances")]
         // GET: Alcances
         public async Task<IActionResult> Index()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavAlc = true;
                 ViewData["numAlcances"] = _context.Alcance.Where(a => a.enabled == true).Count();
                 var context = _context.Alcance.Where(a => a.enabled == true).Include(a => a.usuario).OrderBy(a => a.nombreAlcance);
                 return View(await context.ToListAsync());
@@ -34,11 +37,13 @@ namespace InventarioGEI.Controllers
 
         }
 
+        [Breadcrumb("Crear")]
         // GET: Alcances/Create
         public IActionResult Create()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavAlc = true;
                 return View();
             }
             else
@@ -82,11 +87,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Editar")]
         // GET: Alcances/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavAlc = true;
                 if (id == null || _context.Alcance == null)
                 {
                     return NotFound();
@@ -160,11 +167,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Eliminar")]
         // GET: Alcances/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavAlc = true;
                 if (id == null || _context.Alcance == null)
                 {
                     return NotFound();

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
@@ -18,11 +19,13 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("Combustibles")]
         // GET: Combustibles
         public async Task<IActionResult> Index()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavCom = true;
                 var context = _context.Combustible.Where(c => c.enabled == true).Include(c => c.actividad).Include(c => c.tipo).Include(c => c.unidad).Include(c => c.usuario);
                 return View(await context.ToListAsync());
             }
@@ -32,11 +35,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Crear")]
         // GET: Combustibles/Create
         public IActionResult Create()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavCom = true;
                 List<TipoActividad> tiposActividad = _context.TipoActividad.Where(t => t.enabled == true).ToList();
                 var listaActividades = new List<SelectListItem>();
                 foreach (var item in tiposActividad)
@@ -124,11 +129,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Editar")]
         // GET: Combustibles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavCom = true;
                 if (id == null || _context.Combustible == null)
                 {
                     return NotFound();
@@ -245,11 +252,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Eliminar")]
         // GET: Combustibles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavCom = true;
                 if (id == null || _context.Combustible == null)
                 {
                     return NotFound();

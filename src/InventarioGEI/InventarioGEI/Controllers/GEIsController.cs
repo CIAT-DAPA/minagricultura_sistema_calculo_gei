@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using InventarioGEI.Models;
+using SmartBreadcrumbs.Attributes;
 
 namespace InventarioGEI.Controllers
 {
@@ -18,9 +19,11 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
 
+        [Breadcrumb("GEI")]
         // GET: GEIs
         public async Task<IActionResult> Index()
         {
+            ViewBag.NavGei = true;
             if (GetAccesRol("Conf"))
             {
                 var context = _context.Gei.Where(g => g.enabled == true).Include(g => g.usuario);
@@ -32,11 +35,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Crear")]
         // GET: GEIs/Create
         public IActionResult Create()
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavGei = true;
                 return View();
             }
             else
@@ -77,11 +82,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Editar")]
         // GET: GEIs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavGei = true;
                 if (id == null || _context.Gei == null)
                 {
                     return NotFound();
@@ -153,11 +160,13 @@ namespace InventarioGEI.Controllers
             }
         }
 
+        [Breadcrumb("Eliminar")]
         // GET: GEIs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetAccesRol("Conf"))
             {
+                ViewBag.NavGei = true;
                 if (id == null || _context.Gei == null)
                 {
                     return NotFound();
