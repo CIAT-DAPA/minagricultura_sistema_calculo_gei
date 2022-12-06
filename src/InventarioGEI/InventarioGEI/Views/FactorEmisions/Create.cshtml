@@ -1,0 +1,95 @@
+﻿@model InventarioGEI.Models.FactorEmision
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="card mb-3 container-main">
+    <div class="card-header">
+        <h5 style="margin-top: 10px;">Crear factor de emisión</h5>
+        <hr />
+    </div>
+
+    <form asp-action="Create" class="form-main">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row form-group">
+            <div class="col-12 col-lg-9">
+                <label asp-for="idConfiguracion" class="control-label"></label>
+                <div class="selectdiv ">
+                    <select asp-for="idConfiguracion" class="form-select input-select" asp-items="ViewBag.idConfiguracion" onchange="selectedCon(this)"></select>
+                </div>
+            </div>
+            <div class="col-12 col-lg-3">
+                <label asp-for="idGei" class="control-label"></label>
+                <div class="selectdiv ">
+                    <select asp-for="idGei" class="form-select input-select" asp-items="ViewBag.idGei" onchange="selectedGEI(this)"></select>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-12 col-lg-6 col-xl-3">
+                <label asp-for="factorEmision" class="control-label col-form-label"></label>
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <input asp-for="factorEmision" type="number" step="any" min="0" class="form-control input-text" placeholder="Ingrese el factor de Emisión" />
+                    </div>
+                    <div class = "col-4 d-flex" >
+                        <p id="unidadGei"></p>
+                        <p id="unidadCom"></p>
+                    </div>
+                </div>
+                
+                <span asp-validation-for="factorEmision" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-3">
+                <label asp-for="PCG" class="control-label col-form-label"></label>
+                <input asp-for="PCG" type="number" step="any" min="0" class="form-control input-text" placeholder="Ingrese el PCG" />
+                <span asp-validation-for="PCG" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-3">
+                <label asp-for="incertidumbreMas" class="control-label col-form-label"></label>
+                <input asp-for="incertidumbreMas" type="number" step="any" min="0" class="form-control input-text" placeholder="Ingrese la incertidumbre +" />
+                <span asp-validation-for="incertidumbreMas" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-3">
+                <label asp-for="incertidumbreMenos" class="control-label col-form-label"></label>
+                <input asp-for="incertidumbreMenos" type="number" step="any" min="0" class="form-control input-text" placeholder="Ingrese la incertidumbre -" />
+                <span asp-validation-for="incertidumbreMenos" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group group-buttons">
+            <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+            <input type="submit" value="Crear" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<script>
+    function selectedGEI(geiItem){
+        var selvalue = geiItem.value;
+        var seltext = geiItem.options[geiItem.selectedIndex].innerHTML;
+        $('#unidadGei').contents().remove();
+        $('#unidadGei').append("kg "+seltext);
+    }
+
+
+</script>
+
+<script>
+    function selectedCon(conItem) {
+        var selectedCon = conItem.value;
+        var unidadGei = $('#unidadCom');
+        unidadGei.contents().remove();
+        if (selectedCon != null && selectedCon != '') {
+            $.getJSON('@Url.Action("GetUnidad")', { id: selectedCon }, function (unidad) {
+                if (unidad != null && !jQuery.isEmptyObject(unidad)) {
+                    console.log(unidad[0].combustible.unidad.unidad);
+                    unidadGei.append("/"+unidad[0].combustible.unidad.unidad);
+                };
+            });
+        }
+    };
+</script>
+
+

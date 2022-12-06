@@ -1,0 +1,85 @@
+﻿@model InventarioGEI.Models.Sede
+
+<div class="card mb-3 container-main">
+    <div class="card-header">
+        <h5 style="margin-top: 10px;">Crear sede</h5>
+        <hr />
+    </div>
+
+
+    <form asp-action="Create" class="form-main">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="nombreSede" class="control-label"></label>
+                    <input asp-for="nombreSede" class="form-control input-text" placeholder="Ingrese el nombre de la sede" />
+                    <span asp-validation-for="nombreSede" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="direccion" class="control-label"></label>
+                    <input asp-for="direccion" class="form-control input-text" placeholder="Ingrese la dirección de la sede" />
+                    <span asp-validation-for="direccion" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Departamento</label>
+                    <div class="selectdiv">
+                        <select class="form-control input-select" asp-items="ViewBag.departamentos" onchange="filterMunicipio(this)">
+                            <option value="" selected disabled hidden>Elija un Departamento</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Municipio</label>
+                    <div class="selectdiv">
+                        <select asp-for="codMunicipio" class="form-control input-select" asp-items="ViewBag.municipios" id="selectMun">
+                            <option value="" selected disabled hidden>Elija un Municipio</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group group-buttons">
+            <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+            <input type="submit" value="Crear" class="btn btn-primary" />
+        </div>
+    </form>
+
+</div>
+
+
+
+<script>
+
+    function filterMunicipio(departamentoItem) {
+        let selectedDepartamento = departamentoItem.value;
+        let selectMun = $('#selectMun');
+        selectMun.contents().remove();
+        if (selectedDepartamento != null && selectedDepartamento != '') {
+            selectMun.append($('<option value="" selected disabled hidden >Elija un Municipio</option>'));
+            $.getJSON('@Url.Action("GetMunicipios")', { id: selectedDepartamento }, function (muni) {
+                if (muni != null && !jQuery.isEmptyObject(muni)) {
+                    muni.map(f => {
+                        selectMun.append($("<option></option>").attr("value", f.value).text(f.text));
+                    });
+                };
+            });
+        }
+    };
+</script>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

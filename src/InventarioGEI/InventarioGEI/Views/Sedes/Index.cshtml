@@ -1,0 +1,83 @@
+﻿@model IEnumerable<InventarioGEI.Models.Sede>
+
+@{
+    ViewData["Title"] = "Sedes";
+}
+
+<div class="container-fluid h-100">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-between row">
+
+        <h3 class="col-12">Sedes</h3>
+
+        <div class="d-flex align-items-center col-6">
+            <form asp-action="Index" method="get" class="row align-items-end">
+                <div class="col-5">
+                    <label for="departamentos">Departamento: </label>
+                    <div class="selectdiv">
+                        @Html.DropDownList("filter",null, "Todos",new { @class = "form-control d-inline input-select" })
+                    </div>
+                </div>
+                <input type="submit" value="Buscar" class="btn btn-default btn-outline-primary col-4 h-25 w-auto" />
+            </form>
+        </div>
+        <a asp-action="Create" class="btn btn-primary float-right col-2 h-100">Agregar sede</a>
+
+    </div>
+    <div>
+        <blockquote class="blockquote lead card p-3 mt-4">
+            <p>Las sedes donde esta presente el Ministerio de Agricultura de Colombia.</p>
+        </blockquote>
+    </div>
+    <div class="container-main mt-4" style="background-color: white; border-radius: 5px;">
+        <table class="table table-hover table-main">
+            <thead>
+                <tr class="tr-head">
+                    <th class="th-head">
+                        @Html.DisplayNameFor(model => model.nombreSede)
+                    </th>
+                    <th class="th-head">
+                        @Html.DisplayNameFor(model => model.direccion)
+                    </th>
+                    <th class="th-head">
+                        @Html.DisplayNameFor(model => model.municipio.nombreMunicipio)
+                    </th>
+                    <th class="th-head">
+                        @Html.DisplayNameFor(model => model.municipio.departamento.nombreDepartamento)
+                    </th>
+                    <th class="th-head"></th>
+                    <th class="th-head"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="tr-body">
+                        <td class="td-body-main">
+                            @Html.DisplayFor(modelItem => item.nombreSede)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.direccion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.municipio.nombreMunicipio)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.municipio.departamento.nombreDepartamento)
+                        </td>
+                        <td>
+                            <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idSede">
+                                Editar
+                            </a>
+                        </td>
+                        <td>
+                            <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idSede">
+                                Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

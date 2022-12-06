@@ -1,0 +1,55 @@
+﻿@model InventarioGEI.Models.Sede
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="card mb-3 container-main">
+    <div class="card-header">
+        <h5 style="margin-top: 10px;">Eliminar sede</h5>
+        <hr />
+    </div>
+    <dl>
+        <div class="col-md-10">
+            <dt>
+                @Html.DisplayNameFor(model => model.nombreSede)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.nombreSede)
+            </dd>
+        </div>
+        <div class ="col-md-10">
+            <dt>
+                @Html.DisplayNameFor(model => model.direccion)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.direccion)
+            </dd>
+        </div>
+        <div class="col-md-10">
+            <dt>
+                @Html.DisplayNameFor(model => model.municipio)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.municipio.nombreMunicipio)
+            </dd>
+        </div>
+        <div class="col-md-10">
+            <dt>
+                @Html.DisplayNameFor(model => model.municipio.departamento)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.municipio.departamento.nombreDepartamento)
+            </dd>
+        </div>
+        <dd>
+            <form asp-action="Delete">
+                <div class="form-group group-buttons">
+                    <input type="hidden" asp-for="idSede" />
+                    <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+                    <input type="submit" value="Eliminar" class="btn btn-danger" />
+                </div>
+            </form>
+        </dd>
+    </dl> 
+</div>

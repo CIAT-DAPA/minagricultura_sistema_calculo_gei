@@ -1,0 +1,121 @@
+﻿@model IEnumerable<InventarioGEI.Models.FactorEmision>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row container-title">
+    <h3 class="col-3">Factores de emisión</h3>
+
+    <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create">Crear factor de emisión</a>
+</div>
+<div>
+    <blockquote class="blockquote lead card p-3">
+        <p>Los factores de emisión son factores que tienen cada combustible por GEI que determina la cantidad de contaminación emitido por este combustible.</p>
+    </blockquote>
+</div>
+
+<div class="card mb-3 container-main">
+    <table class="table table-hover table-main">
+        <thead>
+            <tr class="tr-head">
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.configuracion)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.gei)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.factorEmision)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.PCG)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.incertidumbreMas)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.incertidumbreMenos)
+                </th>
+                
+                
+                <th class="th-head"></th>
+                <th class="th-head"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="tr-body">
+                    <td>
+                        @{
+                            string conf = item.configuracion.subcategoria.nombreSubcategoria + " - " + item.configuracion.fuenteEmision.nombreFuenteEmision + " - " + item.configuracion.combustible.nombreCombustible;
+                        }
+                        @Html.DisplayFor(modelItem=>conf)
+                        <br>
+                        <small class="text-muted">Creador por: @Html.DisplayFor(modelItem => item.usuario.email)</small>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.gei.nombreGei)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.factorEmision) kg @Html.DisplayFor(modelItem => item.gei.nombreGei)/@Html.DisplayFor(modelItem => item.configuracion.combustible.unidad.unidad)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PCG)
+                    </td>
+                    <td>
+                        @{
+                            string inMas = item.incertidumbreMas + "%";
+                        }
+                        @Html.DisplayFor(modelItem=>inMas)
+                    </td>
+                    <td>
+                        @{
+                            string inMen = item.incertidumbreMenos + "%";
+                        }
+                        @Html.DisplayFor(modelItem=>inMen)
+                    </td>
+
+                    <td>
+                        <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idFE">
+                            Editar
+                        </a>
+                    </td>
+                    <td>
+                        <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idFE">
+                            Eliminar
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+     function selectedGEI(geiItem) {
+         var selvalue = geiItem.value;
+         var seltext = geiItem.options[geiItem.selectedIndex].innerHTML;
+         $('#unidadGei').contents().remove();
+         $('#unidadGei').append("kg " + seltext);
+     }
+
+
+</script>
+
+<script>
+    function selectedCon(conItem) {
+        var selectedCon = conItem.value;
+        var unidadGei = $('#unidadCom');
+        unidadGei.contents().remove();
+        if (selectedCon != null && selectedCon != '') {
+            $.getJSON('@Url.Action("GetUnidad")', { id: selectedCon }, function (unidad) {
+                if (unidad != null && !jQuery.isEmptyObject(unidad)) {
+                    console.log(unidad[0].combustible.unidad.unidad);
+                    unidadGei.append("/" + unidad[0].combustible.unidad.unidad);
+                };
+            });
+        }
+    };
+</script>

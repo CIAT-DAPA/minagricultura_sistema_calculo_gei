@@ -1,0 +1,80 @@
+﻿@model IEnumerable<InventarioGEI.Models.Rol>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row container-title">
+    <h3 class="col-3">Roles</h3>
+
+    <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create">Crear rol</a>
+ 
+</div>
+<div>
+    <blockquote class="blockquote lead card p-3">
+        <p>Los roles definen que permisos tendran los usuarios dentro del sistema.</p>
+    </blockquote>
+</div>
+
+<div class="card mb-3 container-main">
+    <table class="table table-hover table-main">
+        <thead>
+            <tr class="tr-head" >
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.nombreRol)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.permisoRol)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.permisoSede)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.permisoConfiguracion)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.permisoRegistro)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.permisoVisualizacion)
+                </th>
+                <th class="th-head"></th>
+                <th class="th-head"></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr class="tr-body">
+                <td class="td-body-main">
+                    @Html.DisplayFor(modelItem => item.nombreRol)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.permisoRol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.permisoSede)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.permisoConfiguracion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.permisoRegistro)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.permisoVisualizacion)
+                </td>
+                <td>
+                    <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idRol" style="text-decoration: none; font-weight: 600;">
+                            Editar
+                    </a>
+                </td>
+                <td>
+                    <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idRol" style="text-decoration: none; font-weight: 600; color: white;">
+                        Eliminar
+                    </a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>

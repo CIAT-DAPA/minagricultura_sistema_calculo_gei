@@ -1,0 +1,32 @@
+﻿@model InventarioGEI.Models.Reporte
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="card mb-3 container-main">
+    <div class="card-header">
+        <h5 style="margin-top: 10px;">Editar reporte</h5>
+        <hr />
+    </div>
+
+        <form asp-action="Edit" class="form-main">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="idReporte" />
+            <div class="form-group col-12 col-lg-5">
+                <label asp-for="nombreReporte" class="control-label col-form-label"></label>
+            <input asp-for="nombreReporte" placeholder="Ingrese el nombre del reporte" class="form-control input-text" />
+                <span asp-validation-for="nombreReporte" class="text-danger"></span>
+            </div>
+            <div class="form-group col-12 col-lg-5">
+                <label asp-for="link" class="control-label col-form-label"></label>
+            <input asp-for="link" placeholder="Ingrese el link del reporte" class="form-control input-text" />
+                <span asp-validation-for="link" class="text-danger"></span>
+            </div>
+            <div class="form-group group-buttons">
+            <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+        </div>
+        </form>
+    </div>
+

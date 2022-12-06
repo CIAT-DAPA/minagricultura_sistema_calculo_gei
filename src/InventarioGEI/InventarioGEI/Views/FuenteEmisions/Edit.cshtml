@@ -1,0 +1,25 @@
+﻿@model InventarioGEI.Models.FuenteEmision
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="card mb-3 container-main">
+    <div class="card-header">
+        <h5 style="margin-top: 10px;">Editar fuente de emisión</h5>
+        <hr />
+    </div>
+    <form asp-action="Edit" class="form-main">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="idFuenteEmision" />
+        <div class="form-group col-12 col-lg-6">
+            <label asp-for="nombreFuenteEmision" class="control-label col-form-label"></label>
+            <input asp-for="nombreFuenteEmision" placeholder="Ingrese el nombre de la fuente de emisión" class="form-control input-text" />
+            <span asp-validation-for="nombreFuenteEmision" class="text-danger"></span>
+        </div>
+        <div class="form-group group-buttons">
+            <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+        </div>
+    </form>
+</div>

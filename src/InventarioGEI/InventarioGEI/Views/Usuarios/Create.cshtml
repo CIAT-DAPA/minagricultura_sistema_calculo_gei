@@ -1,0 +1,37 @@
+﻿@model InventarioGEI.Models.Usuario
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="card mb-3 container-main">
+    <div class="card-header">
+        <h5 style="margin-top: 10px;">Crear usuario</h5>
+        <hr />
+    </div>
+
+
+    <form asp-action="Create" class="form-main">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group col-12 col-lg-6">
+            <label asp-for="email" class="control-label col-form-label" ></label>
+            <input asp-for="email" class="form-control input-text" placeholder="Ingrese el correo organizacional del usuario"/>
+            <span asp-validation-for="email" class="text-danger"></span>
+        </div>
+        <div class="form-group col-12 col-lg-6">
+            <label asp-for="idRol" class="control-label"></label>
+            <div class="selectdiv ">
+                <select asp-for="idRol" class="form-select input-select" asp-items="ViewBag.idRol"></select>
+            </div>
+        </div>
+        <div class="form-group group-buttons">
+            <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+            <input type="submit" value="Crear" class="btn btn-primary" />
+        </div>
+       
+    </form>
+
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

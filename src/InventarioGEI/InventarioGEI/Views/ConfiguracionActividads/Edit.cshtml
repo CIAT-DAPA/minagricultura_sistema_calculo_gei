@@ -1,0 +1,87 @@
+﻿@model InventarioGEI.Models.ConfiguracionActividad
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="card mb-3 container-main">
+    <div class="card-header">
+        <h5 style="margin-top: 10px;">Editar configuración</h5>
+        <hr />
+    </div>
+    <form asp-action="Edit" class="form-main">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="idConfiguracion" />
+
+        <div class="form-group col-12 col-lg-6">
+            <label asp-for="idSubcategoria" class="control-label"></label>
+            <div class="selectdiv">
+                <select asp-for="idSubcategoria" class="form-control input-select" asp-items="ViewBag.idSubcategoria"></select>
+            </div>
+            <span asp-validation-for="idSubcategoria" class="text-danger"></span>
+        </div>
+        <div class="form-group col-12 col-lg-6">
+            <label asp-for="idFuenteEmision" class="control-label"></label>
+            <div class="selectdiv">
+                <select asp-for="idFuenteEmision" class="form-control input-select" asp-items="ViewBag.idFuenteEmision"></select>
+            </div>
+            <span asp-validation-for="idFuenteEmision" class="text-danger"></span>
+        </div>
+        <div class="form-group col-12 col-lg-6">
+            <label asp-for="idCombustible" class="control-label"></label>
+            <div class="selectdiv">
+                <select asp-for="idCombustible" class="form-control input-select" asp-items="ViewBag.idCombustible"></select>
+            </div>
+            <span asp-validation-for="idCombustible" class="text-danger"></span>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="biocombustible" id="bio" /> @Html.DisplayNameFor(model => model.biocombustible)
+            </label>
+        </div>
+        @if (Model.biocombustible) {
+            <div id="divConf" class="row">
+                <div class="form-group col-12 col-lg-8">
+                    <label asp-for="idConfDependiente" class="control-label"></label>
+                    <div class="selectdiv">
+                        <select asp-for="idConfDependiente" id="selectConf" class="form-control input-select" asp-items="ViewBag.idConfDependiente"></select>
+                    </div>
+                </div>
+                <div class="form-group col-5 col-lg-4">
+                    <label asp-for="porcentaje" class="control-label"></label>
+                    <input asp-for="porcentaje" type="number" step="any" min="0" class="form-control input-text" placeholder="Ingrese el porcentaje" />
+                    <span asp-validation-for="porcentaje" class="text-danger"></span>
+                </div>
+            </div>
+        }else {
+            <div id="divConf" class="row d-none">
+                <div class="form-group col-12 col-lg-8">
+                    <label asp-for="idConfDependiente" class="control-label"></label>
+                    <div class="selectdiv">
+                        <select asp-for="idConfDependiente" id="selectConf" class="form-control input-select" asp-items="ViewBag.idConfDependiente"></select>
+                    </div>
+                </div>
+                <div class="form-group col-5 col-lg-4">
+                    <label asp-for="porcentaje" class="control-label"></label>
+                    <input asp-for="porcentaje" type="number" step="any" min="0" class="form-control input-text" placeholder="Ingrese el porcentaje" />
+                    <span asp-validation-for="porcentaje" class="text-danger"></span>
+                </div>
+            </div>
+        }
+        <div class="form-group group-buttons">
+            <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+        </div>
+    </form>
+
+    <script>
+        document.addEventListener("click", function () {
+            if ($("#bio").is(":checked")) {
+                $('#divConf').removeClass("d-none");
+            } else {
+                $('#divConf').addClass("d-none");
+            }
+        });
+    </script>
+</div>
+

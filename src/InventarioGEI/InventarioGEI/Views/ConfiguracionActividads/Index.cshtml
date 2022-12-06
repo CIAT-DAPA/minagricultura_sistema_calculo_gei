@@ -1,0 +1,75 @@
+﻿@model IEnumerable<InventarioGEI.Models.ConfiguracionActividad>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row container-title">
+    <h3 class="col-3">Configuraciones</h3>
+
+    <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create">Crear configuración</a>
+</div>
+<div>
+    <blockquote class="blockquote lead card p-3">
+        <p>Las configuraciones son las relaciones que hay entre las subcategorías, las fuentes de emisión y los combustibles</p>
+    </blockquote>
+</div>
+
+<div class="card mb-3 container-main">
+    <table class="table table-hover table-main">
+        <thead>
+            <tr class="tr-head">
+
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.subcategoria)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.fuenteEmision)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.combustible)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.biocombustible)
+                </th>
+                <th class="th-head">
+                    @Html.DisplayNameFor(model => model.configuracion)
+                </th>
+                <th class="th-head"></th>
+                <th class="th-head"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="tr-body">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.subcategoria.nombreSubcategoria)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fuenteEmision.nombreFuenteEmision)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.combustible.nombreCombustible) - @Html.DisplayFor(modelItem => item.combustible.unidad.unidad)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.biocombustible)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.configuracion.subcategoria.nombreSubcategoria) - @Html.DisplayFor(modelItem => item.configuracion.fuenteEmision.nombreFuenteEmision) - @Html.DisplayFor(modelItem => item.configuracion.combustible.nombreCombustible)
+                    </td>
+                    <td>
+                        <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idConfiguracion">
+                            Editar
+                        </a>
+                    </td>
+                    <td>
+                        <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idConfiguracion">
+                            Eliminar
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

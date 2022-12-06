@@ -1,0 +1,26 @@
+﻿@model InventarioGEI.Models.TipoActividad
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="card mb-3 container-main">
+    <div class="card-header">
+        <h5 style="margin-top: 10px;">Crear tipo de actividad</h5>
+        <hr />
+    </div>
+    <form asp-action="Create" class="form-main">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-12 col-lg-6">
+                <label asp-for="nombreTipoActividad" class="control-label col-form-label"></label>
+            <input asp-for="nombreTipoActividad" class="form-control input-text" placeholder="Ingrese nombre del tipo de actividad" />
+                <span asp-validation-for="nombreTipoActividad" class="text-danger"></span>
+            </div>
+        <div class="form-group group-buttons">
+            <a asp-action="Index" type="button" class="btn btn-outline-primary" style="margin-right: 30px;">Regresar</a>
+            <input type="submit" value="Crear" class="btn btn-primary" />
+        </div>
+        </form>
+    </div>
+
+
