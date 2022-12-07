@@ -51,6 +51,21 @@ And inside the .env file are the following environment variables:
 * ASPNETCORE_URLS: Wrire the port in the next format https://+:5000
 * ASPNETCORE_ENVIRONMENT: Write release or development depending on the environment to be run
 #
+
+### Dockerfile 🚀
+
+To build the image you have to be inside the inventario folder and execute the following command:
+
+```
+docker build -t inventariogei:latest .
+```
+ 
+Aftert that execute the following command to run the container
+
+```
+docker run --name gei -p 5000:5000 -p 5001:5001 --env-file ./.env inventariogei
+```
+#
 ## Docker-compose
 If you want to run all containers, you can run docker-compose with the following command and inside the docker folder:
 
