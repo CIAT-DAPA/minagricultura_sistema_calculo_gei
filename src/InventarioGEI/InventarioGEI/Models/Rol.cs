@@ -13,6 +13,7 @@ namespace InventarioGEI.Models
         [Column("rol")]
         [Display(Name = "Rol")]
         [Required(ErrorMessage = "Es necesario que el rol tenga un nombre")]
+        [StringLength(50, ErrorMessage = "Debe tener como maximo {1} caracteres")]
         public string nombreRol { get; set; }
 
         [Column("moduloRol")]

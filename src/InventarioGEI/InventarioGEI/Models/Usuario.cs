@@ -13,6 +13,7 @@ namespace InventarioGEI.Models
         [Column("email")]
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Es obligatorio el correo electronico del usuario")]
+        [StringLength(50, ErrorMessage = "Debe tener como maximo {1} caracteres")]
         public string email { get; set; }
         [Column("enabled")]
         [Display(Name ="Habilitado")]

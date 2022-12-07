@@ -12,10 +12,12 @@ namespace InventarioGEI.Models
         public int idSede { get; set; }
         [Column("nombresede")]
         [Display(Name = "Nombre")]
+        [StringLength(100, ErrorMessage = "Debe tener como maximo {1} caracteres")]
         public string nombreSede { get; set; }
 
         [Column("direccion")]
         [Display(Name = "Dirección")]
+        [StringLength(50, ErrorMessage = "Debe tener como maximo {1} caracteres")]
         public string direccion { get; set; }
 
         [Column("enabled")]

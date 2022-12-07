@@ -13,6 +13,7 @@ namespace InventarioGEI.Models
         [Column("nombretipoactividad")]
         [Display(Name = "Tipo de actividad")]
         [Required(ErrorMessage = "Es necesario que el tipo de actividad tenga un nombre")]
+        [StringLength(50, ErrorMessage = "Debe tener como maximo {1} caracteres")]
         public string nombreTipoActividad { get; set; }
         [Column("enabled")]
         [Display(Name = "Habilitado")]

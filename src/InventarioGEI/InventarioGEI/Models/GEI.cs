@@ -13,6 +13,7 @@ namespace InventarioGEI.Models
         [Column("nombregei")]
         [Display(Name = "GEI")]
         [Required(ErrorMessage = "Es necesario que el GEI tenga un nombre")]
+        [StringLength(50, ErrorMessage = "Debe tener como maximo {1} caracteres")]
         public string nombreGei { get; set; }
         [Column("enabled")]
         [Display(Name = "Habilitado")]

@@ -13,6 +13,7 @@ namespace InventarioGEI.Models
         [Column("nombresubcategoria")]
         [Display(Name = "Subcategoría")]
         [Required(ErrorMessage = "Es necesario que la subcategoría tenga un nombre")]
+        [StringLength(150, ErrorMessage = "Debe tener como maximo {1} caracteres")]
         public string nombreSubcategoria { get; set; }
         [Column("enabled")]
         [Display(Name = "Habilitado")]

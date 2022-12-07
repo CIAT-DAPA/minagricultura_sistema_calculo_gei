@@ -14,6 +14,7 @@ namespace InventarioGEI.Models
         [Column("nombrecombustible")]
         [Display(Name = "Combustible")]
         [Required(ErrorMessage = "Es necesario que el combustible tenga un nombre")]
+        [StringLength(50, ErrorMessage = "Debe tener como maximo {1} caracteres")]
         public string nombreCombustible { get; set; }
 
         [Column("enabled")]

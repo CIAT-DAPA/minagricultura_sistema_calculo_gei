@@ -18,6 +18,8 @@ namespace InventarioGEI.Models
         public bool biocombustible { get; set; }
         [Column("porcentaje")]
         [Display(Name = "Porcentaje destinado al biocombustible")]
+        [RegularExpression(@"^\d+(\.\d{1,4})?$")]
+        [Range(0, 999999.9999)]
         public double? porcentaje { get; set; }
 
 

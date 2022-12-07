@@ -12,6 +12,7 @@ namespace InventarioGEI.Models
         public int idAlcance { get; set; }
         [Column("nombrealcance")]
         [Display(Name ="Alcance")]
+        [StringLength(50, ErrorMessage = "Debe tener como maximo {1} caracteres")]
         [Required(ErrorMessage = "Es necesario que el alcance tenga un nombre")]
         public string nombreAlcance { get; set; }
         [Column("enabled")]

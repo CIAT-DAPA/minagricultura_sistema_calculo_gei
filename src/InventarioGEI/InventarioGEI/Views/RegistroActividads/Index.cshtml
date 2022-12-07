@@ -148,7 +148,7 @@
 </div>
 <div class="row">
     <div class="col-12 d-flex justify-content-end">
-        <button type="button" class="btn btn-primary button-create" onclick="sendChanges()">
+        <button type="button" class="btn btn-primary button-create" id="btnSave" onclick="sendChanges()">
             Guardar cambios
         </button>
     </div>
@@ -188,6 +188,7 @@
             $('#year').attr("disabled", "disabled");
             $('#selectAlc').attr("disabled", "disabled");
             $('#selectCat').attr("disabled", "disabled");
+            $('#btnSave').attr("disabled", "disabled");
             $.getJSON('@Url.Action("GetCombustibles")', { id: selectedCategoria }, function (unidad) {
                 if (unidad != null && !jQuery.isEmptyObject(unidad)) {
                     unidad.map(async f => {
@@ -246,11 +247,13 @@
                             $('#year').removeAttr("disabled");
                             $('#selectAlc').removeAttr("disabled");
                             $('#selectCat').removeAttr("disabled");
+                            $('#btnSave').removeAttr("disabled");
                         })
                             .catch((result) => {
                                 $('#year').removeAttr("disabled");
                                 $('#selectAlc').removeAttr("disabled");
                                 $('#selectCat').removeAttr("disabled");
+                                $('#btnSave').removeAttr("disabled");
                             });
 
                     });

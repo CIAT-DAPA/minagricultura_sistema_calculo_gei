@@ -12,15 +12,23 @@ namespace InventarioGEI.Models
         public int idEmisionGEI { get; set; }
         [Column("emisiongei")]
         [Display(Name = "Emisión GEI")]
+        [RegularExpression(@"^\d+(\.\d{1,3)?$")]
+        [Range(0, 9999999.999)]
         public double emisionGEI { get; set; }
         [Column("emisiongeiequivalente")]
         [Display(Name = "Emisión GEI equivalente")]
+        [RegularExpression(@"^\d+(\.\d{1,3)?$")]
+        [Range(0, 9999999.999)]
         public double emisionGEIEqui { get; set; }
         [Column("factorEmision")]
         [Display(Name = "Factor de emisión")]
+        [RegularExpression(@"^\d+(\.\d{1,3)?$")]
+        [Range(0, 9999999.999)]
         public double factorEmision { get; set; }
         [Column("potencialcalentamientoglobal")]
         [Display(Name = "Potencial de calentamiento global")]
+        [RegularExpression(@"^\d+(\.\d{1,3)?$")]
+        [Range(0, 9999999.999)]
         public double PCG { get; set; }
 
 

@@ -12,6 +12,8 @@ namespace InventarioGEI.Models
         public int idRegistroActividad { get; set; }
         [Column("valor")]
         [Display(Name = "Valor")]
+        [RegularExpression(@"^\d+(\.\d{1,3)?$")]
+        [Range(0, 9999999.999)]
         public double? valor { get; set; }
         [Column("mes")]
         [Display(Name = "Mes")]
