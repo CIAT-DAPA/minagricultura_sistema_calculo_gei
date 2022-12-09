@@ -5,7 +5,7 @@ RUN apt-get update && \
         vim \
         unzip \
         wget 
-RUN wget https://github.com/CIAT-DAPA/minagricultura_sistema_calculo_gei/releases/download/1.0.0/invent.zip
+RUN wget https://github.com/CIAT-DAPA/minagricultura_sistema_calculo_gei/releases/download/1.0.1/build.zip
 RUN unzip invent.zip 
 RUN dotnet dev-certs https
 RUN dotnet dev-certs https --trust
