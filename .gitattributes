@@ -1,2 +1,4 @@
 script.sh text eol=lf
+03_script.sh text eol=lf
 variables.properties text eol=lf
+.env text eol=lf

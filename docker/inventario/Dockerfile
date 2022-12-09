@@ -6,7 +6,7 @@ RUN apt-get update && \
         unzip \
         wget 
 RUN wget https://github.com/CIAT-DAPA/minagricultura_sistema_calculo_gei/releases/download/1.0.1/build.zip
-RUN unzip invent.zip 
+RUN unzip build.zip 
 RUN dotnet dev-certs https
 RUN dotnet dev-certs https --trust
 COPY ./script.sh ./
