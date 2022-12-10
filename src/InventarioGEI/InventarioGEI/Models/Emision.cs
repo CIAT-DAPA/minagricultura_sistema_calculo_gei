@@ -41,7 +41,7 @@ namespace InventarioGEI.Models
         public double? mes7 { get; set; }
         [Column("mes8")]
         [Display(Name = "Agosto")]
-        [Precision(20, 10)]]
+        [Precision(20, 10)]
         public double? mes8 { get; set; }
         [Column("mes9")]
         [Display(Name = "Septiembre")]
