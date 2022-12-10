@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventarioGEI.Models
@@ -12,8 +13,7 @@ namespace InventarioGEI.Models
         public int idRegistroActividad { get; set; }
         [Column("valor")]
         [Display(Name = "Valor")]
-        [RegularExpression(@"^\d+(\.\d{1,3)?$")]
-        [Range(0, 9999999.999)]
+        [Precision(10, 3)]
         public double? valor { get; set; }
         [Column("mes")]
         [Display(Name = "Mes")]

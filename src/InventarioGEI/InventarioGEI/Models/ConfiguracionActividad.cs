@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventarioGEI.Models
@@ -18,8 +19,7 @@ namespace InventarioGEI.Models
         public bool biocombustible { get; set; }
         [Column("porcentaje")]
         [Display(Name = "Porcentaje destinado al biocombustible")]
-        [RegularExpression(@"^\d+(\.\d{1,4})?$")]
-        [Range(0, 999999.9999)]
+        [Precision(10, 4)]
         public double? porcentaje { get; set; }
 
 

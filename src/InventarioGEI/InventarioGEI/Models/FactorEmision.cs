@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventarioGEI.Models
@@ -13,26 +14,22 @@ namespace InventarioGEI.Models
         [Column("factoremision")]
         [Display(Name = "Factor de emisión")]
         [Required(ErrorMessage = "Es necesario el factor de emisión")]
-        [RegularExpression(@"^\d+(\.\d{1,8)?$")]
-        [Range(0, 999999.99999999)]
+        [Precision(14,8)]
         public double factorEmision { get; set; }
         [Column("potencialcalentamientoglobal")]
         [Display(Name = "PCG")]
         [Required(ErrorMessage = "Es necesario el PCG")]
-        [RegularExpression(@"^\d+(\.\d{1,8)?$")]
-        [Range(0, 999999.99999999)]
+        [Precision(14, 8)]
         public double PCG { get; set; }
         [Column("incertidumbremas")]
         [Display(Name = "Incertidumbre + (%)")]
         [Required(ErrorMessage = "Es necesario la incertidumbre +")]
-        [RegularExpression(@"^\d+(\.\d{1,3)?$")]
-        [Range(0, 9999.999)]
+        [Precision(7, 3)]
         public double incertidumbreMas { get; set; }
         [Column("incertidumbremenos")]
         [Display(Name = "Incertidumbre - (%)")]
         [Required(ErrorMessage = "Es necesario la incertidumbre -")]
-        [RegularExpression(@"^\d+(\.\d{1,3)?$")]
-        [Range(0, 9999.999)]
+        [Precision(7, 3)]
         public double incertidumbreMenos { get; set; }
         [Column("enabled")]
         [Display(Name = "Habilitado")]
