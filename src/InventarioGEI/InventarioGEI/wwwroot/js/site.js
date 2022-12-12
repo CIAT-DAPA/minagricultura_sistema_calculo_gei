@@ -1,10 +1,4 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-
-
-document.addEventListener("DOMContentLoaded", function (event) {
+﻿document.addEventListener("DOMContentLoaded", function (event) {
 
     const showHoverNavbar = (toggleId, navId, bodyId, headerId) => {
         const toggle = document.getElementById(toggleId),

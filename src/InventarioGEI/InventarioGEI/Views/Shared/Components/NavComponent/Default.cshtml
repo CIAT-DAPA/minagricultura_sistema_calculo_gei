@@ -1,4 +1,4 @@
-﻿
+﻿@using System.Security.Principal
 <div class="l-navbar" id="nav-bar">
     <nav class="nav" style="padding: 25px 0 0px 25px;">
         <div class="navbar-header">
@@ -112,28 +112,22 @@
                     </li>
                     <li class="nav-item @(ViewBag.NavFue==true?"visit":"")" style="margin-bottom:15px;"><a asp-area="" asp-controller="FuenteEmisions" asp-action="Index" style="white-space: nowrap;"><i class="fa-solid fa-wind navbar-icon"></i>Fuentes de emisión</a></li>
                     <li class="nav-item @(ViewBag.NavCon==true?"visit":"")" style="margin-bottom:15px;"><a asp-area="" asp-controller="ConfiguracionActividads" asp-action="Index" style="white-space: nowrap;"><i class="fa-solid fa-gear navbar-icon"></i>Configuración de GEI</a></li>
-                    @*<li class="nav-item dropdown" style="margin-bottom:15px;">
-                <a data-bs-toggle="collapse" href="#collapseCombustible" role="button" aria-expanded="false" aria-controls="collapseCombustible" class="dropdown-toggle">Combustibles y GEI</a>
-                </li>
-                <div class="collapse border pt-2 px-3 rounded-2" id="collapseCombustible">*@
+                    
                     <li class="nav-item @(ViewBag.NavTip==true?"visit":"")" style="margin-bottom:15px;"><a asp-area="" asp-controller="TipoActividads" asp-action="Index" style="white-space: nowrap;"><i class="fa-solid fa-tag navbar-icon"></i>Tipos de actividad</a></li>
                     <li class="nav-item @(ViewBag.NavCom==true?"visit":"")" style="margin-bottom:15px;"><a asp-area="" asp-controller="Combustibles" asp-action="Index" style="white-space: nowrap;"><i class="fa-solid fa-gas-pump navbar-icon"></i>Combustibles</a></li>
                     <li class="nav-item @(ViewBag.NavGei==true?"visit":"")" style="margin-bottom:15px;"><a asp-area="" asp-controller="GEIs" asp-action="Index" style="white-space: nowrap;"><i class="fa-solid fa-smog navbar-icon"></i>GEI</a></li>
                     <li class="nav-item @(ViewBag.NavFac==true?"visit":"")" style="margin-bottom:15px;"><a asp-area="" asp-controller="FactorEmisions" asp-action="Index" style="white-space: nowrap;"> <i class="fa-solid fa-sun navbar-icon"></i>Factores de emisión</a></li>
-                    @*</div>*@
+                  
 
                 }
                 @if (ViewBag.Reg != null)
                 {
-                    @*   <li class="nav-item dropdown" style="margin-bottom:15px;" id="openNav2">
-                <a data-bs-toggle="collapse" href="#collapseRegistros" role="button" aria-expanded="false" aria-controls="collapseRegistros" class="dropdown-toggle"><i class="fa-solid fa-pen-to-square navbar-icon"></i>Modulo Registros</a>
-                </li>
-                <div class="collapse border pt-2 px-3 rounded-2l" id="collapseRegistros">*@
+                    
                     <li class="nav-item @(ViewBag.NavRegAct==true?"visit":"")" style="margin-bottom:15px;"><a asp-area="" asp-controller="RegistroActividads" asp-action="Index" style="white-space: nowrap;"><i class="fa-solid fa-pen-to-square navbar-icon"></i>Registros de consumos</a></li>
                     <li class="nav-item @(ViewBag.NavRegAnu==true?"visit":"")" style="margin-bottom:15px;"><a asp-area="" asp-controller="RegistroAnuals" asp-action="Index" style="white-space: nowrap;"><i class="fa-solid fa-upload navbar-icon"></i>Cierres</a></li>
-                    @* </div>*@
+                    
                 }
-                @if (ViewBag.Visualizacion != null)
+                @if (User.Identity?.IsAuthenticated == true)
                 {
                     <li class="nav-item @(ViewBag.NavRep==true?"visit":"")" style="margin-bottom:15px;">
                         <a asp-area="" asp-controller="Reportes" asp-action="Index"><i class="fa-solid fa-chart-simple navbar-icon"></i>Reportes</a>

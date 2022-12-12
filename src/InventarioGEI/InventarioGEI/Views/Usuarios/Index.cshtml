@@ -39,14 +39,25 @@
                         @Html.DisplayFor(modelItem => item.rolUsuario.nombreRol)
                     </td>
                     <td>
-                        <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idUsuario">
-                            Editar
-                        </a>
+                        @if (User.Identity.Name.Equals(item.email)){
+                            <p>No puedes editar tu mismo usuario</p>
+                        }else{
+                            <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idUsuario">
+                                Editar
+                            </a>
+                        }
                     </td>
                     <td>
-                        <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idUsuario">
-                            Eliminar
-                        </a>
+                        @if (User.Identity.Name.Equals(item.email))
+                        {
+                            <p>No puedes eliminar tu mismo usuario</p>
+                        }
+                        else
+                        {
+                            <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idUsuario">
+                                Eliminar
+                            </a>
+                        }
                     </td>
                 </tr>
             }

@@ -15,7 +15,6 @@ html {
 }
 
 html {
-    /*position: relative;*/
     min-height: 100%;
 }
 
@@ -31,27 +30,17 @@ body {
     grid-template-rows: 40px 1fr 40px;
 }
 
-.page {
-    /* flex: 1 1 calc(100vh - 250px); */
-}
-
-/*main side bar*/
 .msb {
-    /* width: 250px; */
     background-color: #FFFFFF;
-    /* position: fixed; */
     left: 0;
     top: 45px;
     right: auto;
-    /* min-height: 100%; */
     overflow-y: auto;
     white-space: nowrap;
-    /* height: 100%; */
     z-index: 1;
     border-right: 1px solid #ddd;
     padding: 25px 25px 0px 25px;
     box-shadow: 6px 0 14px 0px rgb(0 0 0 / 4%);
-    /* flex: 0 1 250px; */
 }
 
 .blockquote {
@@ -185,7 +174,6 @@ dl {
 }
 
 .container-main {
-    /* height: 100%; */
     height: calc(100vh * 0.55);
     overflow-x: auto;
     box-shadow: 0px 6px 18px 0px rgb(0 0 0 / 6%);
@@ -338,9 +326,7 @@ dl {
 .text-manual{
     padding: 10px 25px;
 }
-/*.active {
-    color: var(--white-color)
-}*/
+
 .active::before {
     content: '';
     position: absolute;
@@ -369,7 +355,6 @@ dl {
 
     .l-navbar {
         left: 0;
-        /* padding: 1rem 00 0; */
     }
 
     .show-nav {
