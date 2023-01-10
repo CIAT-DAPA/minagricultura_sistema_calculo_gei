@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventarioGEI", "InventarioGEI\InventarioGEI.csproj", "{619DFCF7-8EB3-43B1-8514-230511D68A95}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventarioGEITest", "InventarioGEITest\InventarioGEITest.csproj", "{1C6E84AB-8791-4B43-A289-FB6125F91E96}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventarioGEITests", "InventarioGEITests\InventarioGEITests.csproj", "{54EF6FB7-11B7-4F7F-85E1-4B610D2FA648}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{619DFCF7-8EB3-43B1-8514-230511D68A95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{619DFCF7-8EB3-43B1-8514-230511D68A95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{619DFCF7-8EB3-43B1-8514-230511D68A95}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C6E84AB-8791-4B43-A289-FB6125F91E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C6E84AB-8791-4B43-A289-FB6125F91E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C6E84AB-8791-4B43-A289-FB6125F91E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C6E84AB-8791-4B43-A289-FB6125F91E96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54EF6FB7-11B7-4F7F-85E1-4B610D2FA648}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54EF6FB7-11B7-4F7F-85E1-4B610D2FA648}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54EF6FB7-11B7-4F7F-85E1-4B610D2FA648}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54EF6FB7-11B7-4F7F-85E1-4B610D2FA648}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
