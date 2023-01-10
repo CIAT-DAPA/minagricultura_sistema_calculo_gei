@@ -7,7 +7,7 @@
 <div class="row container-title">
     <h3 class="col-3">Roles</h3>
 
-    <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create">Crear rol</a>
+    <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create"><i class="fa-solid fa-plus"></i> Crear rol</a>
  
 </div>
 <div>
@@ -65,12 +65,12 @@
                 </td>
                 <td>
                     <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idRol" style="text-decoration: none; font-weight: 600;">
-                            Editar
+                            <i class="fa-solid fa-pen"></i> Editar
                     </a>
                 </td>
                 <td>
                     <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idRol" style="text-decoration: none; font-weight: 600; color: white;">
-                        Eliminar
+                            <i class="fa-solid fa-trash"></i> Eliminar
                     </a>
                 </td>
             </tr>

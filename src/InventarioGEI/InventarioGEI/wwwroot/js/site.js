@@ -1,39 +1,73 @@
-﻿document.addEventListener("DOMContentLoaded", function (event) {
+﻿var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+    return new bootstrap.Popover(popoverTriggerEl)
+})
 
-    const showHoverNavbar = (toggleId, navId, bodyId, headerId) => {
-        const toggle = document.getElementById(toggleId),
-            nav = document.getElementById(navId),
-            bodypd = document.getElementById(bodyId),
-            headerpd = document.getElementById(headerId)
-        var width = window.innerWidth;
-        console.log(width);
-        // Validate that all variables exist
+document.addEventListener("DOMContentLoaded", function (event) {
 
-        if (toggle && nav) {
-            toggle.addEventListener('mouseover', () => {
-                if (nav.classList.contains('show-nav') && (toggleId == "openNav1" || toggleId == "openNav2")) {
-                    return
-                }
-                // show navbar
-                nav.classList.toggle('show-nav')
+    //const showHoverNavbar = (toggleId, navId, bodyId, headerId) => {
+    //    const toggle = document.getElementById(toggleId),
+    //        nav = document.getElementById(navId),
+    //        bodypd = document.getElementById(bodyId),
+    //        headerpd = document.getElementById(headerId)
+    //    var width = window.innerWidth;
+    //    console.log(width);
+    //    // Validate that all variables exist
 
-                // add padding to body
-                bodypd.classList.toggle('content-pd')
-            })
+    //    if (toggle && nav) {
+    //        toggle.addEventListener('mouseover', () => {
+    //            if (nav.classList.contains('show-nav') && (toggleId == "openNav1" || toggleId == "openNav2")) {
+    //                return
+    //            }
+    //            // show navbar
+    //            nav.classList.toggle('show-nav')
 
-            toggle.addEventListener('mouseout', () => {
-                if (nav.classList.contains('show-nav') && (toggleId == "openNav1" || toggleId == "openNav2")) {
-                    return
-                }
-                // show navbar
-                nav.classList.toggle('show-nav')
+    //            // add padding to body
+    //            bodypd.classList.toggle('content-pd')
+    //        })
 
-                // add padding to body
-                bodypd.classList.toggle('content-pd')
-            })
-        }
+    //        toggle.addEventListener('mouseout', () => {
+    //            if (nav.classList.contains('show-nav') && (toggleId == "openNav1" || toggleId == "openNav2")) {
+    //                return
+    //            }
+    //            // show navbar
+    //            nav.classList.toggle('show-nav')
 
-    }
+    //            // add padding to body
+    //            bodypd.classList.toggle('content-pd')
+    //        })
+    //    }
+
+    //}
+
+    //const showHoverNavbar = (toggleId, navId, bodyId, headerId) => {
+    //    const toggle = document.getElementById(toggleId),
+    //        nav = document.getElementById(navId),
+    //        bodypd = document.getElementById(bodyId),
+    //        headerpd = document.getElementById(headerId),
+    //        close = document.getElementById('closeNav')
+    //    var width = window.innerWidth;
+    //    console.log(width);
+    //    // Validate that all variables exist
+
+    //    if (toggle && nav) {
+    //        toggle.addEventListener('mouseover', () => {
+    //            if (nav.classList.contains('show-nav') && (toggleId == "openNav1" || toggleId == "openNav2") || !close.classList.contains('d-none')) {
+    //                return
+    //            }
+    //            bodypd.classList.toggle('d-none')
+    //        })
+
+    //        toggle.addEventListener('mouseout', () => {
+    //            if (nav.classList.contains('show-nav') && (toggleId == "openNav1" || toggleId == "openNav2") || !close.classList.contains('d-none')) {
+    //                return
+    //            }
+
+    //            bodypd.classList.toggle('d-none')
+    //        })
+    //    }
+
+    //}
 
     const showClickNavbar = (toggleId, navId, bodyId, headerId, closeId) => {
         const toggle = document.getElementById(toggleId),
@@ -49,6 +83,7 @@
                     return
                 }
                 // show navbar
+                popoverList.map(e => e._isEnabled = false)
                 close.classList.toggle('d-none')
                 toggle.classList.toggle('d-none')
                 nav.classList.toggle('show-nav')
@@ -60,6 +95,7 @@
                     return
                 }
                 // show navbar
+                popoverList.map(e => e._isEnabled = true)
                 close.classList.toggle('d-none')
                 toggle.classList.toggle('d-none')
                 nav.classList.toggle('show-nav')
@@ -69,9 +105,11 @@
     }
 
 
-    showClickNavbar('sidebarCollapse', 'nav-bar', 'content', 'header', 'closeNav');
-    if (window.innerWidth >= 768)
-        showHoverNavbar('nav-bar', 'nav-bar', 'content', 'header');
+    showClickNavbar('btn-open', 'nav-bar', 'content', 'header', 'closeNav');
+    //showHoverNavbar('nav-bar', 'nav-bar', 'btn-open', 'header');
+   // showClickNavbar('btn-open', 'nav-bar', 'content', 'header', 'closeNav');
+    //if (window.innerWidth >= 768)
+    //    showHoverNavbar('nav-bar', 'nav-bar', 'content', 'header');
 
 
     /*===== LINK ACTIVE =====*/

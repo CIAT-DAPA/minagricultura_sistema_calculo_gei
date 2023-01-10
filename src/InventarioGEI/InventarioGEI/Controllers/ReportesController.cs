@@ -72,7 +72,7 @@ namespace InventarioGEI.Controllers
             }
         }
 
-        [Breadcrumb("Visualizar")]
+        [Breadcrumb("ViewData.TitleBread")]
         public async Task<IActionResult> Visualizar(int? id)
         {
             ViewBag.NavRep = true;
@@ -82,6 +82,7 @@ namespace InventarioGEI.Controllers
             }
 
             var reporte = await _context.Reporte.FindAsync(id);
+            ViewData["TitleBread"] = reporte.nombreReporte;
             if (reporte == null)
             {
                 return NotFound();

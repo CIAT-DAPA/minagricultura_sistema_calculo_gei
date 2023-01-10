@@ -20,7 +20,7 @@
                 <input type="submit" value="Buscar" class="btn btn-default btn-outline-primary col-4 h-25 w-auto" />
             </form>
         </div>
-        <a asp-action="Create" class="btn btn-primary float-right col-2 h-100">Agregar sede</a>
+        <a asp-action="Create" class="btn btn-primary float-right col-2 h-100"><i class="fa-solid fa-plus"></i> Agregar sede</a>
 
     </div>
     <div>
@@ -66,12 +66,12 @@
                         </td>
                         <td>
                             <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idSede">
-                                Editar
+                                <i class="fa-solid fa-pen"></i> Editar
                             </a>
                         </td>
                         <td>
                             <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idSede">
-                                Eliminar
+                                <i class="fa-solid fa-trash"></i> Eliminar
                             </a>
                         </td>
                     </tr>

@@ -6,7 +6,7 @@
 <div class="row container-title">
     <h3 class="col-3">Reportes</h3>
     @if (ViewBag.Edit != null) {
-        <a asp-action="Create" type="button" class="btn btn-primary button-create">Reporte nuevo</a>
+        <a asp-action="Create" type="button" class="btn btn-primary button-create"><i class="fa-solid fa-plus"></i> Reporte nuevo</a>
     }
     
 </div>
@@ -43,19 +43,19 @@
                     </td>
                     <td>
                         <a type="button" class="btn btn-primary" asp-action="Visualizar" asp-route-id="@item.idReporte">
-                            Ver Reporte
+                            <i class="fa-solid fa-eye"></i> Ver Reporte
                         </a>
                     </td>
                     @if (ViewBag.Edit != null)
                     {
                         <td>
                             <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idReporte">
-                                Editar
+                                <i class="fa-solid fa-pen"></i> Editar
                             </a>
                         </td>
                         <td>
                             <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idReporte">
-                                Eliminar
+                                <i class="fa-solid fa-trash"></i> Eliminar
                             </a>
                         </td>
                     }

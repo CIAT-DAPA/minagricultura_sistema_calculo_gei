@@ -8,9 +8,9 @@
     <h3 class="col-3">Alcances</h3>
     @if (ViewBag.numAlcances >= 4)
     {
-        <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create" data-bs-toggle="modal" data-bs-target="#exampleModal">Crear alcance</a>
+        <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create" data-bs-toggle="modal" data-bs-target="#exampleModal"> <i class="fa-solid fa-plus"></i> Crear alcance</a>
     } else {
-        <a asp-action="Create" type="button" class="btn btn-primary button-create">Crear alcance</a>
+        <a asp-action="Create" type="button" class="btn btn-primary button-create"> <i class="fa-solid fa-plus"></i> Crear alcance</a>
     }
 </div>
 <div>
@@ -67,12 +67,12 @@
                  
                     <td>
                         <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idAlcance">
-                            Editar
+                            <i class="fa-solid fa-pen"></i> Editar
                         </a>
                     </td>
                     <td>
                         <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idAlcance">
-                            Eliminar
+                            <i class="fa-solid fa-trash"></i> Eliminar
                         </a>
                     </td>
                 </tr>

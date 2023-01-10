@@ -33,7 +33,7 @@ namespace InventarioGEI.Models
         public bool permisoRegistro { get; set; }
 
         [Column("moduloVisualizacion")]
-        [Display(Name = "Permiso de CRUD de reportes")]
+        [Display(Name = "Permisos de creador de reportes")]
         public bool permisoVisualizacion { get; set; }
 
         [Column("enabled")]

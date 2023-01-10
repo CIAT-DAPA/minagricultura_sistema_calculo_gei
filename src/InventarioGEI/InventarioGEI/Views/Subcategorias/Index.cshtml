@@ -7,7 +7,7 @@
 <div class="row container-title">
     <h3 class="col-3">Subcategorías</h3>
 
-    <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create">Crear subcategoría</a>
+    <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create"><i class="fa-solid fa-plus"></i> Crear subcategoría</a>
 </div>
 <div>
     <blockquote class="blockquote lead card">
@@ -44,12 +44,12 @@
                
                     <td>
                         <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idSubcategoria">
-                            Editar
+                            <i class="fa-solid fa-pen"></i> Editar
                         </a>
                     </td>
                     <td>
                         <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idSubcategoria">
-                            Eliminar
+                            <i class="fa-solid fa-trash"></i> Eliminar
                         </a>
                     </td>
             </tr>

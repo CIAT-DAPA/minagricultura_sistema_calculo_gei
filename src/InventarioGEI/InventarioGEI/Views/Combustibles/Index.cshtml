@@ -7,7 +7,7 @@
 <div class="row container-title">
     <h3 class="col-3">Combustibles</h3>
 
-    <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create">Crear combustibles</a>
+    <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create"><i class="fa-solid fa-plus"></i> Crear combustibles</a>
    
 </div>
 <div>
@@ -57,12 +57,12 @@
 
                     <td @*rowspan="2"*@>
                         <a type="button" class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.idCombustible">
-                            Editar
+                            <i class="fa-solid fa-pen"></i>  Editar
                         </a>
                     </td>
                     <td @*rowspan="2"*@>
                         <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.idCombustible">
-                            Eliminar
+                            <i class="fa-solid fa-trash"></i> Eliminar
                         </a>
                     </td>
                 </tr>

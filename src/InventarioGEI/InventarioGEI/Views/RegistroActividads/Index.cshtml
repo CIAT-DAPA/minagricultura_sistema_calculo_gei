@@ -38,7 +38,7 @@
     </div>
 
 <div class="row container-title">
-    <h5 class="col-3">Registros</h5>
+    <h3 class="col-3">Registros</h3>
 </div>
 <div class="row">
     <div class="col-6">
@@ -147,7 +147,7 @@
 <div class="row">
     <div class="col-12 d-flex justify-content-end">
         <button type="button" class="btn btn-primary button-create" id="btnSave" onclick="sendChanges()">
-            Guardar cambios
+            <i class="fa-sharp fa-solid fa-floppy-disk"></i> Guardar cambios
         </button>
     </div>
 </div>
@@ -269,6 +269,27 @@
         var jsonVal = [];
         var idSede = $("#sede").val();
         var año = $("#year").val();
+        
+        if ($('#year').val() == null || $('#year').val() == '') {
+            $('#yearVerification').addClass('d-block').removeClass('d-none');
+            $('#yearVerification').text("Debes escoger un año");
+            checkedYear = false;
+        } else if ($('#year').val() < 2005 || $('#year').val() > 2100) {
+            $('#yearVerification').addClass('d-block').removeClass('d-none');
+            $('#yearVerification').text("Debe ser un año entre 2005 y 2100");
+            checkedYear = false;
+        }
+        if ($('#selectAlc').val() == null) {
+            $('#alcanceVerification').addClass('d-block').removeClass('d-none');
+            $('#alcanceVerification').text("Debes escoger un alcance");
+            checkedAlcance = false;
+        } 
+        if ($('#selectCat').val() == null) {
+            $('#categoriaVerification').addClass('d-block').removeClass('d-none');
+            $('#categoriaVerification').text("Debes escoger una categoria");
+            checkedCategoria = false;
+        }
+
         $("td").each(function () {
             var valueInput = $(this).find("input");
             if (valueInput.val() !== undefined) {
@@ -304,13 +325,13 @@
     }
 
     function checkYear() {
-        if ($('#year').val() < 2005 || $('#year').val() > 2100) {
-            $('#yearVerification').addClass('d-block').removeClass('d-none');
-            $('#yearVerification').text("Debe ser un año entre 2005 y 2100");
-            checkedYear = false;
-        } else if ($('#year').val() == null) {
+        if ($('#year').val() == null || $('#year').val() == '') {
             $('#yearVerification').addClass('d-block').removeClass('d-none');
             $('#yearVerification').text("Debes escoger un año");
+            checkedYear = false;
+        } else if ($('#year').val() < 2005 || $('#year').val() > 2100) {
+            $('#yearVerification').addClass('d-block').removeClass('d-none');
+            $('#yearVerification').text("Debe ser un año entre 2005 y 2100");
             checkedYear = false;
         } else {
             $('#yearVerification').addClass('d-none').removeClass('d-block');
