@@ -1,61 +1,82 @@
 using InventarioGEI.Controllers;
 using InventarioGEI.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Moq;
+using System.Net.Sockets;
 using System.Security.Claims;
 
 namespace InventarioGEITests
 {
     public class RolControllerTest
     {
+        public RolsController controller;
+
         [SetUp]
         public void Setup()
         {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, "Sebastian.Lopez@cgiar.org"),
-                new Claim(ClaimTypes.Role, "Administrator"),
-            };
+            var rol = new Rol {idRol = 1, nombreRol = "Rol1test", permisoConfiguracion = true, permisoRol = true, enabled=true};
 
-            var claimsIdentity = new ClaimsIdentity(claims, "TestAuthType");
-            var user = new ClaimsPrincipal(claimsIdentity);
+            var userTest = new Usuario {idUsuario = 1, email = "adminTest@admin.com", idRol=1, enabled=true};
 
-            ClaimsPrincipal.ClaimsPrincipalSelector = () => user;
-            Console.WriteLine("Termino SetUp");
+            var optionsBuilder = new DbContextOptionsBuilder<Context>();
+            optionsBuilder.UseInMemoryDatabase("DBTest");
+            var _dbContext = new Context(optionsBuilder.Options);
+            _dbContext.Rol.Add(rol);
+            _dbContext.Usuario.Add(userTest);
+            _dbContext.SaveChangesAsync();
+            controller = new RolsController(_dbContext);
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                            {
+                                new Claim(ClaimTypes.Name, "adminTest@admin.com"),
+
+                            }, "mock"));
+            controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
         }
 
         [Test]
         public async Task TestIndexView()
         {
-            Console.WriteLine("Test2");
-            //Rol rol = new Rol() { idRol=99,
-            //                        nombreRol="Roltest",
-            //                        permisoConfiguracion=true,
-            //                        permisoRol=true
-            //                    };
-            //Mock<Context> _context = new Mock<Context>(rol);
-
-            //RolsController controller = new RolsController(_context.Object);
-            //Assert.That(controller.Index, Is.InstanceOf<ViewResult>());
-
-            // Arrange
-            //var options = new DbContextOptionsBuilder<Context>().UseInMemoryDatabase(databaseName: "TestIndex").Options;
-
-            
-            var options = new DbContextOptionsBuilder<Context>()
-                                        .UseInMemoryDatabase(databaseName: "TestIndex")
-                                        .EnableSensitiveDataLogging()
-                                        .Options;
-            var context = new Context(options);
-            var controller = new RolsController(context);
-
-            // Act
             var result = await controller.Index();
             var viewResult = result as ViewResult;
 
-            // Assert
-            Assert.That(viewResult.ViewName, Is.EqualTo("Index"));
+            Assert.IsNotNull(viewResult);
+            Assert.Greater(((IEnumerable<Rol>)viewResult.Model).Count(), 0);
+        }
+
+        [Test]
+        public async Task TestCreateView()
+        {
+            var result = controller.Create();
+            var viewResult = result as ViewResult;
+
+            Assert.IsNotNull(viewResult);
+        }
+
+        [Test]
+        public async Task TestCreateRolCorrect()
+        {
+            var rol = new Rol { idRol = 2, nombreRol = "Rol2test", permisoConfiguracion = true, permisoRol = true, enabled = true };
+
+            var result = await controller.Create(rol);
+            var redirectResult = result as RedirectToActionResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Index", redirectResult.ActionName);
+        }
+
+        [Test]
+        public async Task TestCreateRolIncorrect()
+        {
+            var rol = new Rol { permisoConfiguracion = true, permisoRol = true, enabled = true };
+
+            var result = await controller.Create(rol);
+            var redirectResult = result as RedirectToActionResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Index", redirectResult.ActionName);
         }
     }
 }
