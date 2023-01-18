@@ -27,7 +27,6 @@ namespace InventarioGEI.Controllers
             if (GetAccesRol("Rol"))
             {
                 ViewBag.NavRol = true;
-
                 return View(await _context.Rol.Where(r => r.enabled == true).ToListAsync());
             }
             else

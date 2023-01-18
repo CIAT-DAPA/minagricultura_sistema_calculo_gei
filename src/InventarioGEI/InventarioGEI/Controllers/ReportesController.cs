@@ -82,11 +82,11 @@ namespace InventarioGEI.Controllers
             }
 
             var reporte = await _context.Reporte.FindAsync(id);
-            ViewData["TitleBread"] = reporte.nombreReporte;
             if (reporte == null)
             {
                 return NotFound();
             }
+            ViewData["TitleBread"] = reporte.nombreReporte;
             return View(reporte);
         }
 

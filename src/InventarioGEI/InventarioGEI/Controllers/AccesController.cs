@@ -1,5 +1,6 @@
 ﻿using InventarioGEI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventarioGEI.Controllers
 {
@@ -13,10 +14,9 @@ namespace InventarioGEI.Controllers
             _context = context;
         }
         public bool GetAccesRol(String moduloPermiso)
-        {
+        {            
             Usuario user = _context.Usuario.Where(u => u.enabled == true).FirstOrDefault(u => u.email == User.Identity.Name);
-            Rol rolAsig = _context.Rol.FirstOrDefault(r => r.idRol == user.idRol);
-            //ViewData["Rol"] = rolAsig.permisoRol;
+            Rol rolAsig = _context.Rol.AsNoTracking().FirstOrDefault(r => r.idRol == user.idRol);
             switch (moduloPermiso)
             {
                 case "Rol":

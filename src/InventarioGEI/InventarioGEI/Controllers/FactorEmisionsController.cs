@@ -240,12 +240,11 @@ namespace InventarioGEI.Controllers
                     .Include(f => f.gei)
                     .Include(f => f.usuario)
                     .FirstOrDefaultAsync(m => m.idFE == id);
-                ViewData["configuracion"] = factorEmision.configuracion.subcategoria.nombreSubcategoria + " - " + factorEmision.configuracion.fuenteEmision.nombreFuenteEmision + " - " + factorEmision.configuracion.combustible.nombreCombustible;
                 if (factorEmision == null)
                 {
                     return NotFound();
                 }
-
+                ViewData["configuracion"] = factorEmision.configuracion.subcategoria.nombreSubcategoria + " - " + factorEmision.configuracion.fuenteEmision.nombreFuenteEmision + " - " + factorEmision.configuracion.combustible.nombreCombustible;
                 return View(factorEmision);
             }
             else
