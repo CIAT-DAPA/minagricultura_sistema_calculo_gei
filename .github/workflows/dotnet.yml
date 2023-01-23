@@ -5,11 +5,11 @@ name: Inventario GEI Devops
 
 on:
   push:
-    branches: [ "Dev" ]
+    branches: [ "stage" ]
     tags:
     - 'v*'
   pull_request:
-    branches: [ "Dev" ]
+    branches: [ "stage" ]
 
 permissions:
   contents: read
@@ -40,7 +40,7 @@ jobs:
 
   MergeMainBranch:
     needs: [TestGEI]
-    name: Merge Dev with main
+    name: Merge stage with main
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
@@ -90,7 +90,7 @@ jobs:
         WITH_V: true
         DRY_RUN: true
         DEFAULT_BUMP: patch
-        RELEASE_BRANCHES : Dev,main
+        RELEASE_BRANCHES : stage,main
         BRANCH_HISTORY: last
     # Create release
     - name: Create Release
