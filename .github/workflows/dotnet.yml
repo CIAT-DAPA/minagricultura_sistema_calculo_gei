@@ -1,16 +1,23 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: .NET
+name: Inventario GEI Devops
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "Dev" ]
+    tags:
+    - 'v*'
   pull_request:
-    branches: [ "main" ]
+    branches: [ "Dev" ]
+
+permissions:
+  contents: read
 
 jobs:
-  build:
+
+#-------------------START BUILD & TEST INVENTARIO GEI----------------------#
+  TestGEI:
 
     runs-on: ubuntu-latest
 
@@ -26,3 +33,88 @@ jobs:
       run: dotnet build src/InventarioGEI --no-restore
     - name: Test
       run: dotnet test src/InventarioGEI --no-build --verbosity normal
+
+#-------------------END BUILD & TEST INVENTARIO GEI----------------------#
+
+# ------- START MERGE PROCCESS -------- #
+
+  MergeMainBranch:
+    needs: [TestGEI]
+    name: Merge Dev with main
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+
+      - name: Merge TestGEI -> main
+        uses: devmasx/merge-branch@main
+        with:
+          type: now
+          head_to_merge: ${{ github.ref }}
+          target_branch: main
+          github_token: ${{ github.token }}
+
+# ------- END MERGE PROCCESS -------- #
+
+# ------- START RELEASE PROCCESS -------- #
+
+  PostRelease:
+    needs: MergeMainBranch
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: '0'
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    # InventarioGEI Zip
+    - name: Publish Inventario GEI
+      run: dotnet publish --configuration Release --project src/InventarioGEI --output bin/publish/
+    - name: Zip Inventario GEI
+      run: zip releaseGEI.zip bin/publish/* -r
+    # Upload Artifacts
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v3
+      with:
+        name: Frontend
+        path: releaseGEI.zip #cambiar al zip que ponga arriba
+    # Generate Tagname
+    - name: Generate Tagname for release
+      id: taggerDryRun
+      uses: anothrNick/github-tag-action@1.61.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+        DRY_RUN: true
+        DEFAULT_BUMP: patch
+        RELEASE_BRANCHES : Dev,main
+        BRANCH_HISTORY: last
+    # Create release
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        tag_name: ${{ steps.taggerDryRun.outputs.new_tag }}
+        release_name: Release ${{ steps.taggerDryRun.outputs.new_tag }}
+        #body_path: ./body.md
+        body: ${{ github.event.head_commit.message }}
+        draft: false
+        prerelease: false
+    # Upload Assets to release
+    - name: Upload Release Asset Front
+      id: upload-front-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./releaseGEI.zip
+        asset_name: releaseGEI.zip
+        asset_content_type: application/zip
+
+# ------- END RELEASE PROCCESS -------- #
