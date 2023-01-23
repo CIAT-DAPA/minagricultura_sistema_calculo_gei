@@ -28,9 +28,9 @@ namespace InventarioGEITests
             var optionsBuilder = new DbContextOptionsBuilder<Context>();
             optionsBuilder.UseInMemoryDatabase("DBTest");
             _dbContext = new Context(optionsBuilder.Options);
-            _dbContext.Rol.Add(rol);
-            _dbContext.Alcance.Add(alcanceToEdit);
-            _dbContext.Usuario.Add(userTest);
+            _dbContext.Rol.AddAsync(rol);
+            _dbContext.Alcance.AddAsync(alcanceToEdit);
+            _dbContext.Usuario.AddAsync(userTest);
             _dbContext.SaveChangesAsync();
             controller = new AlcancesController(_dbContext);
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -39,6 +39,16 @@ namespace InventarioGEITests
 
                             }, "mock"));
             controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            // Limpia el contexto de la base de datos después de cada ejecución de pruebas
+            _dbContext.Rol.RemoveRange(_dbContext.Rol);
+            //_dbContext.Alcance.RemoveRange(_dbContext.Alcance);
+            //_dbContext.Usuario.RemoveRange(_dbContext.Usuario);
+            _dbContext.SaveChanges();
         }
 
         [Test]
@@ -105,7 +115,7 @@ namespace InventarioGEITests
         [Test]
         public async Task TestEditCorrect()
         {
-            _dbContext.Entry(_dbContext.Alcance.Find(5)).State = EntityState.Detached;
+            _dbContext.Entry(await _dbContext.Alcance.FindAsync(5)).State = EntityState.Detached;
             var alcanceEdited = new Alcance { idAlcance = 5, nombreAlcance = "RolEditado", isBiocombustible = true, enabled = true };
             var result = await controller.Edit(5, alcanceEdited);
 
@@ -148,7 +158,7 @@ namespace InventarioGEITests
         [Test]
         public async Task TestDelete()
         {
-            _dbContext.Entry(_dbContext.Alcance.Find(5)).State = EntityState.Detached;
+            _dbContext.Entry(_dbContext.Alcance.FindAsync(5).Result).State = EntityState.Detached;
             var result = await controller.DeleteConfirmed(5);
 
             var redirectResult = result as RedirectToActionResult;

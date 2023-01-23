@@ -42,6 +42,21 @@ namespace InventarioGEITests
             controller.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            // Limpia el contexto de la base de datos después de cada ejecución de pruebas
+
+            _dbContext.Rol.RemoveRange(_dbContext.Rol);
+            //_dbContext.Sede.RemoveRange(_dbContext.Sede);
+            //_dbContext.Usuario.RemoveRange(_dbContext.Usuario);
+            _dbContext.Departamento.RemoveRange(_dbContext.Departamento);
+            //_dbContext.Municipio.RemoveRange(_dbContext.Municipio);
+
+            _dbContext.SaveChangesAsync();
+            
+        }
+
         [Test]
         public async Task TestIndexView()
         {
