@@ -76,7 +76,7 @@ jobs:
     - name: Zip Inventario GEI
       run: |
         cd bin/publish/
-        zip -r releaseGEI.zip ./ -d /
+        zip -r /releaseGEI.zip ./
         cd ..
         cd ..
     # Upload Artifacts
