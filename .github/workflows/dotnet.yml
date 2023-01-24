@@ -75,7 +75,7 @@ jobs:
         dotnet publish src/InventarioGEI/InventarioGEI --configuration Release --output bin/publish/
     - name: Zip Inventario GEI
       run: |
-        zip -r releaseGEI.zip ./bin/publish/ -x "bin/*" "publish/*"
+        zip -r -j -X releaseGEI.zip ./bin/publish/
     # Upload Artifacts
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3
