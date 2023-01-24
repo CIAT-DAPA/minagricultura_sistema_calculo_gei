@@ -8,8 +8,6 @@ on:
     branches: [ "stage" ]
     tags:
     - 'v*'
-  pull_request:
-    branches: [ "stage" ]
 
 permissions:
   contents: read
@@ -77,7 +75,7 @@ jobs:
         ls
         dotnet publish src/InventarioGEI --configuration Release --output bin/publish/
     - name: Zip Inventario GEI
-      run: zip releaseGEI.zip bin/publish/* -r
+      run: zip -r releaseGEI.zip bin/publish/
     # Upload Artifacts
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3

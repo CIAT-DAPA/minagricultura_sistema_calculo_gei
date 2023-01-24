@@ -4,9 +4,10 @@ RUN apt-get update && \
     apt-get install -y \
         vim \
         unzip \
-        wget 
-RUN wget https://github.com/CIAT-DAPA/minagricultura_sistema_calculo_gei/releases/download/1.0.3/build.zip
-RUN unzip build.zip 
+        wget \
+        jq
+RUN curl -LJO $(curl -Ls https://api.github.com/repos/CIAT-DAPA/minagricultura_sistema_calculo_gei/releases/latest | jq -r '.assets[].browser_download_url')
+RUN unzip releaseGEI.zip
 RUN dotnet dev-certs https
 RUN dotnet dev-certs https --trust
 COPY ./script.sh ./
