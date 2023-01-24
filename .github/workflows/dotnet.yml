@@ -76,6 +76,7 @@ jobs:
     - name: Zip Inventario GEI
       run: |
         cd bin/publish/
+        pwd
         zip -r /releaseGEI.zip ./
         cd ..
         cd ..
