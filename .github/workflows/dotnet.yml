@@ -72,9 +72,9 @@ jobs:
     - name: Publish Inventario GEI
       run: |
         dotnet --version
-        ls
         dotnet publish src/InventarioGEI --configuration Release --output bin/publish/
-        cd /bin/publish/
+        ls
+        cd bin/publish/
     - name: Zip Inventario GEI
       run: |
         zip -r releaseGEI.zip ./
