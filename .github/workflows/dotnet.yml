@@ -72,7 +72,9 @@ jobs:
         dotnet-version: 6.0.x
     # InventarioGEI Zip
     - name: Publish Inventario GEI
-      run: dotnet publish --configuration Release --project src/InventarioGEI --output bin/publish/
+      run: dotnet --version
+      run: ls
+      run: dotnet publish src/InventarioGEI --configuration Release --output bin/publish/
     - name: Zip Inventario GEI
       run: zip releaseGEI.zip bin/publish/* -r
     # Upload Artifacts
