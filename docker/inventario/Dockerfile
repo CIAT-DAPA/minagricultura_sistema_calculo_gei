@@ -8,6 +8,8 @@ RUN apt-get update && \
         jq
 RUN curl -LJO $(curl -Ls https://api.github.com/repos/CIAT-DAPA/minagricultura_sistema_calculo_gei/releases/latest | jq -r '.assets[].browser_download_url')
 RUN unzip releaseGEI.zip
+RUN mv -n bin/publish/* .
+RUN rm -r bin
 RUN dotnet dev-certs https
 RUN dotnet dev-certs https --trust
 COPY ./script.sh ./
