@@ -77,6 +77,7 @@ jobs:
       run: |
         cd bin/publish/
         pwd
+        ls
         zip -r releaseGEI.zip ./ -d /home/runner/work/minagricultura_sistema_calculo_gei/minagricultura_sistema_calculo_gei/
         cd ..
         cd ..
