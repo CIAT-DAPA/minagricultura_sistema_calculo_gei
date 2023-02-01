@@ -1,5 +1,5 @@
 ﻿@using System.Security.Principal
-<div class="l-navbar" id="nav-bar">
+<div class="l-navbar show-nav" id="nav-bar">
     <nav class="nav" style="padding: 25px 0 0px 25px;">
         <div class="navbar-header">
             <div class="brand-wrapper">
@@ -9,22 +9,34 @@
                             <i class="fa-solid fa-house navbar-icon"></i>Inventario GEI
                         </spam>
                     </a>
-                    <button type="button" class="btn-close d-none" aria-label="Close" id="closeNav"></button>
+                    <button type="button" class="btn-close" aria-label="Close" id="closeNav"></button>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary shadow open-nav" id="btn-open"  > > </button>
+            <button type="button" class="btn btn-primary shadow open-nav d-none" id="btn-open"  > > </button>
         </div>
         <div class="side-menu-container">
             <ul class="navbar-nav">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <li class="nav-item @(ViewBag.NavRep==true?"visit":"")" style="margin-bottom:15px;">
+                        <a asp-area="" asp-controller="Reportes" asp-action="Index"><i class="fa-solid fa-chart-simple navbar-icon" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right" data-bs-content="Reportes"></i>Reportes</a>
+                    </li>
+                }
+                @if (ViewBag.Reg != null)
+                {
 
-
+                    <li class="nav-item @(ViewBag.NavRegAct==true?"visit":"")" style="margin-bottom:15px;"><a asp-area="" asp-controller="RegistroActividads" asp-action="Index" style="white-space: nowrap;"><i class="fa-solid fa-pen-to-square navbar-icon" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right" data-bs-content="Registros de consumo"></i>Registros de consumos</a></li>
+                    <li class="nav-item @(ViewBag.NavRegAnu==true?"visit":"")" style="margin-bottom:15px;"><a asp-area="" asp-controller="RegistroAnuals" asp-action="Index" style="white-space: nowrap;"><i class="fa-solid fa-upload navbar-icon" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right" data-bs-content="Cierres"></i>Cierres</a></li>
+                    
+                }
+                
                 @if (ViewBag.Rol != null)
                 {
                     <li class="nav-item @(ViewBag.NavRol==true?"visit":"")" style="margin-bottom:15px;">
-                        <a asp-area="" asp-controller="Rols" asp-action="Index" style="white-space: nowrap;"><i class="fa fa-user navbar-icon" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right" data-bs-content="Roles"></i>Roles</a>
+                        <a asp-area="" asp-controller="Rols" asp-action="Index" style="white-space: nowrap;"><i class="fa fa-address-book navbar-icon" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right" data-bs-content="Roles"></i>Roles</a>
                     </li>
                     <li class="nav-item @(ViewBag.NavUsu==true?"visit":"")" style="margin-bottom:15px;">
-                        <a asp-area="" asp-controller="Usuarios" asp-action="Index" style="white-space: nowrap;"><i class="fa fa-address-book navbar-icon" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right" data-bs-content="Usuarios"></i>Usuarios</a>
+                        <a asp-area="" asp-controller="Usuarios" asp-action="Index" style="white-space: nowrap;"><i class="fa fa-user navbar-icon" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right" data-bs-content="Usuarios"></i>Usuarios</a>
                     </li>
                 }
                 @if (ViewBag.Sedes != null)
@@ -121,19 +133,7 @@
                   
 
                 }
-                @if (ViewBag.Reg != null)
-                {
-
-                    <li class="nav-item @(ViewBag.NavRegAct==true?"visit":"")" style="margin-bottom:15px;"><a asp-area="" asp-controller="RegistroActividads" asp-action="Index" style="white-space: nowrap;"><i class="fa-solid fa-pen-to-square navbar-icon" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right" data-bs-content="Registros de consumo"></i>Registros de consumos</a></li>
-                    <li class="nav-item @(ViewBag.NavRegAnu==true?"visit":"")" style="margin-bottom:15px;"><a asp-area="" asp-controller="RegistroAnuals" asp-action="Index" style="white-space: nowrap;"><i class="fa-solid fa-upload navbar-icon" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right" data-bs-content="Cierres"></i>Cierres</a></li>
-                    
-                }
-                @if (User.Identity?.IsAuthenticated == true)
-                {
-                    <li class="nav-item @(ViewBag.NavRep==true?"visit":"")" style="margin-bottom:15px;">
-                        <a asp-area="" asp-controller="Reportes" asp-action="Index"><i class="fa-solid fa-chart-simple navbar-icon" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right" data-bs-content="Reportes"></i>Reportes</a>
-                    </li>
-                }
+                
             </ul>
         </div>
     </nav>
