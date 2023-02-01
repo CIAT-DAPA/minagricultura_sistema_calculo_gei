@@ -7,7 +7,10 @@
 <div class="container-fluid h-100">
     <div class="d-grid gap-2 d-md-flex justify-content-md-between row">
 
-        <h3 class="col-12">Sedes</h3>
+        <div class="col-3 d-flex align-items-center">
+            <h3 class="m-0 me-3">Sedes</h3>
+            <a asp-controller="Home" asp-action="Manual" type="button"><span class="badge rounded-pill text-bg-secondary bg-secondary">info</span></a>
+        </div>
 
         <div class="d-flex align-items-center col-6">
             <form asp-action="Index" method="get" class="row align-items-end">

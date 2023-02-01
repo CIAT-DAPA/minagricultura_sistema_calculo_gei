@@ -5,7 +5,10 @@
 }
 
 <div class="row container-title">
-    <h3 class="col-3">Combustibles</h3>
+    <div class="col-3 d-flex align-items-center">
+        <h3 class="m-0 me-3">Combustibles</h3>
+        <a asp-controller="Home" asp-action="Manual" type="button"><span class="badge rounded-pill text-bg-secondary bg-secondary">info</span></a>
+    </div>
 
     <a asp-action="Create" type="button" class="col-1 btn btn-primary button-create"><i class="fa-solid fa-plus"></i> Crear combustibles</a>
    

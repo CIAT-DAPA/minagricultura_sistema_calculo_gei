@@ -4,7 +4,10 @@
     ViewData["Title"] = "Index";
 }
 <div class="row container-title">
-    <h3 class="col-3">Reportes</h3>
+    <div class="col-3 d-flex align-items-center">
+        <h3 class="m-0 me-3">Reportes</h3>
+        <a asp-controller="Home" asp-action="Manual" type="button"><span class="badge rounded-pill text-bg-secondary bg-secondary">info</span></a>
+    </div>
     @if (ViewBag.Edit != null) {
         <a asp-action="Create" type="button" class="btn btn-primary button-create"><i class="fa-solid fa-plus"></i> Reporte nuevo</a>
     }

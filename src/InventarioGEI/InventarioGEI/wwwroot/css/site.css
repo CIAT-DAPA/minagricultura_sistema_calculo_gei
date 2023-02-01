@@ -285,6 +285,10 @@ dl {
 .content {
     width: inherit;
     position: relative;
+    
+}
+
+.content-animation {
     transition: .5s
 }
 
@@ -295,8 +299,12 @@ dl {
     height: calc(100vh - 98px);
     background-color: white;
     padding: .5rem 0.7rem 0 0;
-    transition: .5s;
+    
     z-index: 1
+}
+
+.nav-animation {
+    transition: .5s;
 }
 
 .nav-item {
